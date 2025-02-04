@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Markazi_Text, Poppins } from "next/font/google";
 import "./../globals.css";
+import AuthProvider from "@/components/AuthProvider";
 
 export const metadata: Metadata = {
 	title: "Everything Jobs",
@@ -37,7 +38,7 @@ export default function RootLayout({
 		<html lang='en'>
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} ${markaziText.variable} antialiased`}>
-				{children}
+				<AuthProvider>{children}</AuthProvider>
 			</body>
 		</html>
 	);
