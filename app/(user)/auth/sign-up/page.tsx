@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { userSchema } from "@/validations/userValidator";
+import { userSchema } from "@/validations/signUpValidator";
 
 export default function SignUpPage() {
 	const [firstName, setFirstName] = useState("");
@@ -64,11 +64,13 @@ export default function SignUpPage() {
 					username,
 					email,
 					password,
+					confirmPassword,
 				}),
 				headers: { "Content-Type": "application/json" },
 			});
 
 			const responseData = await res.json();
+			console.table(responseData);
 
 			if (res.ok) {
 				router.push("/auth/sign-in");

@@ -1,0 +1,18 @@
+{"level":"info","message":"[1738688696496] Signup request received","service":"user-service","timestamp":"2025-02-04 18:04:56"}
+{"level":"info","message":"[1738688696496] Request body parsed successfully","service":"user-service","timestamp":"2025-02-04 18:04:59"}
+{"errors":[{"field":"confirmPassword","message":"Required"}],"level":"warn","message":"[1738688696496] Validation failed","service":"user-service","timestamp":"2025-02-04 18:04:59"}
+{"level":"info","message":"[1738690278027] Signup request received","service":"user-service","timestamp":"2025-02-04 18:31:18"}
+{"level":"info","message":"[1738690278027] Request body parsed successfully","service":"user-service","timestamp":"2025-02-04 18:31:18"}
+{"errors":[{"field":"confirmPassword","message":"Required"}],"level":"warn","message":"[1738690278027] Validation failed","service":"user-service","timestamp":"2025-02-04 18:31:18"}
+{"level":"info","message":"[1738690290075] Signup request received","service":"user-service","timestamp":"2025-02-04 18:31:30"}
+{"level":"info","message":"[1738690290075] Request body parsed successfully","service":"user-service","timestamp":"2025-02-04 18:31:30"}
+{"errors":[{"field":"confirmPassword","message":"Required"}],"level":"warn","message":"[1738690290075] Validation failed","service":"user-service","timestamp":"2025-02-04 18:31:30"}
+{"level":"info","message":"[1738690506037] Signup request received","service":"user-service","timestamp":"2025-02-04 18:35:06"}
+{"level":"info","message":"[1738690506037] Request body parsed successfully","service":"user-service","timestamp":"2025-02-04 18:35:06"}
+{"errors":[{"field":"confirmPassword","message":"Required"}],"level":"warn","message":"[1738690506037] Validation failed","service":"user-service","timestamp":"2025-02-04 18:35:06"}
+{"level":"info","message":"[1738694571536] Signup request received","service":"user-service","timestamp":"2025-02-04 19:42:51"}
+{"level":"info","message":"[1738694571536] Request body parsed successfully","service":"user-service","timestamp":"2025-02-04 19:42:51"}
+{"errors":[{"field":"confirmPassword","message":"Required"}],"level":"warn","message":"[1738694571536] Validation failed","service":"user-service","timestamp":"2025-02-04 19:42:51"}
+{"level":"info","message":"[1738694608726] Signup request received","service":"user-service","timestamp":"2025-02-04 19:43:28"}
+{"level":"info","message":"[1738694608726] Request body parsed successfully","service":"user-service","timestamp":"2025-02-04 19:43:28"}
+{"email":"ozorjijoshua@gmail.com","level":"info","message":"[1738694608726] User created successfully","service":"user-service","timestamp":"2025-02-04 19:43:30","username":"josh"}

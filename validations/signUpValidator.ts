@@ -58,7 +58,7 @@ export const userSchema = z
 
 export type UserInput = z.infer<typeof userSchema>;
 
-export const validateUser = async (data: unknown) => {
+export const validateSignUp = async (data: unknown) => {
 	const result = userSchema.safeParse(data);
 
 	if (!result.success) {
