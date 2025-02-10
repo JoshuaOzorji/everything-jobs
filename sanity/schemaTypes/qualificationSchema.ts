@@ -7,24 +7,52 @@ export const qualificationSchema = defineType({
 	fields: [
 		defineField({
 			name: "name",
+			title: "Name",
 			type: "string",
-			title: "Qualification Name",
 			validation: (Rule) => Rule.required(),
-		}),
-		defineField({
-			name: "slug",
-			type: "slug",
-			title: "Slug",
 			options: {
-				source: "name",
-				maxLength: 96,
+				list: [
+					{ title: "SSCE", value: "ssce" },
+					{
+						title: "National Diploma (ND)",
+						value: "nd",
+					},
+					{
+						title: "Higher National Diploma (HND)",
+						value: "hnd",
+					},
+					{
+						title: "National Certificate of Education (NCE)",
+						value: "nce",
+					},
+					{
+						title: "Bachelor's Degree (B.Sc/B.A/B.Ed/B.Eng)",
+						value: "bachelors",
+					},
+					{
+						title: "Master's Degree (M.Sc/M.A/M.Ed/M.Eng)",
+						value: "masters",
+					},
+					{
+						title: "Doctor of Philosophy (Ph.D)",
+						value: "phd",
+					},
+					{ title: "Others", value: "others" },
+				],
 			},
-			validation: (Rule) => Rule.required(),
+		}),
+
+		defineField({
+			name: "order",
+			title: "Order",
+			type: "number",
+			hidden: true,
 		}),
 	],
 	preview: {
 		select: {
 			title: "name",
+			subtitle: "level",
 		},
 	},
 });

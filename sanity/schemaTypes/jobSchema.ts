@@ -1,9 +1,11 @@
 import { defineField, defineType } from "sanity";
+import { DocumentTextIcon } from "@sanity/icons";
 
-export const jobType = defineType({
+export const jobSchema = defineType({
 	name: "job",
 	title: "Job",
 	type: "document",
+	icon: DocumentTextIcon,
 	fields: [
 		defineField({
 			name: "title",
@@ -12,18 +14,11 @@ export const jobType = defineType({
 			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
-			name: "slug",
-			type: "slug",
-			title: "Slug",
-			options: {
-				source: "title",
-			},
-			validation: (Rule) => Rule.required(),
-		}),
-		defineField({
 			name: "company",
-			type: "string",
-			title: "Company Name",
+			type: "reference",
+			title: "Company",
+			to: [{ type: "company" }],
+			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
 			name: "location",
@@ -47,17 +42,25 @@ export const jobType = defineType({
 			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
-			name: "category",
-			type: "reference",
-			title: "Category",
-			to: [{ type: "category" }],
-			validation: (Rule) => Rule.required(),
-		}),
-		defineField({
-			name: "description",
-			type: "text",
-			title: "Job Description",
-			validation: (Rule) => Rule.required(),
+			name: "salaryRange",
+			title: "Salary Range",
+			type: "object",
+			fields: [
+				defineField({
+					name: "min",
+					title: "Minimum Salary",
+					type: "number",
+					validation: (Rule) =>
+						Rule.required().min(0),
+				}),
+				defineField({
+					name: "max",
+					title: "Maximum Salary",
+					type: "number",
+					validation: (Rule) =>
+						Rule.required().min(0),
+				}),
+			],
 		}),
 		defineField({
 			name: "publishedAt",
@@ -66,12 +69,60 @@ export const jobType = defineType({
 			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
+			name: "deadline",
+			type: "datetime",
+			title: "Deadline",
+			validation: (Rule) =>
+				Rule.required()
+					.min(new Date().toISOString())
+					.error(
+						"Deadline must be in the future",
+					),
+			options: {
+				dateFormat: "DD-MM-YYYY",
+				timeFormat: "HH:mm",
+				timeStep: 15,
+			},
+		}),
+		defineField({
+			name: "requirements",
+			title: "Requirements",
+			type: "array",
+			of: [{ type: "string" }],
+			validation: (Rule) =>
+				Rule.required()
+					.min(1)
+					.error(
+						"Please add at least one requirement",
+					),
+		}),
+		defineField({
+			name: "responsibilities",
+			title: "Responsibilities",
+			type: "array",
+			of: [{ type: "string" }],
+			// validation: (Rule) =>
+			// 	Rule.required()
+			// 		.min(1)
+			// 		.error(
+			// 			"Please add at least one responsibility",
+			// 		),
+		}),
+		defineField({
+			name: "recruitmentProcess",
+			title: "Recruitment Process",
+			type: "array",
+			of: [{ type: "string" }],
+			validation: (Rule) =>
+				Rule.min(1).error(
+					"Please describe the recruitment process",
+				),
+		}),
+		defineField({
 			name: "mainImage",
 			type: "image",
 			title: "Main Image",
-			options: {
-				hotspot: true,
-			},
+			options: { hotspot: true },
 			fields: [
 				defineField({
 					name: "alt",
@@ -80,11 +131,25 @@ export const jobType = defineType({
 				}),
 			],
 		}),
+		defineField({
+			name: "description",
+			type: "array",
+			title: "Job Description",
+			of: [{ type: "block" }],
+			validation: (Rule) => Rule.required(),
+		}),
+		defineField({
+			name: "apply",
+			type: "array",
+			title: "Method of Application",
+			of: [{ type: "block" }],
+			validation: (Rule) => Rule.required(),
+		}),
 	],
 	preview: {
 		select: {
 			title: "title",
-			company: "company",
+			company: "company.name",
 			location: "location.name",
 			media: "mainImage",
 		},

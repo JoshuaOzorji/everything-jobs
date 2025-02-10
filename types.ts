@@ -5,7 +5,7 @@ export interface Job {
 	company: string;
 	location: { _ref: string; name: string };
 	jobType: { _ref: string; name: string };
-	qualification: { _ref: string; name: string };
+	education: { _ref: string; name: string };
 	category: { _ref: string; name: string };
 	description: string;
 	publishedAt: string;
@@ -29,7 +29,7 @@ export interface JobType {
 	slug: { current: string };
 }
 
-export interface Qualification {
+export interface Education {
 	_id: string;
 	name: string;
 	slug: { current: string };
