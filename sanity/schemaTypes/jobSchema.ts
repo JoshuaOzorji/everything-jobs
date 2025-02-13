@@ -14,6 +14,21 @@ export const jobSchema = defineType({
 			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
+			name: "slug",
+			type: "slug",
+			title: "Slug",
+			options: {
+				source: "title",
+				maxLength: 96,
+				slugify: (input) =>
+					input
+						.toLowerCase()
+						.replace(/\s+/g, "-")
+						.replace(/[^\w-]+/g, ""),
+			},
+			validation: (Rule) => Rule.required(),
+		}),
+		defineField({
 			name: "company",
 			type: "reference",
 			title: "Company",
@@ -39,6 +54,13 @@ export const jobSchema = defineType({
 			type: "reference",
 			title: "Qualification",
 			to: [{ type: "qualification" }],
+			validation: (Rule) => Rule.required(),
+		}),
+		defineField({
+			name: "jobField",
+			type: "reference",
+			title: "Job Field",
+			to: [{ type: "jobField" }],
 			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
@@ -101,12 +123,6 @@ export const jobSchema = defineType({
 			title: "Responsibilities",
 			type: "array",
 			of: [{ type: "string" }],
-			// validation: (Rule) =>
-			// 	Rule.required()
-			// 		.min(1)
-			// 		.error(
-			// 			"Please add at least one responsibility",
-			// 		),
 		}),
 		defineField({
 			name: "recruitmentProcess",
@@ -151,13 +167,15 @@ export const jobSchema = defineType({
 			title: "title",
 			company: "company.name",
 			location: "location.name",
+			jobField: "jobField.name",
 			media: "mainImage",
 		},
 		prepare(selection) {
-			const { title, company, location } = selection;
+			const { title, company, location, jobField } =
+				selection;
 			return {
 				...selection,
-				subtitle: `${company} - ${location}`,
+				subtitle: `${company} - ${location} - ${jobField}`,
 			};
 		},
 	},

@@ -1,15 +1,45 @@
 import { defineField, defineType } from "sanity";
+import { DocumentTextIcon } from "@sanity/icons";
 
 export const qualificationSchema = defineType({
 	name: "qualification",
 	title: "Qualification",
 	type: "document",
+	icon: DocumentTextIcon,
+
 	fields: [
 		defineField({
 			name: "name",
 			title: "Name",
 			type: "string",
-			validation: (Rule) => Rule.required(),
+			validation: (Rule) =>
+				Rule.required().custom(
+					async (name, context) => {
+						if (!name)
+							return "Qualification name is required.";
+
+						const { document, getClient } =
+							context;
+						const client = getClient({
+							apiVersion: "2023-01-01",
+						});
+
+						const existingQualification =
+							await client.fetch(
+								`*[_type == "qualification" && name == $name && _id != $id][0]`,
+								{
+									name,
+									id:
+										document?._id ||
+										"",
+								},
+							);
+
+						return existingQualification
+							? "A qualification with this name already exists."
+							: true;
+					},
+				),
 			options: {
 				list: [
 					{ title: "SSCE", value: "ssce" },
@@ -22,15 +52,11 @@ export const qualificationSchema = defineType({
 						value: "hnd",
 					},
 					{
-						title: "National Certificate of Education (NCE)",
-						value: "nce",
-					},
-					{
-						title: "Bachelor's Degree (B.Sc/B.A/B.Ed/B.Eng)",
+						title: "Bachelor's Degree",
 						value: "bachelors",
 					},
 					{
-						title: "Master's Degree (M.Sc/M.A/M.Ed/M.Eng)",
+						title: "Master's Degree",
 						value: "masters",
 					},
 					{
@@ -43,16 +69,41 @@ export const qualificationSchema = defineType({
 		}),
 
 		defineField({
-			name: "order",
-			title: "Order",
-			type: "number",
-			hidden: true,
+			name: "slug",
+			title: "Slug",
+			type: "slug",
+			options: {
+				source: "name",
+				slugify: (input) =>
+					input
+						.toLowerCase()
+						.replace(/\s+/g, "-")
+						.replace(/[^\w-]+/g, ""),
+			},
+			validation: (Rule) =>
+				Rule.required().custom(
+					async (slug, context) => {
+						const { document, getClient } =
+							context;
+						const client = getClient({
+							apiVersion: "2023-01-01",
+						});
+						const existingSlug =
+							await client.fetch(
+								`*[_type == "qualification" && slug.current == $slug && _id != $id][0]`,
+								{
+									slug: slug?.current,
+									id:
+										document?._id ||
+										"",
+								},
+							);
+
+						return existingSlug
+							? "A qualification with this slug already exists."
+							: true;
+					},
+				),
 		}),
 	],
-	preview: {
-		select: {
-			title: "name",
-			subtitle: "level",
-		},
-	},
 });

@@ -1,9 +1,12 @@
 import { defineField, defineType } from "sanity";
+import { DocumentTextIcon } from "@sanity/icons";
+import { SanityDocument } from "next-sanity";
 
 export const locationSchema = defineType({
 	name: "location",
 	title: "Location",
 	type: "document",
+	icon: DocumentTextIcon,
 	fields: [
 		defineField({
 			name: "states",
@@ -32,10 +35,7 @@ export const locationSchema = defineType({
 					{ title: "Edo", value: "Edo" },
 					{ title: "Ekiti", value: "Ekiti" },
 					{ title: "Enugu", value: "Enugu" },
-					{
-						title: "Abuja",
-						value: "Abuja",
-					},
+					{ title: "Abuja", value: "Abuja" },
 					{ title: "Gombe", value: "Gombe" },
 					{ title: "Imo", value: "Imo" },
 					{ title: "Jigawa", value: "Jigawa" },
@@ -65,6 +65,54 @@ export const locationSchema = defineType({
 			},
 			validation: (Rule) => Rule.required().min(1),
 		}),
+
+		defineField({
+			name: "slug",
+			title: "Slug",
+			type: "slug",
+			options: {
+				source: (doc: SanityDocument) =>
+					doc.states?.[0] || "",
+				slugify: (input) =>
+					input
+						.toLowerCase()
+						.replace(/\s+/g, "-")
+						.replace(/[^\w-]+/g, ""),
+			},
+			validation: (Rule) =>
+				Rule.required().custom(
+					async (slug, context) => {
+						if (!slug || !slug.current)
+							return "Slug is required.";
+
+						const doc = context.document as
+							| SanityDocument
+							| undefined;
+						if (!doc || !doc.states?.length)
+							return true;
+
+						const docId = doc._id ?? "";
+						const stateName = doc.states[0];
+
+						const existing = await context
+							.getClient({
+								apiVersion: "2023-01-01",
+							})
+							.fetch(
+								`*[_type == "location" && slug.current == $slug && states[0] == $stateName && _id != $id][0]`,
+								{
+									slug: slug.current,
+									stateName,
+									id: docId,
+								},
+							);
+
+						return existing
+							? "A location with the same name and slug already exists."
+							: true;
+					},
+				),
+		}),
 	],
 	preview: {
 		select: {
@@ -74,7 +122,7 @@ export const locationSchema = defineType({
 			const { states } = selection;
 			return {
 				title: "Locations",
-				subtitle: states?.join(", "), // Display selected states
+				subtitle: states?.join(", "),
 			};
 		},
 	},
