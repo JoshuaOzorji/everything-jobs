@@ -9,6 +9,12 @@ export const locationSchema = defineType({
 	icon: DocumentTextIcon,
 	fields: [
 		defineField({
+			name: "name",
+			type: "string",
+			title: "Location Name",
+			validation: (Rule) => Rule.required(),
+		}),
+		defineField({
 			name: "states",
 			type: "array",
 			title: "States",
