@@ -194,6 +194,16 @@ export const jobFieldSchema = defineType({
 			type: "number",
 			hidden: true,
 		}),
+
+		defineField({
+			name: "publishedAt",
+			type: "datetime",
+			title: "Published At",
+			validation: (Rule) => Rule.required(),
+			readOnly: ({ document }) =>
+				Boolean(document?.publishedAt),
+		}),
+
 		defineField({
 			name: "slug",
 			title: "Slug",
@@ -206,13 +216,18 @@ export const jobFieldSchema = defineType({
 						.replace(/\s+/g, "-")
 						.replace(/[^\w-]+/g, ""),
 			},
+			description:
+				"This field will become read-only after the job field is published.",
+			readOnly: ({ document }) =>
+				Boolean(document?.publishedAt),
 			validation: (Rule) =>
 				Rule.required().custom(
-					async (slug, context) => {
+					async (name, context) => {
 						const document =
 							context.document as
 								| {
 										_id?: string;
+										publishedAt?: string;
 								  }
 								| undefined;
 						const client =
@@ -220,21 +235,25 @@ export const jobFieldSchema = defineType({
 								apiVersion: "2023-01-01",
 							});
 
-						if (!slug?.current) return true;
+						if (!name) return true; // Skip validation if name is empty
 
-						const existingSlug =
+						// If document is not published, skip uniqueness validation
+						if (!document?.publishedAt)
+							return true;
+
+						const existingJobField =
 							await client.fetch(
-								`*[_type == "jobField" && slug.current == $slug && _id != $id][0]`,
+								`*[_type == "jobField" && name == $name && _id != $id][0]`,
 								{
-									slug: slug.current,
+									name,
 									id:
 										document?._id ??
 										"",
 								},
 							);
 
-						return existingSlug
-							? "A job field with this slug already exists."
+						return existingJobField
+							? "A job field with this name already exists."
 							: true;
 					},
 				),

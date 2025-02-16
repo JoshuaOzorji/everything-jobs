@@ -44,6 +44,16 @@ export const companySchema = defineType({
 					},
 				),
 		}),
+
+		defineField({
+			name: "publishedAt",
+			type: "datetime",
+			title: "Published At",
+			validation: (Rule) => Rule.required(),
+			readOnly: ({ document }) =>
+				Boolean(document?.publishedAt),
+		}),
+
 		defineField({
 			name: "slug",
 			title: "Slug",
@@ -55,40 +65,68 @@ export const companySchema = defineType({
 						.toLowerCase()
 						.replace(/\s+/g, "-")
 						.replace(/[^\w-]+/g, ""),
+				maxLength: 200,
+			},
+			description:
+				"This field will become read-only after the company is published",
+			readOnly: ({ document }) => {
+				return Boolean(document?.publishedAt);
 			},
 			validation: (Rule) =>
 				Rule.required().custom(
 					async (slug, context) => {
-						const document =
-							context.document as
-								| {
-										_id?: string;
-								  }
-								| undefined;
-						const client =
-							context.getClient({
-								apiVersion: "2023-01-01",
-							});
-
-						if (!slug?.current) return true;
-
-						const existingSlug =
-							await client.fetch(
-								`*[_type == "company" && slug.current == $slug && _id != $id][0]`,
-								{
-									slug: slug.current,
-									id:
-										document?._id ??
-										"",
-								},
+						const documentIsPublished =
+							Boolean(
+								context.document
+									?.publishedAt,
 							);
 
-						return existingSlug
-							? "A company with this slug already exists."
-							: true;
+						// If document is not published and slug is empty, that's okay
+						if (
+							!documentIsPublished &&
+							!slug?.current
+						)
+							return true;
+
+						// If document is published, require a slug
+						if (
+							documentIsPublished &&
+							!slug?.current
+						) {
+							return "Published documents must have a slug";
+						}
+
+						// Check for duplicate slugs
+						if (slug?.current) {
+							const existing =
+								await context
+									.getClient(
+										{
+											apiVersion: "2025-02-02",
+										},
+									)
+									.fetch(
+										`*[_type == "company" && slug.current == $slug && _id != $id][0]`,
+										{
+											slug: slug.current,
+											id:
+												context
+													.document
+													?._id ??
+												"",
+										},
+									);
+
+							return existing
+								? "A company with this slug already exists."
+								: true;
+						}
+
+						return true;
 					},
 				),
 		}),
+
 		defineField({ name: "website", type: "url", title: "Website" }),
 		defineField({
 			name: "logo",

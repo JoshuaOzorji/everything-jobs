@@ -1,5 +1,6 @@
 import { defineField, defineType } from "sanity";
 import { DocumentTextIcon } from "@sanity/icons";
+import { SanityDocument } from "next-sanity";
 
 export const jobSchema = defineType({
 	name: "job",
@@ -43,7 +44,22 @@ export const jobSchema = defineType({
 			title: "Slug",
 			type: "slug",
 			options: {
-				source: async (doc, options) => {
+				source: async (
+					doc: SanityDocument,
+					options,
+				) => {
+					if (doc.slug?.current)
+						return doc.slug.current;
+
+					// Check if required references exist
+					if (
+						!doc.company?._ref ||
+						!doc.jobType?._ref ||
+						!doc.title
+					) {
+						return ""; // Return empty if required fields aren't set
+					}
+
 					const client = options.getClient({
 						apiVersion: "2025-02-02",
 					});
@@ -53,13 +69,7 @@ export const jobSchema = defineType({
 							client.fetch(
 								`*[_type == "company" && _id == $id][0]`,
 								{
-									id: (
-										doc as unknown as {
-											company: {
-												_ref: string;
-											};
-										}
-									)
+									id: doc
 										.company
 										._ref,
 								},
@@ -67,18 +77,17 @@ export const jobSchema = defineType({
 							client.fetch(
 								`*[_type == "jobType" && _id == $id][0]`,
 								{
-									id: (
-										doc as unknown as {
-											jobType: {
-												_ref: string;
-											};
-										}
-									)
+									id: doc
 										.jobType
 										._ref,
 								},
 							),
 						]);
+
+					// Add null checks for referenced documents
+					if (!company?.name || !jobType?.name) {
+						return "";
+					}
 
 					return `${doc.title}-${company.name}-${jobType.name}`
 						.toLowerCase()
@@ -86,14 +95,15 @@ export const jobSchema = defineType({
 						.replace(/[^\w-]+/g, "");
 				},
 			},
+			description:
+				"This field will become read-only after the job is published. Fill in the title, company, and job type first to generate the slug.",
+			readOnly: ({ document }) =>
+				Boolean(document?.publishedAt),
 			validation: (Rule) =>
 				Rule.required().custom(
 					async (slug, context) => {
-						if (!slug) return true;
+						if (!slug?.current) return true;
 
-						const docId =
-							context.document?._id ??
-							"";
 						const existing = await context
 							.getClient({
 								apiVersion: "2025-02-02",
@@ -102,7 +112,11 @@ export const jobSchema = defineType({
 								`*[_type == "job" && slug.current == $slug && _id != $id][0]`,
 								{
 									slug: slug.current,
-									id: docId,
+									id:
+										context
+											.document
+											?._id ??
+										"",
 								},
 							);
 
@@ -166,7 +180,6 @@ export const jobSchema = defineType({
 			name: "publishedAt",
 			type: "datetime",
 			title: "Published At",
-			initialValue: () => new Date().toISOString(),
 			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
