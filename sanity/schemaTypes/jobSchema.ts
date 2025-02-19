@@ -96,27 +96,48 @@ export const jobSchema = defineType({
 				},
 			},
 			description:
-				"This field will become read-only after the job is published. Fill in the title, company, and job type first to generate the slug.",
-			readOnly: ({ document }) =>
-				Boolean(document?.publishedAt),
+				"This Slug field will only be generated once. Fill in the title, company, and job type first to generate the slug.",
+			readOnly: ({ value }) => {
+				// Lock slug field if it already has a value
+				return Boolean(value?.current);
+			},
 			validation: (Rule) =>
 				Rule.required().custom(
 					async (slug, context) => {
 						if (!slug?.current) return true;
 
-						const existing = await context
-							.getClient({
+						const client =
+							context.getClient({
 								apiVersion: "2025-02-02",
-							})
-							.fetch(
+							});
+						const docId =
+							context.document?._id ??
+							"";
+
+						// Get the original document to check if slug has changed
+						const originalDoc =
+							await client.fetch(
+								`*[_type == "job" && _id == $id][0]`,
+								{ id: docId },
+							);
+
+						// If the document exists and the slug hasn't changed, skip validation
+						if (
+							originalDoc &&
+							originalDoc.slug
+								?.current ===
+								slug.current
+						) {
+							return true;
+						}
+
+						// Only check for duplicates if the slug has changed
+						const existing =
+							await client.fetch(
 								`*[_type == "job" && slug.current == $slug && _id != $id][0]`,
 								{
 									slug: slug.current,
-									id:
-										context
-											.document
-											?._id ??
-										"",
+									id: docId,
 								},
 							);
 

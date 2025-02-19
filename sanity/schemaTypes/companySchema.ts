@@ -22,8 +22,28 @@ export const companySchema = defineType({
 								| undefined;
 						const client =
 							context.getClient({
-								apiVersion: "2023-01-01",
+								apiVersion: "2025-02-02",
 							});
+
+						// Get the original document to check if name has changed
+						const originalDoc =
+							await client.fetch(
+								`*[_type == "company" && _id == $id][0]`,
+								{
+									id:
+										document?._id ??
+										"",
+								},
+							);
+
+						// Skip validation if name hasn't changed
+						if (
+							originalDoc &&
+							originalDoc.name ===
+								name
+						) {
+							return true;
+						}
 
 						if (!name) return true;
 
@@ -46,88 +66,11 @@ export const companySchema = defineType({
 		}),
 
 		defineField({
-			name: "publishedAt",
-			type: "datetime",
-			title: "Published At",
-			validation: (Rule) => Rule.required(),
-			readOnly: ({ document }) =>
-				Boolean(document?.publishedAt),
+			name: "website",
+			type: "url",
+			title: "Website",
 		}),
 
-		defineField({
-			name: "slug",
-			title: "Slug",
-			type: "slug",
-			options: {
-				source: "name",
-				slugify: (input) =>
-					input
-						.toLowerCase()
-						.replace(/\s+/g, "-")
-						.replace(/[^\w-]+/g, ""),
-				maxLength: 200,
-			},
-			description:
-				"This field will become read-only after the company is published",
-			readOnly: ({ document }) => {
-				return Boolean(document?.publishedAt);
-			},
-			validation: (Rule) =>
-				Rule.required().custom(
-					async (slug, context) => {
-						const documentIsPublished =
-							Boolean(
-								context.document
-									?.publishedAt,
-							);
-
-						// If document is not published and slug is empty, that's okay
-						if (
-							!documentIsPublished &&
-							!slug?.current
-						)
-							return true;
-
-						// If document is published, require a slug
-						if (
-							documentIsPublished &&
-							!slug?.current
-						) {
-							return "Published documents must have a slug";
-						}
-
-						// Check for duplicate slugs
-						if (slug?.current) {
-							const existing =
-								await context
-									.getClient(
-										{
-											apiVersion: "2025-02-02",
-										},
-									)
-									.fetch(
-										`*[_type == "company" && slug.current == $slug && _id != $id][0]`,
-										{
-											slug: slug.current,
-											id:
-												context
-													.document
-													?._id ??
-												"",
-										},
-									);
-
-							return existing
-								? "A company with this slug already exists."
-								: true;
-						}
-
-						return true;
-					},
-				),
-		}),
-
-		defineField({ name: "website", type: "url", title: "Website" }),
 		defineField({
 			name: "logo",
 			type: "image",
@@ -141,11 +84,95 @@ export const companySchema = defineType({
 				}),
 			],
 		}),
+
 		defineField({
 			name: "description",
 			type: "text",
 			title: "Description",
 		}),
+
+		// defineField({
+		// 	name: "slug",
+		// 	type: "slug",
+		// 	title: "Slug",
+		// 	options: {
+		// 		source: "name",
+		// 		maxLength: 96,
+		// 		slugify: (input) =>
+		// 			input
+		// 				.toLowerCase()
+		// 				.replace(/\s+/g, "-")
+		// 				.replace(/[^\w-]+/g, ""),
+		// 	},
+		// 	readOnly: ({ value, document }) => {
+		// 		// Allow editing if there's no slug yet
+		// 		return value?.current ? true : false;
+		// 	},
+		// }),
+
+		defineField({
+			name: "slug",
+			type: "slug",
+			title: "Slug",
+			options: {
+				source: "name",
+				maxLength: 96,
+				slugify: (input) =>
+					input
+						.toLowerCase()
+						.replace(/\s+/g, "-")
+						.replace(/[^\w-]+/g, ""),
+			},
+			description:
+				"Slug will only be generated once. Be sure of the Company name before generating",
+			readOnly: ({ value }) => {
+				// Lock slug field if it already has a value
+				return Boolean(value?.current);
+			},
+			validation: (Rule) =>
+				Rule.required().custom(
+					async (slug, context) => {
+						if (!slug?.current)
+							return "Slug is required.";
+
+						const doc = context.document;
+						if (!doc) return true;
+
+						const docId = doc._id ?? "";
+						const existingSlug =
+							await context
+								.getClient({
+									apiVersion: "2025-02-02",
+								})
+								.fetch(
+									`*[_type == "company" && slug.current == $slug && _id != $id][0]`,
+									{
+										slug: slug.current,
+										id: docId,
+									},
+								);
+
+						// ✅ Fix: Skip validation if the slug hasn't changed
+						if (
+							existingSlug &&
+							existingSlug.slug
+								.current ===
+								slug.current
+						) {
+							return true;
+						}
+
+						return existingSlug
+							? "This slug is already in use."
+							: true;
+					},
+				),
+		}),
 	],
-	preview: { select: { title: "name", media: "logo" } },
+	preview: {
+		select: {
+			title: "name",
+			media: "logo",
+		},
+	},
 });
