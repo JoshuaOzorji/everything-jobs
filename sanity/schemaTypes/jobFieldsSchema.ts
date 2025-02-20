@@ -25,7 +25,27 @@ export const jobFieldSchema = defineType({
 								apiVersion: "2023-01-01",
 							});
 
-						if (!name) return true; // Skip validation if name is empty
+						if (!name) return true;
+
+						// Get the original document to check if name has changed
+						const originalDoc =
+							await client.fetch(
+								`*[_type == "jobField" && _id == $id][0]`,
+								{
+									id:
+										document?._id ??
+										"",
+								},
+							);
+
+						// Skip validation if name hasn't changed
+						if (
+							originalDoc &&
+							originalDoc.name ===
+								name
+						) {
+							return true;
+						}
 
 						const existingJobField =
 							await client.fetch(
@@ -200,8 +220,6 @@ export const jobFieldSchema = defineType({
 			type: "datetime",
 			title: "Published At",
 			validation: (Rule) => Rule.required(),
-			readOnly: ({ document }) =>
-				Boolean(document?.publishedAt),
 		}),
 
 		defineField({
@@ -217,43 +235,52 @@ export const jobFieldSchema = defineType({
 						.replace(/[^\w-]+/g, ""),
 			},
 			description:
-				"This field will become read-only after the job field is published.",
-			readOnly: ({ document }) =>
-				Boolean(document?.publishedAt),
+				"This field will become read-only once a value is set.",
+			readOnly: ({ value }) => {
+				// Lock slug field if it already has a value
+				return Boolean(value?.current);
+			},
 			validation: (Rule) =>
 				Rule.required().custom(
-					async (name, context) => {
-						const document =
-							context.document as
-								| {
-										_id?: string;
-										publishedAt?: string;
-								  }
-								| undefined;
+					async (slug, context) => {
+						if (!slug?.current) return true;
+
 						const client =
 							context.getClient({
 								apiVersion: "2023-01-01",
 							});
+						const docId =
+							context.document?._id ??
+							"";
 
-						if (!name) return true; // Skip validation if name is empty
-
-						// If document is not published, skip uniqueness validation
-						if (!document?.publishedAt)
-							return true;
-
-						const existingJobField =
+						// Get the original document to check if slug has changed
+						const originalDoc =
 							await client.fetch(
-								`*[_type == "jobField" && name == $name && _id != $id][0]`,
+								`*[_type == "jobField" && _id == $id][0]`,
+								{ id: docId },
+							);
+
+						// If the document exists and the slug hasn't changed, skip validation
+						if (
+							originalDoc &&
+							originalDoc.slug
+								?.current ===
+								slug.current
+						) {
+							return true;
+						}
+
+						const existing =
+							await client.fetch(
+								`*[_type == "jobField" && slug.current == $slug && _id != $id][0]`,
 								{
-									name,
-									id:
-										document?._id ??
-										"",
+									slug: slug.current,
+									id: docId,
 								},
 							);
 
-						return existingJobField
-							? "A job field with this name already exists."
+						return existing
+							? "A job field with this slug already exists."
 							: true;
 					},
 				),

@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Markazi_Text, Poppins } from "next/font/google";
 import "./../globals.css";
 import AuthProvider from "@/components/AuthProvider";
+import { Suspense } from "react";
+import { Toaster } from "react-hot-toast";
+import ProgressBar from "@/components/ProgressBar";
+import BaseLayout from "@/components/BaseLayout";
+import { ErrorBoundary } from "react-error-boundary";
 
 export const metadata: Metadata = {
 	title: "Everything Jobs",
@@ -38,7 +43,18 @@ export default function RootLayout({
 		<html lang='en'>
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} ${markaziText.variable} antialiased`}>
-				<AuthProvider>{children}</AuthProvider>
+				<ErrorBoundary
+					fallback={<p>Something went wrong!</p>}>
+					<ProgressBar />
+				</ErrorBoundary>
+
+				<BaseLayout>
+					<AuthProvider>{children}</AuthProvider>
+					<Toaster
+						position='bottom-center'
+						reverseOrder={false}
+					/>
+				</BaseLayout>
 			</body>
 		</html>
 	);
