@@ -31,9 +31,10 @@ export default {
 				poppins: ["var(--font-poppins)", "sans-serif"],
 			},
 			colors: {
-				pry: "#005CE6",
+				pry: "#000066",
 				sec: "#4f5763",
 				acc: "#e5e7eb",
+				acc2: "#F4F4F6",
 
 				background: "hsl(var(--background))",
 				foreground: "hsl(var(--foreground))",

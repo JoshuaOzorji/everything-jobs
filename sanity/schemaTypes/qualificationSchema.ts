@@ -44,23 +44,23 @@ export const qualificationSchema = defineType({
 				list: [
 					{ title: "SSCE", value: "ssce" },
 					{
-						title: "National Diploma (ND)",
+						title: "NCE",
+						value: "nce",
+					},
+					{
+						title: "ND",
 						value: "nd",
 					},
 					{
-						title: "Higher National Diploma (HND)",
-						value: "hnd",
+						title: "BSC/BA/HND",
+						value: "bsc-ba-hnd",
 					},
 					{
-						title: "Bachelor's Degree",
-						value: "bachelors",
-					},
-					{
-						title: "Master's Degree",
+						title: "MSC/MA/MBA",
 						value: "masters",
 					},
 					{
-						title: "Doctor of Philosophy (Ph.D)",
+						title: "PhD/Fellowship",
 						value: "phd",
 					},
 					{ title: "Others", value: "others" },

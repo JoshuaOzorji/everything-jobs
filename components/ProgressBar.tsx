@@ -65,7 +65,7 @@ const ProgressBar = () => {
 		<Suspense fallback={null}>
 			<Progress
 				value={progress}
-				className='fixed top-0 left-0 z-50 w-full h-1 bg-acc progress-bar'
+				className='fixed top-0 left-0 z-50  h-1 bg-acc progress-bar w-full'
 			/>
 		</Suspense>
 	);
