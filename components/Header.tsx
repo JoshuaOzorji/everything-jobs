@@ -5,7 +5,7 @@ import MobileNav from "./MobileNav";
 
 const Header = () => {
 	return (
-		<main className='bg-white'>
+		<main className='bg-white animate'>
 			<div className='md:hidden'>
 				<MobileNav />
 			</div>

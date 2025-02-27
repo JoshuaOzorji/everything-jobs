@@ -41,16 +41,16 @@ const MainNav = () => {
 					</div>
 				</div>
 
-				<div className='flex gap-4 text-xl items-center'>
+				<div className='flex items-center gap-4 text-xl'>
 					<Link href='/auth/signup'>
-						<button className='border text-white bg-pry py-1 px-2 rounded-lg'>
-							<BsBriefcaseFill />
+						<button className='flex flex-col items-center px-2 py-1 text-white rounded-lg bg-pry'>
+							<BsBriefcaseFill className='w-3 h-3' />
 							<p>Post Job</p>
 						</button>
 					</Link>
 					<Link href='/auth/login'>
-						<button className=''>
-							<HiMiniUserCircle />
+						<button className='flex flex-col items-center'>
+							<HiMiniUserCircle className='w-4 h-4' />
 							<p>Login</p>
 						</button>
 					</Link>

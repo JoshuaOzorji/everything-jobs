@@ -6,8 +6,16 @@ body {
 	font-family: Arial, Helvetica, sans-serif;
 }
 
+.animate {
+	@apply transition-all delay-150 ease-in;
+}
+
 .progress-bar {
 	animation: indeterminate 1.5s infinite;
+}
+
+.hero-input {
+	@apply flex-1 w-full p-2 text-xs md:text-sm focus:outline-none focus:bg-acc2;
 }
 
 @layer base {

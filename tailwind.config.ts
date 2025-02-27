@@ -20,13 +20,13 @@ export default {
 					"var(--font-markazi-text)",
 					"sans-serif",
 				],
-				geistMono: [
-					"var(--font-geist-mono)",
+				sourceSans3: [
+					"var(--font-source-sans-3)",
 					"sans-serif",
 				],
-				geistSans: [
-					"var(--font-geist-sans)",
-					"sans-serif",
+				crimsonText: [
+					"var(--font-crimson-text)",
+					"serif",
 				],
 				poppins: ["var(--font-poppins)", "sans-serif"],
 			},

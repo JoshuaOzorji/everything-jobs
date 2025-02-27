@@ -75,12 +75,42 @@ export const companySchema = defineType({
 			name: "logo",
 			type: "image",
 			title: "Logo",
-			options: { hotspot: true },
+			description:
+				"If no logo is uploaded, a default logo will be used automatically.",
+			options: {
+				hotspot: true,
+				storeOriginalFilename: true,
+			},
+
+			// fields: [
+			// 	defineField({
+			// 		name: "alt",
+			// 		type: "string",
+			// 		title: "Alternative Text",
+			// 	}),
+			// ],
 			fields: [
 				defineField({
 					name: "alt",
 					type: "string",
 					title: "Alternative Text",
+					// Only require alt text if an image exists
+					validation: (Rule) =>
+						Rule.custom((alt, context) => {
+							const image =
+								context.parent as {
+									asset?: unknown;
+								};
+							// Only require alt if an image has been uploaded
+							if (
+								image &&
+								image.asset &&
+								!alt
+							) {
+								return "Alt text is required when an image is uploaded";
+							}
+							return true;
+						}),
 				}),
 			],
 		}),
@@ -90,25 +120,6 @@ export const companySchema = defineType({
 			type: "text",
 			title: "Description",
 		}),
-
-		// defineField({
-		// 	name: "slug",
-		// 	type: "slug",
-		// 	title: "Slug",
-		// 	options: {
-		// 		source: "name",
-		// 		maxLength: 96,
-		// 		slugify: (input) =>
-		// 			input
-		// 				.toLowerCase()
-		// 				.replace(/\s+/g, "-")
-		// 				.replace(/[^\w-]+/g, ""),
-		// 	},
-		// 	readOnly: ({ value, document }) => {
-		// 		// Allow editing if there's no slug yet
-		// 		return value?.current ? true : false;
-		// 	},
-		// }),
 
 		defineField({
 			name: "slug",
@@ -173,6 +184,13 @@ export const companySchema = defineType({
 		select: {
 			title: "name",
 			media: "logo",
+		},
+		prepare({ title, media }) {
+			// If no logo is provided, use a default
+			return {
+				title,
+				media: media,
+			};
 		},
 	},
 });

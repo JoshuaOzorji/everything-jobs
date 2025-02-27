@@ -40,3 +40,32 @@ export interface Category {
 	name: string;
 	slug: { current: string };
 }
+
+export interface JobCardProps {
+	job: {
+		title: string;
+		company: {
+			name: string;
+		};
+		location: {
+			city: string;
+			country: string;
+		};
+		jobType: {
+			name: string;
+		};
+		level: {
+			name: string;
+		};
+		publishedAt: string;
+		mainImage: {
+			asset: {
+				_ref: string;
+			};
+			alt?: string;
+		};
+		slug: {
+			current: string;
+		};
+	};
+}
