@@ -5,8 +5,13 @@ import logo from "@/public/logo.png";
 import { navItems } from "@/lib/data";
 import { HiMiniUserCircle } from "react-icons/hi2";
 import { BsBriefcaseFill } from "react-icons/bs";
+import { IoSearchOutline } from "react-icons/io5";
 
-const MainNav = () => {
+const MainNav = ({
+	setIsSearchOpen,
+}: {
+	setIsSearchOpen: (value: boolean) => void;
+}) => {
 	return (
 		<nav className='font-semibold border-b font-markaziText'>
 			<div className='flex items-center justify-between w-[96%] mx-auto py-3 px-2'>
@@ -48,12 +53,26 @@ const MainNav = () => {
 							<p>Post Job</p>
 						</button>
 					</Link>
-					<Link href='/auth/login'>
-						<button className='flex flex-col items-center'>
-							<HiMiniUserCircle className='w-4 h-4' />
-							<p>Login</p>
+
+					<div className='flex items-center gap-4'>
+						<Link href='/auth/login'>
+							<button className='flex flex-col items-center'>
+								<HiMiniUserCircle className='w-4 h-4' />
+								<span>
+									Login
+								</span>
+							</button>
+						</Link>
+
+						<button
+							onClick={() =>
+								setIsSearchOpen(
+									true,
+								)
+							}>
+							<IoSearchOutline className='w-6 h-6' />
 						</button>
-					</Link>
+					</div>
 				</div>
 			</div>
 		</nav>

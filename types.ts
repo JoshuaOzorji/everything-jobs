@@ -43,29 +43,29 @@ export interface Category {
 
 export interface JobCardProps {
 	job: {
+		_id: string;
 		title: string;
 		company: {
 			name: string;
+			logo?: {
+				asset?: {
+					_ref: string;
+				};
+			};
 		};
-		location: {
-			city: string;
-			country: string;
+		location?: {
+			name: string;
+			states?: string[];
+			slug?: {
+				current: string;
+			};
 		};
-		jobType: {
+		jobType?: {
 			name: string;
 		};
-		level: {
+		level?: {
 			name: string;
 		};
 		publishedAt: string;
-		mainImage: {
-			asset: {
-				_ref: string;
-			};
-			alt?: string;
-		};
-		slug: {
-			current: string;
-		};
 	};
 }

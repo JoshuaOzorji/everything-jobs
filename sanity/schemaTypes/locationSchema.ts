@@ -34,7 +34,7 @@ export const locationSchema = defineType({
 					{ title: "Borno", value: "Borno" },
 					{
 						title: "Cross River",
-						value: "Cross River",
+						value: "Cross-River",
 					},
 					{ title: "Delta", value: "Delta" },
 					{ title: "Ebonyi", value: "Ebonyi" },

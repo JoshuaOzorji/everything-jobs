@@ -1,46 +1,63 @@
 import image from "@/public/mtn-new-logo.jpg";
+import { JobCardProps } from "@/types";
 import Image from "next/image";
+import { formatDate } from "@/lib/formatDate";
+import { urlFor } from "../sanity/lib/image";
+import defaultImg from "@/public/company-default.png";
+const JobCard = ({ job }: JobCardProps) => {
+	const imageUrl = job.company.logo?.asset?._ref
+		? urlFor(job.company.logo).url()
+		: defaultImg;
 
-const JobCard = () => {
+	const locationDisplay =
+		job.location?.states?.[0] || job.location?.name || "Nigeria";
+
 	return (
-		<div className='flex p-2 gap-3 items-start'>
+		<div className='flex items-start gap-3 p-2 text-gray-900'>
 			<div>
 				<Image
-					src={image}
-					alt='image'
-					className='h-[8vh] w-full rounded-sm bg-red-500'
+					src={imageUrl}
+					alt={job.company.name}
+					className='h-[8vh] w-full rounded-sm'
+					width={50}
+					height={50}
 				/>
 			</div>
-			<div className='w-full '>
-				<span className='flex justify-between items-center font-poppins'>
-					<h2 className=' text-lg font-bold'>
-						Product Designer
+			<div className='w-full'>
+				<span className='flex items-center justify-between '>
+					<h2 className='font-mono text-lg font-medium'>
+						{job.title}
 					</h2>
 					<p className='text-sm'>
-						<span className='mx-1 text-green-500'>
+						{/* <span className='mx-1 text-green-500'>
 							&bull;
-						</span>
-						1hr ago
+						</span> */}
+						Posted:
+						{formatDate(
+							new Date(
+								job.publishedAt,
+							),
+						)}
 					</p>
 				</span>
-				<div className='flex gap-2 font-sourceSans3'>
-					<p>MTN-NG</p>
-					<span>&bull;</span>
+				<div className='flex gap-2 text-sm font-poppins'>
+					<p>{job.company.name}</p>
+					{/* <span>&bull;</span> */}
+					<span>|</span>
 					<p className='flex'>
-						Lagos <span> ,NG</span>
+						{locationDisplay}{" "}
+						<span> ,NG</span>
 					</p>
 				</div>
-				<div className='flex gap-4 flex-wrap font-sourceSans3'>
-					<span>
-						<p className='underline'>
-							Full-time
+				<div className='text-sm font-poppins'>
+					<span className='flex gap-3'>
+						<p className='underline capitalize'>
+							{job.jobType?.name}
 						</p>
-						<p className='underline'>
-							Entry-level
+						<p className='underline capitalize'>
+							{job.level?.name}
 						</p>
 					</span>
-
-					<span></span>
 				</div>
 			</div>
 		</div>

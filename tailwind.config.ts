@@ -20,15 +20,13 @@ export default {
 					"var(--font-markazi-text)",
 					"sans-serif",
 				],
-				sourceSans3: [
-					"var(--font-source-sans-3)",
+				pt_sans: ["var(--font-pt-sans)", "sans-serif"],
+				roboto: [
+					"var(--font-roboto-text)",
 					"sans-serif",
 				],
-				crimsonText: [
-					"var(--font-crimson-text)",
-					"serif",
-				],
 				poppins: ["var(--font-poppins)", "sans-serif"],
+				inter: ["var(--font-inter)", "sans-serif"],
 			},
 			colors: {
 				pry: "#000066",

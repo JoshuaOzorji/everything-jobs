@@ -1,10 +1,15 @@
-import React from "react";
 import logo from "@/public/logo.png";
 import Link from "next/link";
 import Image from "next/image";
 import { CgMenu } from "react-icons/cg";
 import { HiMiniUserCircle } from "react-icons/hi2";
-const MobileNav = () => {
+import { IoSearchOutline } from "react-icons/io5";
+
+const MobileNav = ({
+	setIsSearchOpen,
+}: {
+	setIsSearchOpen: (value: boolean) => void;
+}) => {
 	return (
 		<div>
 			<div className='flex items-center justify-between p-2'>
@@ -16,12 +21,20 @@ const MobileNav = () => {
 					<Image src={logo} alt='logo' />
 				</Link>
 
-				<Link href='/auth/login'>
-					<button className='flex flex-col items-center'>
-						<HiMiniUserCircle className='w-4 h-4' />
-						<p>Login</p>
+				<div className='flex items-center gap-4'>
+					<button
+						onClick={() =>
+							setIsSearchOpen(true)
+						}>
+						<IoSearchOutline className='w-6 h-6' />
 					</button>
-				</Link>
+					<Link href='/auth/login'>
+						<button className='flex flex-col items-center'>
+							<HiMiniUserCircle className='w-4 h-4' />
+							<span>Login</span>
+						</button>
+					</Link>
+				</div>
 			</div>
 		</div>
 	);
