@@ -9,8 +9,9 @@ const Header = () => {
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
 
 	return (
-		<>
-			<main className='bg-white animate'>
+		<header className='bg-white relative'>
+			{/* Header content always at top z-index */}
+			<div className='relative z-50'>
 				<div className='md:hidden'>
 					<MobileNav
 						setIsSearchOpen={
@@ -25,12 +26,14 @@ const Header = () => {
 						}
 					/>
 				</div>
-				<SearchComponent
-					isSearchOpen={isSearchOpen}
-					setIsSearchOpen={setIsSearchOpen}
-				/>
-			</main>
-		</>
+			</div>
+
+			{/* Search component below */}
+			<SearchComponent
+				isSearchOpen={isSearchOpen}
+				setIsSearchOpen={setIsSearchOpen}
+			/>
+		</header>
 	);
 };
 

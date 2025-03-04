@@ -200,9 +200,26 @@ const SheetContent = React.forwardRef<
 >(({ side = "right", inline, className, children, ...props }, ref) => {
 	// Generate the base classes from sheetVariants.
 	let classes = sheetVariants({ side });
-	// If inline is true, replace fixed with absolute.
+	// If inline is true, replace "fixed" with "absolute".
 	if (inline) {
 		classes = classes.replace("fixed", "absolute");
+		if (side === "top") {
+			// Position the content at the bottom of the header.
+			classes = classes.replace("top-0", "top-full");
+			// Remove the default slide animation classes.
+			classes = classes
+				.replace(
+					"data-[state=closed]:slide-out-to-top",
+					"",
+				)
+				.replace(
+					"data-[state=open]:slide-in-from-top",
+					"",
+				);
+			// Append explicit transition and transform classes.
+			classes +=
+				" transition-transform duration-300 ease-in-out data-[state=closed]:-translate-y-full data-[state=open]:translate-y-0";
+		}
 	}
 
 	const content = (
