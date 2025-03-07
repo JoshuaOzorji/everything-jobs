@@ -7,7 +7,7 @@ export interface Job {
 	jobType: { _ref: string; name: string };
 	education: { _ref: string; name: string };
 	category: { _ref: string; name: string };
-	description: string;
+	description: any[];
 	publishedAt: string;
 	mainImage: {
 		asset: {
@@ -67,5 +67,7 @@ export interface JobCardProps {
 			name: string;
 		};
 		publishedAt: string;
+		description?: any[];
+		responsibilities?: string[];
 	};
 }

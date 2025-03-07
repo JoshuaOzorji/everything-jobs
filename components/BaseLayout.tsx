@@ -8,7 +8,7 @@ const BaseLayout = ({ children }: { children: React.ReactNode }) => {
 		<main className='flex flex-col min-h-screen bg-acc2'>
 			<Header />
 
-			<div className='flex-1 mx-4 my-2 md:my-4 md:mx-8'>
+			<div className='flex-1 mx-4 my-2 md:w-[84%] md:mx-auto'>
 				{children}
 			</div>
 			<Footer />

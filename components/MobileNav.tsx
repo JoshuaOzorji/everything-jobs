@@ -6,12 +6,14 @@ import { HiMiniUserCircle } from "react-icons/hi2";
 import { IoSearchOutline } from "react-icons/io5";
 
 const MobileNav = ({
-	setIsSearchOpen,
+	toggleSearch,
+	isSearchOpen,
 }: {
-	setIsSearchOpen: (value: boolean) => void;
+	toggleSearch: () => void;
+	isSearchOpen: boolean;
 }) => {
 	return (
-		<div>
+		<nav>
 			<div className='flex items-center justify-between p-2'>
 				<span>
 					<CgMenu className='w-6 h-6' />
@@ -23,9 +25,12 @@ const MobileNav = ({
 
 				<div className='flex items-center gap-4'>
 					<button
-						onClick={() =>
-							setIsSearchOpen(true)
-						}>
+						onClick={toggleSearch}
+						className={`p-2 transition-colors duration-200 ${
+							isSearchOpen
+								? "text-pry bg-gray-200 rounded-full"
+								: "text-gray-600"
+						}`}>
 						<IoSearchOutline className='w-6 h-6' />
 					</button>
 					<Link href='/auth/login'>
@@ -36,7 +41,7 @@ const MobileNav = ({
 					</Link>
 				</div>
 			</div>
-		</div>
+		</nav>
 	);
 };
 

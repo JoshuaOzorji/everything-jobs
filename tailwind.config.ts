@@ -16,21 +16,14 @@ export default {
 				xl: "1280px",
 			},
 			fontFamily: {
-				markaziText: [
-					"var(--font-markazi-text)",
-					"sans-serif",
-				],
-				pt_sans: ["var(--font-pt-sans)", "sans-serif"],
-				roboto: [
-					"var(--font-roboto-text)",
-					"sans-serif",
-				],
+				lato: ["var(--font-lato)", "sans-serif"],
+				plex_serif: ["var(--font-plex-serif)", "serif"],
 				poppins: ["var(--font-poppins)", "sans-serif"],
-				inter: ["var(--font-inter)", "sans-serif"],
 			},
 			colors: {
-				pry: "#000066",
+				pry: "#003ECB",
 				sec: "#4f5763",
+				sec2: "#c4e0f9",
 				acc: "#e5e7eb",
 				acc2: "#F4F4F6",
 

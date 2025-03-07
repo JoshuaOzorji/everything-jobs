@@ -1,11 +1,5 @@
 import type { Metadata } from "next";
-import {
-	Markazi_Text,
-	Poppins,
-	Roboto,
-	PT_Sans,
-	Inter,
-} from "next/font/google";
+import { Lato, Poppins, IBM_Plex_Sans, IBM_Plex_Serif } from "next/font/google";
 import "./../globals.css";
 import AuthProvider from "@/components/AuthProvider";
 import { Toaster } from "react-hot-toast";
@@ -24,28 +18,18 @@ const poppins = Poppins({
 	weight: "400",
 });
 
-const markaziText = Markazi_Text({
-	variable: "--font-markazi-text",
-	subsets: ["latin"],
-});
-
-const roboto = Roboto({
-	variable: "--font-roboto-text",
-	weight: "400",
-	subsets: ["latin"],
-});
-
-const pt_sans = PT_Sans({
-	variable: "--font-pt-sans",
+const lato = Lato({
+	variable: "--font-lato",
 	subsets: ["latin"],
 	weight: "400",
 });
 
-const inter = Inter({
-	variable: "--font-inter",
+const plex_serif = IBM_Plex_Serif({
+	variable: "--font-plex-serif",
 	subsets: ["latin"],
 	weight: "400",
 });
+
 export default function RootLayout({
 	children,
 }: Readonly<{
@@ -54,7 +38,7 @@ export default function RootLayout({
 	return (
 		<html lang='en'>
 			<body
-				className={`${roboto.variable} ${inter.variable} ${pt_sans.variable} ${poppins.variable} ${markaziText.variable} antialiased`}>
+				className={`${lato.variable} ${plex_serif.variable} ${poppins.variable}  antialiased`}>
 				<ErrorBoundary
 					fallback={<p>Something went wrong!</p>}>
 					<ProgressBar />

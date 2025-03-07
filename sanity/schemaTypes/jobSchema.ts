@@ -301,6 +301,12 @@ export const jobSchema = defineType({
 			title: "Responsibilities",
 			type: "array",
 			of: [{ type: "string" }],
+			// validation: (Rule) =>
+			// 	Rule.required()
+			// 		.min(1)
+			// 		.error(
+			// 			"Please add at least one requirement",
+			// 		),
 		}),
 		defineField({
 			name: "recruitmentProcess",
@@ -326,9 +332,9 @@ export const jobSchema = defineType({
 			],
 		}),
 		defineField({
-			name: "description",
+			name: "summary",
 			type: "array",
-			title: "Job Description",
+			title: "Job Summary Details",
 			of: [{ type: "block" }],
 			validation: (Rule) => Rule.required(),
 		}),

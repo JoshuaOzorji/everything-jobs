@@ -8,22 +8,24 @@ import SearchComponent from "./SearchComponent";
 const Header = () => {
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
 
+	const toggleSearch = () => {
+		setIsSearchOpen((prev) => !prev);
+	};
+
 	return (
 		<header className='bg-white relative'>
 			{/* Header content always at top z-index */}
 			<div className='relative z-50'>
 				<div className='md:hidden'>
 					<MobileNav
-						setIsSearchOpen={
-							setIsSearchOpen
-						}
+						toggleSearch={toggleSearch}
+						isSearchOpen={isSearchOpen}
 					/>
 				</div>
 				<div className='hidden md:block'>
 					<MainNav
-						setIsSearchOpen={
-							setIsSearchOpen
-						}
+						toggleSearch={toggleSearch}
+						isSearchOpen={isSearchOpen}
 					/>
 				</div>
 			</div>

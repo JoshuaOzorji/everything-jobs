@@ -23,7 +23,8 @@ const LatestJobs = async () => {
     level->{
       name
     },
-    publishedAt
+    publishedAt, 
+		summary,
   }`);
 
 	return (
@@ -32,7 +33,7 @@ const LatestJobs = async () => {
 			<div className='flex flex-col gap-4 md:flex-row'>
 				<section className='md:w-[65%] bg-white'>
 					{jobs.length > 0 ? (
-						<div className='flex flex-col divide-y'>
+						<div className='flex flex-col gap-2 divide-y'>
 							{jobs.map((job) => (
 								<JobCard
 									key={
