@@ -17,7 +17,10 @@ export default {
 			},
 			fontFamily: {
 				lato: ["var(--font-lato)", "sans-serif"],
-				plex_serif: ["var(--font-plex-serif)", "serif"],
+				openSans: [
+					"var(--font-open-sans)",
+					"sans-serif",
+				],
 				poppins: ["var(--font-poppins)", "sans-serif"],
 			},
 			colors: {
@@ -26,6 +29,7 @@ export default {
 				sec2: "#c4e0f9",
 				acc: "#e5e7eb",
 				acc2: "#F4F4F6",
+				myBlack: "#262626",
 
 				background: "hsl(var(--background))",
 				foreground: "hsl(var(--foreground))",

@@ -127,7 +127,7 @@ export const locationSchema = defineType({
 		prepare(selection) {
 			const { states } = selection;
 			return {
-				title: "Locations",
+				title: "Location",
 				subtitle: states?.join(", "),
 			};
 		},

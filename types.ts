@@ -1,50 +1,69 @@
-export interface Job {
-	_id: string;
-	title: string;
-	slug: { current: string };
-	company: string;
-	location: { _ref: string; name: string };
-	jobType: { _ref: string; name: string };
-	education: { _ref: string; name: string };
-	category: { _ref: string; name: string };
-	description: any[];
-	publishedAt: string;
-	mainImage: {
-		asset: {
-			_ref: string;
-		};
-		alt: string;
-	};
+export interface Company {
+	name: string;
 }
 
 export interface Location {
-	_id: string;
 	name: string;
-	slug: { current: string };
 }
 
 export interface JobType {
-	_id: string;
 	name: string;
-	slug: { current: string };
 }
 
-export interface Education {
-	_id: string;
-	name: string;
-	slug: { current: string };
+export interface Qualification {
+	title: string;
 }
 
-export interface Category {
-	_id: string;
+export interface JobField {
 	name: string;
-	slug: { current: string };
 }
 
+export interface JobLevel {
+	name: string;
+}
+
+export interface SalaryRange {
+	min: number;
+	max: number;
+}
+
+export interface ExperienceRange {
+	min: number;
+	max: number;
+}
+
+export interface MainImage {
+	asset: {
+		url: string;
+	};
+	alt: string;
+}
+
+export interface Job {
+	title: string;
+	slug: { current: string };
+	summary: any[];
+	company: Company;
+	location: Location;
+	jobType: JobType;
+	qualification: Qualification;
+	jobField: JobField;
+	salaryRange: SalaryRange;
+	publishedAt: string;
+	deadline: string;
+	level: JobLevel;
+	experienceRange: ExperienceRange;
+	requirements: string[];
+	responsibilities: string[];
+	recruitmentProcess: string[];
+	mainImage: MainImage;
+	apply: any[];
+}
 export interface JobCardProps {
 	job: {
 		_id: string;
 		title: string;
+		slug: string;
 		company: {
 			name: string;
 			logo?: {
@@ -67,7 +86,7 @@ export interface JobCardProps {
 			name: string;
 		};
 		publishedAt: string;
-		description?: any[];
+		summary?: any[];
 		responsibilities?: string[];
 	};
 }

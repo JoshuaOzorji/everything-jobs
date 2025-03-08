@@ -28,8 +28,8 @@ const MobileNav = ({
 						onClick={toggleSearch}
 						className={`p-2 transition-colors duration-200 ${
 							isSearchOpen
-								? "text-pry bg-gray-200 rounded-full"
-								: "text-gray-600"
+								? "text-pry bg-slate-100 border-b-2 border-pry animate"
+								: "text-black"
 						}`}>
 						<IoSearchOutline className='w-6 h-6' />
 					</button>

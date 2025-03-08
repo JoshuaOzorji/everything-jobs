@@ -9,13 +9,16 @@ const LatestJobs = async () => {
 		await client.fetch(`*[_type == "job"] | order(publishedAt desc)[0...10] {
     _id,
     title,
+		"slug": slug.current,
     company->{
       name,
-      logo
+      logo,
+			"slug": slug.current,
     },
     location->{
       name,
-      states
+      states,
+			 "slug": slug.current 
     },
     jobType->{
       name
@@ -27,13 +30,14 @@ const LatestJobs = async () => {
 		summary,
   }`);
 
+	console.log(jobs);
 	return (
 		<main className=''>
 			<h2 className='text-xl font-poppins'>Latest Jobs</h2>
 			<div className='flex flex-col gap-4 md:flex-row'>
-				<section className='md:w-[65%] bg-white'>
+				<section className='md:w-[65%] '>
 					{jobs.length > 0 ? (
-						<div className='flex flex-col gap-2 divide-y'>
+						<div className='flex flex-col gap-2 '>
 							{jobs.map((job) => (
 								<JobCard
 									key={

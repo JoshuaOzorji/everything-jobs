@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Lato, Poppins, IBM_Plex_Sans, IBM_Plex_Serif } from "next/font/google";
+import { Lato, Poppins, Open_Sans, IBM_Plex_Serif } from "next/font/google";
 import "./../globals.css";
 import AuthProvider from "@/components/AuthProvider";
 import { Toaster } from "react-hot-toast";
@@ -24,8 +24,8 @@ const lato = Lato({
 	weight: "400",
 });
 
-const plex_serif = IBM_Plex_Serif({
-	variable: "--font-plex-serif",
+const openSans = Open_Sans({
+	variable: "--font-open-sans",
 	subsets: ["latin"],
 	weight: "400",
 });
@@ -38,7 +38,7 @@ export default function RootLayout({
 	return (
 		<html lang='en'>
 			<body
-				className={`${lato.variable} ${plex_serif.variable} ${poppins.variable}  antialiased`}>
+				className={`${lato.variable} ${openSans.variable} ${poppins.variable}  antialiased`}>
 				<ErrorBoundary
 					fallback={<p>Something went wrong!</p>}>
 					<ProgressBar />
