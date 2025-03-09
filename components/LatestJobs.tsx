@@ -30,40 +30,23 @@ const LatestJobs = async () => {
 		summary,
   }`);
 
-	console.log(jobs);
 	return (
-		<main className=''>
-			<h2 className='text-xl font-poppins'>Latest Jobs</h2>
-			<div className='flex flex-col gap-4 md:flex-row'>
-				<section className='md:w-[65%] '>
-					{jobs.length > 0 ? (
-						<div className='flex flex-col gap-2 '>
-							{jobs.map((job) => (
-								<JobCard
-									key={
-										job._id
-									}
-									job={
-										job
-									}
-								/>
-							))}
-						</div>
-					) : (
-						<div className='p-4 text-center'>
-							<p>
-								No jobs
-								available at the
-								moment.
-							</p>
-						</div>
-					)}
-				</section>
-				<aside className='md:w-[35%] bg-white'>
-					Right
-				</aside>
-			</div>
-		</main>
+		<div className=''>
+			{jobs.length > 0 ? (
+				<div className='flex flex-col gap-2 '>
+					{jobs.map((job) => (
+						<JobCard
+							key={job._id}
+							job={job}
+						/>
+					))}
+				</div>
+			) : (
+				<div className='p-4 text-center'>
+					<p>No jobs available at the moment.</p>
+				</div>
+			)}
+		</div>
 	);
 };
 
