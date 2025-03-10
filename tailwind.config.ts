@@ -29,7 +29,7 @@ export default {
 				sec2: "#c4e0f9",
 				acc: "#e5e7eb",
 				acc2: "#F4F4F6",
-				myBlack: "#262626",
+				myBlack: "#212529",
 
 				background: "hsl(var(--background))",
 				foreground: "hsl(var(--foreground))",

@@ -1,9 +1,16 @@
 export interface Company {
 	name: string;
+	logo?: {
+		asset?: {
+			_ref: string;
+		};
+	};
 }
 
 export interface Location {
 	name: string;
+	states: string[];
+	slug: { current: string };
 }
 
 export interface JobType {

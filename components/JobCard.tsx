@@ -48,10 +48,7 @@ const JobCard = ({ job }: JobCardProps) => {
 					</p>
 				</span>
 
-				<div className='flex gap-2 text-sm border-b font-poppins border-sec2'>
-					{/* <p>{job.company.name}</p> */}
-					{/* <span>&bull;</span> */}
-					{/* <span>|</span> */}
+				<div className='flex gap-2 text-sm border-b font-poppins'>
 					<p>{locationDisplay}</p>
 				</div>
 

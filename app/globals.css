@@ -18,6 +18,30 @@ body {
 	@apply flex-1 w-full p-2 text-xs md:text-sm focus:outline-none;
 }
 
+.job-h2 {
+	@apply font-bold text-base md:text-lg font-poppins;
+}
+
+.icon {
+	@apply text-sec;
+}
+
+.icon-container {
+	@apply flex items-center gap-1;
+}
+
+.icon-container > span {
+	@apply font-bold;
+}
+
+.icon-container2 {
+	@apply flex items-center gap-1;
+}
+
+.icon-container2 > span {
+	@apply font-bold;
+}
+
 .two-line-summary {
 	display: -webkit-box;
 	-webkit-line-clamp: 2;

@@ -5,13 +5,30 @@ import { PortableText } from "@portabletext/react";
 import { Job } from "@/types";
 import SubLayout from "@/components/SubLayout";
 import AsideComponent from "@/components/AsideComponent";
+import defaultImg from "@/public/company-default.png";
+import { urlFor } from "@/sanity/lib/image";
+import { ImLocation } from "react-icons/im";
+import { IoIosCash } from "react-icons/io";
+import { IoBriefcase } from "react-icons/io5";
+import { PiBuildingsFill } from "react-icons/pi";
+import { RiMedalFill } from "react-icons/ri";
+import { CiCalendarDate } from "react-icons/ci";
+import { formatDate } from "@/lib/formatDate";
+import { RiUserStarFill } from "react-icons/ri";
 
 const jobQuery = defineQuery(groq`
   *[_type == "job" && slug.current == $slug][0]{
     title,
     summary,
-    company-> { name },
-    location-> { name },
+    company-> { 
+			name,
+      logo,
+			"slug": slug.current, },
+    location->{
+      name,
+      states,
+			 "slug": slug.current 
+    },
     jobType-> { name },
     qualification-> { title },
     jobField-> { name },
@@ -41,264 +58,323 @@ export default async function JobPage({ params: { slug } }: PageProps) {
 		return <div>Job not found.</div>;
 	}
 
-	console.log(job.location.name);
+	const imageUrl = job.company.logo?.asset?._ref
+		? urlFor(job.company.logo).url()
+		: defaultImg;
+
 	return (
 		<main>
 			<SubLayout aside={<AsideComponent />}>
-				<section className='font-openSans text-myBlack bg-white p-4 rounded-md'>
-					<h1 className='font-poppins font-bold text-xl'>
-						{job.title}
-					</h1>
+				<div className='p-3 bg-white rounded-md font-openSans text-myBlack md:p-6'>
+					<section className='pb-4 mb-4 border-b'>
+						{/* COMPANY IMAGE & NAME */}
+						<div className='flex justify-between items-center text-sm font-poppins md:text-base'>
+							<div className='flex items-center gap-2'>
+								<Image
+									src={
+										imageUrl
+									}
+									alt={
+										job
+											.company
+											.name
+									}
+									className='h-[7vh] w-[7vh] rounded-sm'
+									width={
+										50
+									}
+									height={
+										50
+									}
+								/>
 
-					<div className='flex gap-2 items-center'>
-						{job.company?.name && (
-							<p>
-								{
-									job
-										.company
-										.name
-								}
-							</p>
-						)}
-						<p>{job.location?.name}</p>
-					</div>
-					<div>
-						<h3>Details</h3>
+								<p>
+									{
+										job
+											.company
+											.name
+									}
+								</p>
+							</div>
 
-						{job.jobType?.name && (
-							<p>
-								<strong>
-									Job
-									Type:
-								</strong>{" "}
-								{
+							{job.publishedAt && (
+								<p className='flex items-center gap-1 '>
+									<CiCalendarDate />
+									{formatDate(
+										new Date(
+											job.publishedAt,
+										),
+									)}
+								</p>
+							)}
+						</div>
+
+						{/* JOB TITLE */}
+						<h1 className='my-4 text-xl font-bold md:text-3xl font-poppins text-pry'>
+							{job.title}
+						</h1>
+
+						<div className='font-poppins'>
+							{/* LOCATION */}
+							<div className='icon-container'>
+								<ImLocation className='icon' />
+								<span>
+									Location:{" "}
+								</span>
+								<p>
+									{Array.isArray(
+										job
+											.location
+											?.states,
+									)
+										? job.location.states.join(
+												", ",
+											)
+										: job
+												.location
+												?.states}
+								</p>
+							</div>
+
+							<div>
+								{(job
+									.experienceRange
+									?.min !=
+									null ||
 									job
-										.jobType
-										.name
-								}
-							</p>
-						)}
-						{job.qualification?.title && (
-							<p>
-								<strong>
-									Qualification:
-								</strong>{" "}
-								{
-									job
-										.qualification
-										.title
-								}
-							</p>
-						)}
-						{job.jobField?.name && (
-							<p>
-								<strong>
+										.experienceRange
+										?.max !=
+										null) && (
+									<p className='icon-container2'>
+										<RiMedalFill className='icon' />
+										<span>
+											Experience
+										</span>{" "}
+										{job
+											.experienceRange
+											?.min ??
+											0}{" "}
+										-{" "}
+										{job
+											.experienceRange
+											?.max ??
+											0}
+
+										+{" "}
+										years
+									</p>
+								)}
+							</div>
+
+							{job.salaryRange?.min &&
+								job.salaryRange
+									?.max && (
+									<div className='icon-container'>
+										<IoIosCash className='icon' />
+										<span>
+											Pay:
+										</span>
+										<p>
+											₦
+											{job.salaryRange.min.toLocaleString()}{" "}
+											-
+											₦
+											{job.salaryRange.max.toLocaleString()}
+										</p>
+									</div>
+								)}
+
+							<div className='icon-container'>
+								<IoBriefcase className='icon' />
+								<span>
+									Job-Type:
+								</span>
+								{job.jobType
+									?.name && (
+									<p>
+										{
+											job
+												.jobType
+												.name
+										}
+									</p>
+								)}
+							</div>
+
+							<div className='icon-container'>
+								<PiBuildingsFill className='icon' />
+								<span>
 									Job
 									Field:
-								</strong>{" "}
-								{
-									job
-										.jobField
-										.name
-								}
-							</p>
-						)}
-						{job.salaryRange?.min &&
-							job.salaryRange
-								?.max && (
-								<p>
-									<strong>
-										Salary
-										Range:
-									</strong>{" "}
+								</span>
+								{job.jobField
+									?.name && (
+									<p>
+										{
+											job
+												.jobField
+												.name
+										}
+									</p>
+								)}
+							</div>
+
+							{job.level?.name && (
+								<p className='icon-container2'>
+									<RiUserStarFill className='icon' />
+									<span>
+										Career
+										Levels:{" "}
+									</span>
 									{
 										job
-											.salaryRange
-											.min
-									}{" "}
-									-{" "}
-									{
-										job
-											.salaryRange
-											.max
+											.level
+											.name
 									}
 								</p>
 							)}
-						{job.publishedAt && (
-							<p>
-								<strong>
-									Published
-									At:
-								</strong>{" "}
-								{new Date(
-									job.publishedAt,
-								).toLocaleDateString()}
-							</p>
-						)}
-						{job.deadline && (
-							<p>
-								<strong>
-									Deadline:
-								</strong>{" "}
-								{new Date(
-									job.deadline,
-								).toLocaleDateString()}
-							</p>
-						)}
-						{job.level?.name && (
-							<p>
-								<strong>
-									Experience
-									Level:
-								</strong>{" "}
-								{job.level.name}
-							</p>
-						)}
-						{job.experienceRange?.min &&
-							job.experienceRange
-								?.max && (
+						</div>
+
+						<div>
+							{job.qualification
+								?.title && (
 								<p>
 									<strong>
-										Experience
-										Range:
+										Qualification:
 									</strong>{" "}
 									{
 										job
-											.experienceRange
-											.min
-									}{" "}
-									-{" "}
-									{
-										job
-											.experienceRange
-											.max
-									}{" "}
-									years
+											.qualification
+											.title
+									}
 								</p>
 							)}
-					</div>
 
-					{job.requirements?.length > 0 && (
-						<section>
-							<h3>Requirements</h3>
-							<ul>
-								{job.requirements.map(
-									(
-										req,
-										index,
-									) => (
-										<li
-											key={
-												index
-											}>
-											{
-												req
-											}
-										</li>
-									),
-								)}
-							</ul>
-						</section>
-					)}
+							{job.deadline && (
+								<p>
+									<strong className='text-red-600'>
+										Deadline:
+									</strong>{" "}
+									{new Date(
+										job.deadline,
+									).toLocaleDateString()}
+								</p>
+							)}
+						</div>
+					</section>
 
-					{job.responsibilities?.length > 0 && (
-						<section>
-							<h3>
-								Responsibilities
-							</h3>
-							<ul>
-								{job.responsibilities.map(
-									(
-										res,
-										index,
-									) => (
-										<li
-											key={
-												index
-											}>
-											{
-												res
-											}
-										</li>
-									),
-								)}
-							</ul>
-						</section>
-					)}
+					<section className='space-y-2'>
+						{/* SUMMARY */}
+						{job.summary && (
+							<div>
+								<h2 className='job-h2'>
+									Job
+									Summary
+								</h2>
+								<PortableText
+									value={
+										job.summary
+									}
+								/>
+							</div>
+						)}
 
-					{job.recruitmentProcess?.length > 0 && (
-						<section>
-							<h3>
-								Recruitment
-								Process
-							</h3>
-							<ul>
-								{job.recruitmentProcess.map(
-									(
-										step,
-										index,
-									) => (
-										<li
-											key={
-												index
-											}>
-											{
-												step
-											}
-										</li>
-									),
-								)}
-							</ul>
-						</section>
-					)}
+						{job.responsibilities?.length >
+							0 && (
+							<div>
+								<h2 className='job-h2'>
+									Job
+									Responsibilities
+								</h2>
+								<ul className='list-disc list-inside'>
+									{job.responsibilities.map(
+										(
+											res,
+											index,
+										) => (
+											<li
+												key={
+													index
+												}>
+												{
+													res
+												}
+											</li>
+										),
+									)}
+								</ul>
+							</div>
+						)}
 
-					{job.mainImage?.asset?.url && (
-						<section>
-							<h3>Job Image</h3>
-							<Image
-								src={
-									job
-										.mainImage
-										.asset
-										.url
-								}
-								alt={
-									job
-										.mainImage
-										.alt ||
-									"Job Image"
-								}
-								width={800}
-								height={400}
-								style={{
-									objectFit: "cover",
-								}}
-							/>
-						</section>
-					)}
+						{job.requirements?.length >
+							0 && (
+							<div>
+								<h2 className='job-h2'>
+									Job
+									Requirements
+									/ Skills
+								</h2>
+								<ul className='list-disc list-inside'>
+									{job.requirements.map(
+										(
+											req,
+											index,
+										) => (
+											<li
+												key={
+													index
+												}>
+												{
+													req
+												}
+											</li>
+										),
+									)}
+								</ul>
+							</div>
+						)}
 
-					{job.summary && (
-						<section>
-							<h2>Summary</h2>
-							<PortableText
-								value={
-									job.summary
-								}
-							/>
-						</section>
-					)}
+						{job.recruitmentProcess
+							?.length > 0 && (
+							<div>
+								<h2 className='job-h2'>
+									Recruitment
+									Process
+								</h2>
+								<ul>
+									{job.recruitmentProcess.map(
+										(
+											step,
+											index,
+										) => (
+											<li
+												key={
+													index
+												}>
+												{
+													step
+												}
+											</li>
+										),
+									)}
+								</ul>
+							</div>
+						)}
 
-					{job.apply && (
-						<section>
-							<h3>How to Apply</h3>
-							<PortableText
-								value={
-									job.apply
-								}
-							/>
-						</section>
-					)}
-				</section>
+						{job.apply && (
+							<div className='py-4'>
+								<h2 className='inline-block px-2 text-white rounded-md job-h2 bg-pry'>
+									Apply
+								</h2>
+								<PortableText
+									value={
+										job.apply
+									}
+								/>
+							</div>
+						)}
+					</section>
+				</div>
 			</SubLayout>
 		</main>
 	);
