@@ -162,7 +162,7 @@ export const customSerializers: PortableTextComponents = {
 					);
 				default:
 					return (
-						<p className='mt-4 text-sec'>
+						<p className='mt-2 text-sec'>
 							{node.children.map(
 								(child, i) => (
 									<span

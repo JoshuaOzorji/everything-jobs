@@ -28,7 +28,7 @@ const JobCard = ({ job }: JobCardProps) => {
 			</div>
 			<div className='w-full font-openSans text-myBlack '>
 				<span className='flex items-center justify-between '>
-					<h2 className='text-[13px] md:text-base font-bold flex items-center font-poppins'>
+					<h2 className='text-[13px] md:text-base font-bold flex items-center font-poppins hover:text-pry animate'>
 						<Link href={`/job/${job.slug}`}>
 							{job.title} at{" "}
 							{job.company.name}
@@ -53,7 +53,7 @@ const JobCard = ({ job }: JobCardProps) => {
 				</div>
 
 				{/* Summary */}
-				<div className='text-[12px] md:text-sm font-openSans line-clamp-2 my-1'>
+				<div className='text-[12px] md:text-sm font-openSans line-clamp-2 mb-1 my-2'>
 					<PortableText
 						value={job.summary}
 						components={customSerializers}
@@ -61,10 +61,10 @@ const JobCard = ({ job }: JobCardProps) => {
 				</div>
 				<div className='text-[12px] md:text-sm text-black'>
 					<span className='flex gap-3'>
-						<p className='px-1 capitalize rounded-md bg-sec2'>
+						<p className='px-1 rounded-md bg-sec2 first-letter:uppercase'>
 							{job.jobType?.name}
 						</p>
-						<p className='px-1 capitalize rounded-md bg-sec2'>
+						<p className='px-1 rounded-md first-letter:uppercase bg-sec2'>
 							{job.level?.name}
 						</p>
 					</span>

@@ -27,7 +27,7 @@ export default {
 				pry: "#003ECB",
 				sec: "#4f5763",
 				sec2: "#c4e0f9",
-				acc: "#e5e7eb",
+				acc: "#e6e6eb",
 				acc2: "#F4F4F6",
 				myBlack: "#212529",
 

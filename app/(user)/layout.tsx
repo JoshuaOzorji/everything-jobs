@@ -40,7 +40,7 @@ export default function RootLayout({
 			<body
 				className={`${lato.variable} ${openSans.variable} ${poppins.variable}  antialiased`}>
 				<ErrorBoundary
-					fallback={<p>Something went wrong!</p>}>
+					fallback={<>Something went wrong!</>}>
 					<ProgressBar />
 				</ErrorBoundary>
 

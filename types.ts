@@ -18,7 +18,7 @@ export interface JobType {
 }
 
 export interface Qualification {
-	title: string;
+	name: string;
 }
 
 export interface JobField {

@@ -1,8 +1,11 @@
 "use client";
 
+import { client } from "@/sanity/lib/client";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
+
+const fetchLocationsQuery = `*[_type == "location"] { states }`;
 
 const SearchComponent = ({
 	isSearchOpen,
@@ -11,7 +14,32 @@ const SearchComponent = ({
 	isSearchOpen: boolean;
 	setIsSearchOpen: (value: boolean) => void;
 }) => {
-	// Add keyboard support for Escape key to close search
+	const [locations, setLocations] = useState<string[]>([]);
+	const [selectedLocation, setSelectedLocation] = useState("");
+
+	// Fetch locations from Sanity
+	useEffect(() => {
+		const fetchLocations = async () => {
+			const data = await client.fetch(fetchLocationsQuery);
+			// Extract the first state from each location
+			setLocations(
+				data.flatMap(
+					(loc: { states: string[] }) =>
+						loc.states,
+				),
+			);
+		};
+		fetchLocations();
+	}, []);
+
+	// Handle select change
+	const handleLocationChange = (
+		event: React.ChangeEvent<HTMLSelectElement>,
+	) => {
+		setSelectedLocation(event.target.value);
+	};
+
+	// Escape key listener
 	useEffect(() => {
 		const handleEscKey = (event: KeyboardEvent) => {
 			if (isSearchOpen && event.key === "Escape") {
@@ -41,18 +69,36 @@ const SearchComponent = ({
 						className='border border-r-pry hero-input'
 					/>
 
-					<input
-						type='text'
-						placeholder='Location'
+					{/* Location Dropdown */}
+					<select
 						className='border hero-input'
-					/>
+						value={selectedLocation}
+						onChange={handleLocationChange}>
+						<option value=''>
+							Select Location
+						</option>
+						{locations.map(
+							(location, index) => (
+								<option
+									key={
+										index
+									}
+									value={
+										location
+									}>
+									{
+										location
+									}
+								</option>
+							),
+						)}
+					</select>
 
 					{/* Search Icon */}
 					<Link
 						href='/'
 						className='p-1 md:p-1.5 bg-pry hover:bg-sec animate hover:text-acc text-white border-pry border'>
 						<IoSearchOutline className='w-6 h-6' />
-						{/* <p className="text-sm md:text-base">Search</p> */}
 					</Link>
 				</div>
 			</div>

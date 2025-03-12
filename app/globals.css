@@ -27,19 +27,23 @@ body {
 }
 
 .icon-container {
-	@apply flex items-center gap-1;
+	@apply flex items-center gap-1 first-letter:uppercase text-[0.9rem] md:text-base;
+}
+
+.icon-container2 {
+	@apply flex items-center gap-1 first-letter:uppercase text-[0.9rem] md:text-base;
 }
 
 .icon-container > span {
 	@apply font-bold;
 }
 
-.icon-container2 {
-	@apply flex items-center gap-1;
-}
-
 .icon-container2 > span {
 	@apply font-bold;
+}
+
+.job-input {
+	@apply first-letter:uppercase;
 }
 
 .two-line-summary {

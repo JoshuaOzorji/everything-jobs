@@ -15,7 +15,9 @@ import { RiMedalFill } from "react-icons/ri";
 import { CiCalendarDate } from "react-icons/ci";
 import { formatDate } from "@/lib/formatDate";
 import { RiUserStarFill } from "react-icons/ri";
-
+import { FaGraduationCap } from "react-icons/fa";
+import { formatDate2 } from "@/lib/formatDate2";
+import { FaRegCalendarXmark } from "react-icons/fa6";
 const jobQuery = defineQuery(groq`
   *[_type == "job" && slug.current == $slug][0]{
     title,
@@ -30,7 +32,7 @@ const jobQuery = defineQuery(groq`
 			 "slug": slug.current 
     },
     jobType-> { name },
-    qualification-> { title },
+    qualification-> { name },
     jobField-> { name },
     salaryRange,
     publishedAt,
@@ -65,10 +67,10 @@ export default async function JobPage({ params: { slug } }: PageProps) {
 	return (
 		<main>
 			<SubLayout aside={<AsideComponent />}>
-				<div className='p-3 bg-white rounded-md font-openSans text-myBlack md:p-6'>
-					<section className='pb-4 mb-4 border-b'>
+				<div className='p-4 bg-white rounded-md font-openSans text-myBlack md:p-8'>
+					<section className='pb-4 mb-4 border-b border-zinc-300'>
 						{/* COMPANY IMAGE & NAME */}
-						<div className='flex justify-between items-center text-sm font-poppins md:text-base'>
+						<div className='flex items-center justify-between text-sm font-poppins md:text-base'>
 							<div className='flex items-center gap-2'>
 								<Image
 									src={
@@ -110,11 +112,11 @@ export default async function JobPage({ params: { slug } }: PageProps) {
 						</div>
 
 						{/* JOB TITLE */}
-						<h1 className='my-4 text-xl font-bold md:text-3xl font-poppins text-pry'>
+						<h1 className='mt-6 mb-2 font-bold ext-xl md:text-3xl font-poppins text-pry'>
 							{job.title}
 						</h1>
 
-						<div className='font-poppins'>
+						<div className='space-y-1 font-poppins'>
 							{/* LOCATION */}
 							<div className='icon-container'>
 								<ImLocation className='icon' />
@@ -148,7 +150,7 @@ export default async function JobPage({ params: { slug } }: PageProps) {
 									<p className='icon-container2'>
 										<RiMedalFill className='icon' />
 										<span>
-											Experience
+											Experience:
 										</span>{" "}
 										{job
 											.experienceRange
@@ -191,7 +193,7 @@ export default async function JobPage({ params: { slug } }: PageProps) {
 								</span>
 								{job.jobType
 									?.name && (
-									<p>
+									<p className='job-input'>
 										{
 											job
 												.jobType
@@ -209,7 +211,7 @@ export default async function JobPage({ params: { slug } }: PageProps) {
 								</span>
 								{job.jobField
 									?.name && (
-									<p>
+									<p className='job-input'>
 										{
 											job
 												.jobField
@@ -226,44 +228,64 @@ export default async function JobPage({ params: { slug } }: PageProps) {
 										Career
 										Levels:{" "}
 									</span>
-									{
-										job
-											.level
-											.name
-									}
+									<p className='job-input'>
+										{
+											job
+												.level
+												.name
+										}
+									</p>
 								</p>
+							)}
+							{job.qualification
+								?.name && (
+								<div className='icon-container2'>
+									<FaGraduationCap className='icon' />
+									<span>
+										Qualification:
+									</span>{" "}
+									<p className='job-input'>
+										{
+											job
+												.qualification
+												.name
+										}
+									</p>
+								</div>
 							)}
 						</div>
 
-						<div>
-							{job.qualification
-								?.title && (
-								<p>
-									<strong>
-										Qualification:
-									</strong>{" "}
-									{
-										job
-											.qualification
-											.title
-									}
-								</p>
-							)}
-
+						{/* DEADLINE */}
+						<div className='flex justify-center w-full mt-4'>
 							{job.deadline && (
-								<p>
-									<strong className='text-red-600'>
-										Deadline:
-									</strong>{" "}
+								<p className='icon-container font-poppins'>
+									<FaRegCalendarXmark className='text-red-500 ' />
 									{new Date(
 										job.deadline,
-									).toLocaleDateString()}
+									) >
+									new Date() ? (
+										<>
+											<span className='text-red-500'>
+												Deadline:
+											</span>{" "}
+											{formatDate2(
+												new Date(
+													job.deadline,
+												),
+											)}
+										</>
+									) : (
+										<span className='text-red-500'>
+											Job
+											Expired
+										</span>
+									)}
 								</p>
 							)}
 						</div>
 					</section>
 
-					<section className='space-y-2'>
+					<section className='space-y-2 text-[0.9rem] md:text-base'>
 						{/* SUMMARY */}
 						{job.summary && (
 							<div>
@@ -334,37 +356,56 @@ export default async function JobPage({ params: { slug } }: PageProps) {
 							</div>
 						)}
 
-						{job.recruitmentProcess
-							?.length > 0 && (
-							<div>
-								<h2 className='job-h2'>
-									Recruitment
-									Process
-								</h2>
-								<ul>
-									{job.recruitmentProcess.map(
-										(
-											step,
-											index,
-										) => (
-											<li
-												key={
-													index
-												}>
-												{
-													step
-												}
-											</li>
-										),
-									)}
-								</ul>
-							</div>
-						)}
+						{job.recruitmentProcess &&
+							Array.isArray(
+								job.recruitmentProcess,
+							) &&
+							job.recruitmentProcess.filter(
+								(step) =>
+									step &&
+									step.trim()
+										.length >
+										0,
+							).length > 0 && (
+								<div>
+									<span className='job-h2'>
+										Recruitment
+										Process
+									</span>
+									<ul>
+										{job.recruitmentProcess
+											.filter(
+												(
+													step,
+												) =>
+													step &&
+													step.trim()
+														.length >
+														0,
+											)
+											.map(
+												(
+													step,
+													index,
+												) => (
+													<li
+														key={
+															index
+														}>
+														{
+															step
+														}
+													</li>
+												),
+											)}
+									</ul>
+								</div>
+							)}
 
 						{job.apply && (
-							<div className='py-4'>
-								<h2 className='inline-block px-2 text-white rounded-md job-h2 bg-pry'>
-									Apply
+							<div className='py-4 '>
+								<h2 className='inline-block px-3 text-white rounded-md job-h2 bg-pry'>
+									APPLY
 								</h2>
 								<PortableText
 									value={
