@@ -64,6 +64,7 @@ const JobCard = ({ job }: JobCardProps) => {
 						<p className='px-1 rounded-md bg-sec2 first-letter:uppercase'>
 							{job.jobType?.name}
 						</p>
+
 						<p className='px-1 rounded-md first-letter:uppercase bg-sec2'>
 							{job.level?.name}
 						</p>

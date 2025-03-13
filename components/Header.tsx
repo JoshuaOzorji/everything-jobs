@@ -13,7 +13,7 @@ const Header = () => {
 	};
 
 	return (
-		<header className='bg-white relative'>
+		<header className='relative bg-white'>
 			{/* Header content always at top z-index */}
 			<div className='relative z-50'>
 				<div className='md:hidden'>
