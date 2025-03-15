@@ -1,7 +1,6 @@
 "use client";
 
 import { client } from "@/sanity/lib/client";
-import Link from "next/link";
 import React, { FormEvent, useEffect, useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
@@ -53,7 +52,7 @@ const SearchComponent = ({
 
 		//Create query params
 		const params = new URLSearchParams();
-		if (searchQuery) params.append("query", searchQuery);
+		if (searchQuery) params.append("q", searchQuery);
 		if (selectedLocation)
 			params.append("location", selectedLocation);
 

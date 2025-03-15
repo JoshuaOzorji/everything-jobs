@@ -2,7 +2,7 @@ import { groq } from "next-sanity";
 
 export const searchJobsQuery = groq`
   *[_type == "job" && 
-    (title match $query + "*" || company->name match $query + "*") &&
+    (title match $q + "*" || company->name match $q + "*") &&
     ($location == "" || location->states[] match $location) &&
     ($jobType == "" || jobType->name == $jobType) &&
     ($jobLevel == "" || level->name == $jobLevel) &&

@@ -97,3 +97,31 @@ export interface JobCardProps {
 		responsibilities?: string[];
 	};
 }
+
+export interface JobQuery {
+	_id: string;
+	title: string;
+	slug: string;
+	company: string;
+	companyLogo?: string;
+	location: string[];
+	jobType: string;
+	level: string;
+	qualification: string;
+	jobField: string;
+	salaryRange: { min: number; max: number };
+	publishedAt: string;
+	deadline: string;
+}
+
+export interface Filter {
+	_id: string;
+	name: string;
+}
+
+export interface FilterOptions {
+	jobTypes: Filter[];
+	jobLevels: Filter[];
+	qualifications: Filter[];
+	jobFields: Filter[];
+}

@@ -22,8 +22,8 @@ const JobCard = ({ job }: JobCardProps) => {
 					src={imageUrl}
 					alt={job.company.name}
 					className='h-[8vh] w-full rounded-sm'
-					width={50}
-					height={50}
+					width={45}
+					height={45}
 				/>
 			</div>
 			<div className='w-full font-openSans text-myBlack '>
@@ -61,11 +61,11 @@ const JobCard = ({ job }: JobCardProps) => {
 				</div>
 				<div className='text-[12px] md:text-sm text-black'>
 					<span className='flex gap-3'>
-						<p className='px-1 rounded-md bg-sec2 first-letter:uppercase'>
+						<p className='px-1 bg-blue-100 rounded-md text-pry first-letter:uppercase'>
 							{job.jobType?.name}
 						</p>
 
-						<p className='px-1 rounded-md first-letter:uppercase bg-sec2'>
+						<p className='px-1 text-green-800 bg-green-100 rounded-md first-letter:uppercase'>
 							{job.level?.name}
 						</p>
 					</span>

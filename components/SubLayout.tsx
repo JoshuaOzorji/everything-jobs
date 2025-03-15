@@ -8,8 +8,8 @@ const SubLayout = ({ children, aside }: SubLayoutProps) => {
 	return (
 		<div>
 			<div className='flex flex-col md:flex-row gap-4 my-6'>
-				<div className='md:w-[65%]'>{children}</div>
-				<aside className='md:w-[35%]'>{aside}</aside>
+				<div className='md:w-[66%]'>{children}</div>
+				<aside className='md:w-[34%]'>{aside}</aside>
 			</div>
 		</div>
 	);
