@@ -65,7 +65,7 @@ export default async function JobPage({ params: { slug } }: PageProps) {
 		: defaultImg;
 
 	return (
-		<main>
+		<>
 			<SubLayout aside={<AsideComponent />}>
 				<div className='p-4 bg-white rounded-md font-openSans text-myBlack md:p-8'>
 					<section className='pb-4 mb-4 border-b border-zinc-300'>
@@ -417,6 +417,6 @@ export default async function JobPage({ params: { slug } }: PageProps) {
 					</section>
 				</div>
 			</SubLayout>
-		</main>
+		</>
 	);
 }

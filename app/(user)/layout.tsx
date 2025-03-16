@@ -3,7 +3,6 @@ import { Lato, Poppins, Open_Sans, IBM_Plex_Serif } from "next/font/google";
 import "./../globals.css";
 import AuthProvider from "@/components/AuthProvider";
 import { Toaster } from "react-hot-toast";
-import ProgressBar from "@/components/ProgressBar";
 import BaseLayout from "@/components/BaseLayout";
 import { ErrorBoundary } from "react-error-boundary";
 
@@ -39,10 +38,10 @@ export default function RootLayout({
 		<html lang='en'>
 			<body
 				className={`${lato.variable} ${openSans.variable} ${poppins.variable}  antialiased`}>
-				<ErrorBoundary
+				{/* <ErrorBoundary
 					fallback={<>Something went wrong!</>}>
 					<ProgressBar />
-				</ErrorBoundary>
+				</ErrorBoundary> */}
 
 				<BaseLayout>
 					<AuthProvider>{children}</AuthProvider>

@@ -9,12 +9,12 @@ interface JobListProps {
 
 const JobList: React.FC<JobListProps> = ({ jobs, formatDate }) => {
 	return (
-		<div className='grid gap-4'>
+		<div className='grid gap-2'>
 			{jobs.map((job) => (
 				<JobCard
 					key={job._id}
 					job={job}
-					formatDate={formatDate}
+					// formatDate={formatDate}
 				/>
 			))}
 		</div>

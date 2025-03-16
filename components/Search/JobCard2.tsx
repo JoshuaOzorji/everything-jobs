@@ -10,7 +10,7 @@ interface JobCardProps2 {
 
 const JobCard2: React.FC<JobCardProps2> = ({ job }) => {
 	return (
-		<div className='p-4 transition bg-white rounded shadow hover:shadow-sm'>
+		<div className='px-4 py-3 transition bg-white rounded shadow md:p-4 hover:shadow-sm'>
 			<div className='flex gap-3'>
 				{job.companyLogo && (
 					<div className='w-12 h-12 overflow-hidden rounded'>
@@ -24,7 +24,7 @@ const JobCard2: React.FC<JobCardProps2> = ({ job }) => {
 					</div>
 				)}
 
-				<div className='flex flex-col'>
+				<div className='flex flex-col flex-1'>
 					<div className='flex justify-between w-full'>
 						<Link
 							href={`/jobs/${job.slug}`}
@@ -36,7 +36,7 @@ const JobCard2: React.FC<JobCardProps2> = ({ job }) => {
 							<span className='text-base text-pry'>
 								&bull;
 							</span>
-							<span className='text-xs md:text-sm'>
+							<span className='text-xs md:text-sm font-poppins'>
 								{formatDate(
 									new Date(
 										job.publishedAt,
@@ -46,26 +46,26 @@ const JobCard2: React.FC<JobCardProps2> = ({ job }) => {
 						</p>
 					</div>
 					<div>
-						<p className='text-xs text-gray-600 font-poppins md:text-sm'>
+						<p className='text-sm text-gray-700 font-poppins'>
 							{job.company}
 						</p>
 					</div>
 
-					<div className='flex flex-wrap gap-2 mt-2 font-openSans'>
+					<div className='flex flex-wrap gap-3 mt-2 font-openSans'>
 						{job.location &&
 							job.location.length >
 								0 && (
-								<span className='px-2 py-1 text-xs text-blue-800 bg-blue-100 rounded first-letter:uppercase'>
+								<span className='px-2 py-0.5 text-sm text-blue-800 bg-blue-100 rounded first-letter:uppercase'>
 									{
 										job
 											.location[0]
 									}
 								</span>
 							)}
-						<span className='px-2 py-1 text-xs text-green-800 bg-green-100 rounded first-letter:uppercase'>
+						<span className='px-2 py-0.5 text-sm text-green-800 bg-green-100 rounded first-letter:uppercase'>
 							{job.jobType}
 						</span>
-						<span className='px-2 py-1 text-xs text-purple-800 bg-purple-100 rounded first-letter:uppercase'>
+						<span className='px-2 py-0.5 text-sm text-purple-800 bg-purple-100 rounded first-letter:uppercase'>
 							{job.level}
 						</span>
 					</div>

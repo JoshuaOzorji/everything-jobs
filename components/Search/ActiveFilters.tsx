@@ -34,15 +34,16 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({
 	if (activeFilters.length === 0) return null;
 
 	return (
-		<div className='mb-4 font-openSans'>
-			<h3 className='mb-2 text-sm font-medium'>
+		<div className='flex flex-wrap items-center gap-2 p-2 mb-4 text-sm'>
+			<h3 className='font-bold text-center font-poppins'>
 				Active Filters:
 			</h3>
-			<div className='flex flex-wrap gap-2'>
+
+			<div className='flex flex-wrap gap-2 font-openSans'>
 				{activeFilters.map((filter) => (
 					<div
 						key={filter.name}
-						className='flex items-center px-2 py-1 text-sm bg-blue-100 rounded'>
+						className='flex items-center px-2 text-sm bg-blue-100 rounded'>
 						<span>
 							{filter.name}:{" "}
 							{filter.value}

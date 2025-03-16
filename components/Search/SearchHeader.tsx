@@ -10,16 +10,16 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
 	jobCount,
 }) => {
 	return (
-		<div className='mb-6'>
-			<h1 className='text-2xl font-bold'>
+		<div className='flex items-center gap-4 p-2 text-center text-sm'>
+			<h1 className='font-poppins font-bold'>
 				{query
 					? `Search Results for "${query}"`
 					: "All Jobs"}
 				{location && ` in ${location}`}
 			</h1>
-			<p className='mt-2 text-gray-600'>
-				{jobCount} jobs found
-			</p>
+			<span className='flex gap-1 text-gray-600 font-openSans'>
+				&bull; <p>{jobCount} jobs found</p>
+			</span>
 		</div>
 	);
 };

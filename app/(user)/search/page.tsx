@@ -102,29 +102,39 @@ const SearchPage = () => {
 	return (
 		<main>
 			<SubLayout aside={<AsideComponent />}>
-				<div className='container mx-auto'>
-					<SearchHeader
-						query={query}
-						location={location}
-						jobCount={jobs.length}
-					/>
+				<div className='mx-auto '>
+					<div className='bg-white rounded-md '>
+						<SearchHeader
+							query={query}
+							location={location}
+							jobCount={jobs.length}
+						/>
 
-					<FilterToggle
-						showFilters={showFilters}
-						setShowFilters={setShowFilters}
-					/>
+						<FilterToggle
+							showFilters={
+								showFilters
+							}
+							setShowFilters={
+								setShowFilters
+							}
+						/>
 
-					<ActiveFilters
-						location={location}
-						jobType={jobType}
-						jobLevel={jobLevel}
-						qualification={qualification}
-						jobField={jobField}
-						query={query}
-						updateFilters={updateFilters}
-					/>
+						<ActiveFilters
+							location={location}
+							jobType={jobType}
+							jobLevel={jobLevel}
+							qualification={
+								qualification
+							}
+							jobField={jobField}
+							query={query}
+							updateFilters={
+								updateFilters
+							}
+						/>
+					</div>
 
-					<div className='flex flex-col gap-4 md:flex-row'>
+					<div className='flex flex-col gap-2 md:flex-row my-2'>
 						<FilterSidebar
 							filters={filters}
 							jobType={jobType}

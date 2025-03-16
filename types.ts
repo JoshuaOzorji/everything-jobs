@@ -45,7 +45,6 @@ export interface MainImage {
 	};
 	alt: string;
 }
-
 export interface Job {
 	title: string;
 	slug: { current: string };
