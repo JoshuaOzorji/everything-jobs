@@ -33,12 +33,12 @@ const MobileNav = ({
 						}`}>
 						<IoSearchOutline className='w-6 h-6' />
 					</button>
-					<Link href='/auth/login'>
+					{/* <Link href='/auth/login'>
 						<button className='flex flex-col items-center'>
 							<HiMiniUserCircle className='w-4 h-4' />
 							<span>Login</span>
 						</button>
-					</Link>
+					</Link> */}
 				</div>
 			</div>
 		</nav>

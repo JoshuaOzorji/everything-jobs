@@ -51,11 +51,11 @@ const MainNav = ({
 						</button>
 					</Link>
 
-					<Link href='/auth/login'>
+					{/* <Link href='/auth/login'>
 						<button className='flex flex-col items-center'>
 							<span>Login</span>
 						</button>
-					</Link>
+					</Link> */}
 				</div>
 			</div>
 		</nav>

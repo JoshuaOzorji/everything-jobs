@@ -1,10 +1,31 @@
 export interface Company {
+	_id: string;
 	name: string;
 	logo?: {
 		asset?: {
 			_ref: string;
 		};
+		alt?: string;
 	};
+	description?: string;
+	slug: {
+		current: string;
+	};
+	website?: string;
+}
+
+export interface CompanyWithJobs extends Company {
+	jobs?: {
+		_id: string;
+		title: string;
+		summary: any[];
+		slug: { current: string };
+		publishedAt: string;
+		deadline?: string;
+		jobType: { name: string };
+		location: { name: string };
+		level: { name: string };
+	}[];
 }
 
 export interface Location {
@@ -46,6 +67,7 @@ export interface MainImage {
 	alt: string;
 }
 export interface Job {
+	_id: string;
 	title: string;
 	slug: { current: string };
 	summary: any[];
