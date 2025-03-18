@@ -80,4 +80,8 @@ export default {
 		},
 	},
 	plugins: [require("tailwindcss-animate"), require("daisyui")],
+	daisyui: {
+		themes: ["light"], // Use only the light theme
+		darkTheme: "light", // Prevent dark mode switching
+	},
 } satisfies Config;

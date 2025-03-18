@@ -4,18 +4,13 @@ import JobCard from "./JobCard2";
 
 interface JobListProps {
 	jobs: JobQuery[];
-	formatDate: (dateString: string) => string;
 }
 
-const JobList: React.FC<JobListProps> = ({ jobs, formatDate }) => {
+const JobList: React.FC<JobListProps> = ({ jobs }) => {
 	return (
 		<div className='grid gap-2'>
 			{jobs.map((job) => (
-				<JobCard
-					key={job._id}
-					job={job}
-					// formatDate={formatDate}
-				/>
+				<JobCard key={job._id} job={job} />
 			))}
 		</div>
 	);

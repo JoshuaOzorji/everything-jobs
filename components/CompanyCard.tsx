@@ -2,53 +2,111 @@ import Image from "next/image";
 import Link from "next/link";
 import { urlFor } from "@/sanity/lib/image";
 import { Company } from "@/types";
+import placeholder from "@/public/placeholderCompany.png";
 
 type CompanyCardProps = {
 	company: Company;
 };
 
-const CompanyCard = ({ company }: CompanyCardProps) => {
+const SmallScreenCompanyCard = ({ company }: CompanyCardProps) => {
 	return (
-		<Link href={`/companies/${company.slug.current}`}>
-			<div className='flex flex-col h-full border rounded-lg shadow-sm hover:shadow-md transition-shadow p-4'>
-				<div className='flex items-center justify-center mb-4 h-24'>
+		<div className='block w-full'>
+			<div className='flex flex-row items-center w-full gap-2 p-2 bg-white border rounded-lg shadow-sm hover:shadow-md font-poppins'>
+				<div className='flex items-center justify-center w-14 h-14 rounded'>
 					{company.logo ? (
 						<Image
 							src={urlFor(
 								company.logo,
 							)
-								.width(200)
-								.height(100)
+								.width(100)
+								.height(50)
 								.url()}
 							alt={
 								company.logo
 									.alt ||
 								company.name
 							}
-							width={200}
-							height={100}
-							className='object-contain max-h-24'
+							width={100}
+							height={50}
+							className='object-cover rounded-md w-full h-full aspect-[2/1]'
 						/>
 					) : (
-						<div className='w-full h-full flex items-center justify-center bg-gray-100 rounded'>
-							<span className='text-gray-500 font-medium text-xl'>
-								{company.name.charAt(
-									0,
-								)}
-							</span>
-						</div>
+						<Image
+							src={placeholder}
+							alt={company.name}
+							width={100}
+							height={50}
+							className='object-cover rounded-md w-full h-full aspect-[2/1]'
+						/>
 					)}
 				</div>
-				<h3 className='text-lg font-semibold mb-2'>
-					{company.name}
-				</h3>
-				{company.description && (
-					<p className='text-gray-600 text-sm line-clamp-3 mb-2'>
-						{company.description}
-					</p>
+
+				<Link href={`/company/${company.slug.current}`}>
+					<h3 className='flex-1 text-[0.9rem] font-semibold hover:underline'>
+						{company.name}
+					</h3>
+				</Link>
+			</div>
+		</div>
+	);
+};
+
+const LargeScreenCompanyCard = ({ company }: CompanyCardProps) => {
+	return (
+		<div className='flex flex-col h-full p-2 bg-white border rounded-lg shadow-sm hover:shadow-md font-poppins'>
+			<div className='flex flex-col items-center justify-center mb-2'>
+				{company.logo ? (
+					<Image
+						src={urlFor(company.logo)
+							.width(200)
+							.height(100)
+							.url()}
+						alt={
+							company.logo.alt ||
+							company.name
+						}
+						width={200}
+						height={100}
+						className='object-contain rounded-md max-h-24 w-full aspect-[2/1]'
+					/>
+				) : (
+					<div className='flex items-center justify-center w-full h-full rounded'>
+						<Image
+							src={placeholder}
+							alt={company.name}
+							width={200}
+							height={100}
+							className='object-contain rounded-md max-h-24 w-full aspect-[2/1]'
+						/>
+					</div>
 				)}
 			</div>
-		</Link>
+
+			<div className='relative group'>
+				<div className='mb-2 text-sm font-semibold text-center truncate hover:underline'>
+					<Link
+						href={`/company/${company.slug.current}`}>
+						{company.name}
+					</Link>
+				</div>
+				<span className='absolute max-w-xs px-2 py-1 mb-1 text-xs text-white transition-opacity -translate-x-1/2 rounded-md opacity-0 left-1/2 bottom-full w-max bg-myBlack group-hover:opacity-100'>
+					{company.name}
+				</span>
+			</div>
+		</div>
+	);
+};
+
+const CompanyCard = ({ company }: CompanyCardProps) => {
+	return (
+		<>
+			<div className='flex md:hidden'>
+				<SmallScreenCompanyCard company={company} />
+			</div>
+			<div className='hidden md:flex md:flex-col'>
+				<LargeScreenCompanyCard company={company} />
+			</div>
+		</>
 	);
 };
 

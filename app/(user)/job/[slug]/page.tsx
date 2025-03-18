@@ -5,7 +5,7 @@ import { PortableText } from "@portabletext/react";
 import { Job } from "@/types";
 import SubLayout from "@/components/SubLayout";
 import AsideComponent from "@/components/AsideComponent";
-import defaultImg from "@/public/company-default.png";
+import placeholder from "@/public/placeholderCompany.png";
 import { urlFor } from "@/sanity/lib/image";
 import { ImLocation } from "react-icons/im";
 import { IoIosCash } from "react-icons/io";
@@ -62,7 +62,7 @@ export default async function JobPage({ params: { slug } }: PageProps) {
 
 	const imageUrl = job.company.logo?.asset?._ref
 		? urlFor(job.company.logo).url()
-		: defaultImg;
+		: placeholder;
 
 	return (
 		<>

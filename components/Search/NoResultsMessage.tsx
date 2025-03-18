@@ -5,7 +5,7 @@ const NoResultsMessage: React.FC = () => {
 	const router = useRouter();
 
 	return (
-		<div className='p-8 text-center bg-white rounded shadow'>
+		<div className='p-8 text-center bg-white rounded shadow font-poppins'>
 			<h3 className='mb-2 text-xl font-semibold'>
 				No jobs found
 			</h3>

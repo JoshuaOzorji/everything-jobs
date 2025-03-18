@@ -90,15 +90,6 @@ const SearchPage = () => {
 		);
 	};
 
-	// Format date for display
-	const formatDate = (dateString: string) => {
-		return new Date(dateString).toLocaleDateString("en-US", {
-			year: "numeric",
-			month: "short",
-			day: "numeric",
-		});
-	};
-
 	return (
 		<main>
 			<SubLayout aside={<AsideComponent />}>
@@ -155,9 +146,8 @@ const SearchPage = () => {
 						/>
 
 						<SearchResults
-							loading={loading}
+							isLoading={loading}
 							jobs={jobs}
-							formatDate={formatDate}
 						/>
 					</div>
 				</div>

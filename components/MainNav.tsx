@@ -25,9 +25,13 @@ const MainNav = ({
 							<li key={index}>
 								<Link
 									href={
-										"/"
+										item.href
 									}>
-									{item}
+									<p className='hover:text-pry animate'>
+										{
+											item.label
+										}
+									</p>
 								</Link>
 							</li>
 						))}

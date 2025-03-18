@@ -1,1 +1,5 @@
-export const navItems = ["Find Jobs", "Remote Jobs", "About Us"];
+export const navItems = [
+	{ label: "Find Jobs", href: "/" },
+	{ label: "Remote Jobs", href: "/" },
+	{ label: "Find Company", href: "/companies" },
+];

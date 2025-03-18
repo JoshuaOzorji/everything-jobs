@@ -1,4 +1,3 @@
-import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { JobQuery } from "@/types";
@@ -27,7 +26,7 @@ const JobCard2: React.FC<JobCardProps2> = ({ job }) => {
 				<div className='flex flex-col flex-1'>
 					<div className='flex justify-between w-full'>
 						<Link
-							href={`/jobs/${job.slug}`}
+							href={`/job/${job.slug}`}
 							className='text-[13px] md:text-base font-bold flex items-center font-poppins hover:text-pry animate'>
 							{job.title}
 						</Link>

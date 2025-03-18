@@ -4,16 +4,15 @@ import { JobCardProps } from "@/types";
 import Image from "next/image";
 import { formatDate } from "@/lib/formatDate";
 import { urlFor } from "../sanity/lib/image";
-import defaultImg from "@/public/company-default.png";
+import placeholder from "@/public/placeholderCompany.png";
 import { PortableText } from "@portabletext/react";
 import { customSerializers } from "@/lib/customSerializers";
 import Link from "next/link";
-import { useState } from "react";
 
 const JobCard = ({ job }: JobCardProps) => {
 	const imageUrl = job.company.logo?.asset?._ref
 		? urlFor(job.company.logo).url()
-		: defaultImg;
+		: placeholder;
 
 	const locationDisplay =
 		job.location?.states?.[0] || job.location?.name || "Nigeria";

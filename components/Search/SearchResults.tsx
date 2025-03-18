@@ -1,26 +1,30 @@
 import React from "react";
 import { JobQuery } from "@/types";
-import LoadingSpinner from "../LoadingSpinner";
 import JobList from "./JobList";
 import NoResultsMessage from "./NoResultsMessage";
+import Loading from "@/app/(user)/loading";
 
 interface SearchResultsProps {
-	loading: boolean;
 	jobs: JobQuery[];
-	formatDate: (dateString: string) => string;
+	isLoading: boolean;
 }
 
-const SearchResults: React.FC<SearchResultsProps> = ({
-	loading,
-	jobs,
-	formatDate,
-}) => {
+const SearchResults: React.FC<SearchResultsProps> = ({ jobs, isLoading }) => {
 	return (
+		// <div className='md:w-3/4'>
+		// 	{isLoading ? (
+		// 		<Loading />
+		// 	) : jobs.length > 0 ? (
+		// 		<JobList jobs={jobs} />
+		// 	) : (
+		// 		<NoResultsMessage />
+		// 	)}
+		// </div>
 		<div className='md:w-3/4'>
-			{loading ? (
-				<LoadingSpinner />
+			{isLoading ? (
+				<Loading />
 			) : jobs.length > 0 ? (
-				<JobList jobs={jobs} formatDate={formatDate} />
+				<JobList jobs={jobs} />
 			) : (
 				<NoResultsMessage />
 			)}
