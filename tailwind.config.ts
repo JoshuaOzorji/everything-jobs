@@ -25,11 +25,10 @@ export default {
 			},
 			colors: {
 				pry: "#003ECB",
+				pry2: "#2563eb",
 				sec: "#4f5763",
-				sec2: "#c4e0f9",
 				acc: "#e6e6eb",
-				acc2: "#F4F4F6",
-				myBlack: "#212529",
+				myBlack: "#374151",
 
 				background: "hsl(var(--background))",
 				foreground: "hsl(var(--foreground))",
