@@ -45,7 +45,7 @@ const JobCard2: React.FC<JobCardProps2> = ({ job }) => {
 						</p>
 					</div>
 					<div>
-						<p className='text-sm text-gray-700 font-poppins'>
+						<p className='text-sm text-myBlack font-poppins'>
 							{job.company}
 						</p>
 					</div>

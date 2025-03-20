@@ -39,7 +39,7 @@ export default async function CompaniesPage() {
 
 					{companies.length === 0 ? (
 						<div className='py-12 text-center'>
-							<p className='text-xl text-gray-600'>
+							<p className='text-xl text-myBlack'>
 								No companies
 								found
 							</p>

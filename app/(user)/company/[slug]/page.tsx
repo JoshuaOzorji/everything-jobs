@@ -9,6 +9,9 @@ import SubLayout from "@/components/SubLayout";
 import CompanyDetailsAside from "@/components/CompanyDetailsAside";
 import { FaArrowLeft } from "react-icons/fa6";
 import ExpandableDescription from "@/components/ExpandableDescription";
+import CompanyJobCard from "@/components/CompanyJobCard";
+import placeholder from "@/public/placeholderCompany.png";
+import { RxExternalLink } from "react-icons/rx";
 
 // Extend the Company type to include related jobs
 interface CompanyWithJobs extends Company {
@@ -52,7 +55,11 @@ const companyQuery = groq`
       publishedAt,
       deadline,
       jobType->{name},
-      location->{name},
+      location->{
+			name,
+			states,
+			slug
+		},	
       level->{name}
     }
   }
@@ -75,68 +82,104 @@ export default async function CompanyDetailPage({
 
 	return (
 		<SubLayout aside={<CompanyDetailsAside company={company} />}>
-			<div className='mx-auto px-4 font-openSans'>
-				<Link href='/companies' className=''>
-					<p className='text-pry2 hover:underline mb-6 inline-flex gap-1 items-center animate text-xs md:text-sm'>
+			<div className='font-openSans'>
+				<Link href='/companies'>
+					<p className='inline-flex items-center gap-1 mb-6 text-[13px] text-pry2 hover:underline animate md:text-sm'>
 						<FaArrowLeft />
 						Back to Companies
 					</p>
 				</Link>
 
-				<div className='bg-white rounded-lg shadow-md p-6 mb-8'>
-					<div className='flex flex-col md:flex-row md:items-center gap-6'>
-						<div className='flex-shrink-0 w-32 h-32 flex items-center justify-center bg-gray-100 rounded'>
-							{company.logo?.asset ? (
-								<Image
-									src={urlFor(
-										company.logo,
-									)
-										.width(
-											200,
-										)
-										.height(
-											200,
-										)
-										.url()}
-									alt={
-										company
-											.logo
-											.alt ||
+				<div className='p-4 bg-white rounded-lg shadow-sm md:p-6'>
+					<div className='flex flex-col gap-2 md:gap-6 md:flex-row md:items-center'>
+						<div className='flex items-center gap-3'>
+							<div className='flex items-center justify-center flex-shrink-0 w-[8vh] h-[8vh] md:w-[20vh] md:h-[20vh]'>
+								{company.logo
+									?.asset ? (
+									<Image
+										src={urlFor(
+											company.logo,
+										).url()}
+										alt={
+											company
+												.logo
+												.alt ||
+											company.name
+										}
+										width={
+											200
+										}
+										height={
+											200
+										}
+										className='object-contain rounded-md max-h-28'
+									/>
+								) : (
+									<Image
+										src={
+											placeholder
+										}
+										alt={
+											company.name
+										}
+										width={
+											200
+										}
+										height={
+											200
+										}
+										className='object-contain h-full rounded-md max-h-28'
+									/>
+								)}
+							</div>
+
+							{/* COMPANY NAME & WEBSITE SMALL SCREEN*/}
+							<div className='block md:hidden'>
+								<h1 className='text-lg font-bold md:text-2xl font-poppins'>
+									{
 										company.name
 									}
-									width={
-										200
-									}
-									height={
-										200
-									}
-									className='object-contain max-h-32'
-								/>
-							) : (
-								<span className='text-gray-500 font-medium text-4xl'>
-									{company.name.charAt(
-										0,
-									)}
-								</span>
-							)}
+								</h1>
+								{company.website && (
+									<a
+										href={
+											company.website
+										}
+										target='_blank'
+										rel='noopener noreferrer'
+										className='flex items-center gap-1 text-sm text-pry2 hover:underline group'>
+										<span>
+											Visit
+											Website
+										</span>
+										<RxExternalLink className='hidden w-4 h-4 group-hover:inline animate' />
+									</a>
+								)}
+							</div>
 						</div>
 
-						<div>
-							<h1 className='text-2xl font-bold font-poppins'>
-								{company.name}
-							</h1>
-							{company.website && (
-								<a
-									href={
-										company.website
+						{/* DESCRIPTION */}
+						<div className='mt-2'>
+							{/* COMPANY NAME & WEBSITE MD/LG SCREEN*/}
+							<div className='hidden md:block'>
+								<h1 className='text-lg font-bold md:text-2xl font-poppins'>
+									{
+										company.name
 									}
-									target='_blank'
-									rel='noopener noreferrer'
-									className='text-pry2 hover:underline mb-3 inline-block'>
-									Visit
-									Website
-								</a>
-							)}
+								</h1>
+								{company.website && (
+									<a
+										href={
+											company.website
+										}
+										target='_blank'
+										rel='noopener noreferrer'
+										className='inline-block mb-3 text-sm text-pry2 hover:underline'>
+										Visit
+										Website
+									</a>
+								)}
+							</div>
 							{company.description && (
 								<ExpandableDescription
 									description={
@@ -148,70 +191,28 @@ export default async function CompanyDetailPage({
 					</div>
 				</div>
 
-				<h2 className='text-2xl font-bold mb-4'>
+				<h2 className='mt-6 mb-2 text-lg font-bold md:text-xl font-poppins'>
 					Jobs at {company.name}
 				</h2>
 
 				{!company.jobs || company.jobs.length === 0 ? (
-					<div className='bg-gray-50 rounded-lg p-6 text-center'>
-						<p className='text-gray-600'>
+					<div className='p-6 text-center rounded-lg bg-gray-50 font-openSans'>
+						<p className='text-myBlack'>
 							No active job listings
 							for this company
 						</p>
 					</div>
 				) : (
-					<div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+					// COMPANY JOB CARD
+					<div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
 						{company.jobs.map((job) => (
-							<Link
-								key={job._id}
-								href={`/jobs/${job.slug.current}`}>
-								<div className='border rounded-lg p-4 hover:shadow-md transition-shadow'>
-									<h3 className='text-xl font-semibold mb-2'>
-										{
-											job.title
-										}
-									</h3>
-									<div className='flex flex-wrap gap-2 mb-3'>
-										<span className='bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded'>
-											{
-												job
-													.jobType
-													.name
-											}
-										</span>
-										<span className='bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded'>
-											{
-												job
-													.location
-													.name
-											}
-										</span>
-										<span className='bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded'>
-											{
-												job
-													.level
-													.name
-											}
-										</span>
-									</div>
-									<div className='text-sm text-gray-500'>
-										<p>
-											Posted:{" "}
-											{new Date(
-												job.publishedAt,
-											).toLocaleDateString()}
-										</p>
-										{job.deadline && (
-											<p>
-												Deadline:{" "}
-												{new Date(
-													job.deadline,
-												).toLocaleDateString()}
-											</p>
-										)}
-									</div>
-								</div>
-							</Link>
+							<div key={job._id}>
+								<CompanyJobCard
+									job={
+										job
+									}
+								/>
+							</div>
 						))}
 					</div>
 				)}

@@ -405,7 +405,7 @@ export default async function JobPage({ params: { slug } }: PageProps) {
 						{job.apply && (
 							<div className='py-4 '>
 								<h2 className='inline-block px-3 text-white rounded-md job-h2 bg-pry'>
-									APPLY
+									Apply
 								</h2>
 								<PortableText
 									value={

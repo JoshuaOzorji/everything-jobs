@@ -52,7 +52,7 @@ const ExpandableDescription = ({ description }: ExpandableDescriptionProps) => {
 		<div>
 			<p
 				ref={textRef}
-				className={`text-gray-700 text-sm ${!expanded ? "line-clamp-3" : ""}`}>
+				className={`text-myBlack text-sm ${!expanded ? "line-clamp-3" : ""}`}>
 				{description}
 			</p>
 			{isOverflowing && (

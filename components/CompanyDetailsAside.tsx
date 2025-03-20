@@ -13,7 +13,7 @@ import { FaLinkedin } from "react-icons/fa";
 import { FiBookmark } from "react-icons/fi";
 import { IoSearchOutline } from "react-icons/io5";
 import { RxExternalLink } from "react-icons/rx";
-
+import { formatDate2 } from "@/lib/formatDate2";
 interface CompanyDetailsAsideProps {
 	company: Company & {
 		jobs?: {
@@ -45,16 +45,16 @@ export default function CompanyDetailsAside({
 		) || {};
 
 	// Group jobs by job type
-	const jobsByType =
-		company.jobs?.reduce(
-			(acc, job) => {
-				const type = job.jobType.name;
-				if (!acc[type]) acc[type] = [];
-				acc[type].push(job);
-				return acc;
-			},
-			{} as Record<string, (typeof company.jobs)[0][]>,
-		) || {};
+	// const jobsByType =
+	// 	company.jobs?.reduce(
+	// 		(acc, job) => {
+	// 			const type = job.jobType.name;
+	// 			if (!acc[type]) acc[type] = [];
+	// 			acc[type].push(job);
+	// 			return acc;
+	// 		},
+	// 		{} as Record<string, (typeof company.jobs)[0][]>,
+	// 	) || {};
 
 	// Get upcoming deadlines
 	const upcomingDeadlines =
@@ -84,7 +84,7 @@ export default function CompanyDetailsAside({
 
 				<div className='space-y-3'>
 					<div className='flex items-center'>
-						<BriefcaseIcon className='w-5 h-5 mr-2 text-gray-500' />
+						<BriefcaseIcon className='w-5 h-5 mr-2 text-myBlack' />
 						<span className='text-sm'>
 							<span className='font-medium'>
 								{company.jobs
@@ -97,21 +97,23 @@ export default function CompanyDetailsAside({
 
 					{mostRecentJob && (
 						<div className='flex items-center'>
-							<CalendarIcon className='w-5 h-5 mr-2 text-gray-500' />
+							<CalendarIcon className='w-5 h-5 mr-2 text-myBlack' />
 							<span className='text-sm'>
 								Latest job
 								posted on{" "}
-								{new Date(
-									mostRecentJob.publishedAt,
-								).toLocaleDateString()}
+								{formatDate2(
+									new Date(
+										mostRecentJob.publishedAt,
+									),
+								)}
 							</span>
 						</div>
 					)}
 
-					{Object.keys(jobsByLocation).length >
+					{/* {Object.keys(jobsByLocation).length >
 						0 && (
 						<div className='flex items-center'>
-							<MapPinIcon className='w-5 h-5 mr-2 text-gray-500' />
+							<MapPinIcon className='w-5 h-5 mr-2 text-myBlack' />
 							<span className='text-sm'>
 								Hiring in{" "}
 								{
@@ -127,7 +129,7 @@ export default function CompanyDetailsAside({
 									: ""}
 							</span>
 						</div>
-					)}
+					)} */}
 
 					{company.website && (
 						<div className='mt-3 '>
@@ -168,11 +170,13 @@ export default function CompanyDetailsAside({
 												job.title
 											}
 										</p>
-										<p className='mt-1 text-xs text-gray-500'>
+										<p className='mt-1 text-xs text-myBlack'>
 											Deadline:{" "}
-											{new Date(
-												job.deadline!,
-											).toLocaleDateString()}
+											{formatDate2(
+												new Date(
+													job.deadline!,
+												),
+											)}
 										</p>
 									</Link>
 								</li>
@@ -223,13 +227,13 @@ export default function CompanyDetailsAside({
 				</button>
 
 				<div className='flex justify-center mt-3 space-x-3'>
-					<button className='p-1 text-gray-600 hover:text-pry2'>
+					<button className='p-1 text-myBlack hover:text-pry2'>
 						<RiTwitterXFill />
 					</button>
-					<button className='p-1 text-gray-600 hover:text-pry2'>
+					<button className='p-1 text-myBlack hover:text-pry2'>
 						<BsFacebook />
 					</button>
-					<button className='p-1 text-gray-600 hover:text-pry2'>
+					<button className='p-1 text-myBlack hover:text-pry2'>
 						<FaLinkedin />
 					</button>
 				</div>

@@ -134,7 +134,7 @@ export const customSerializers: PortableTextComponents = {
 				case "blockquote":
 					return (
 						<blockquote
-							className='mt-4 italic text-gray-700 '
+							className='mt-4 italic text-myBlack '
 							style={{
 								borderLeftWidth:
 									"4px",
@@ -186,7 +186,7 @@ export const customSerializers: PortableTextComponents = {
 		bullet: ({ children }) => {
 			return (
 				<ul
-					className='mb-2 text-gray-700'
+					className='mb-2 text-myBlack'
 					style={{
 						listStyleType: "disc",
 						listStylePosition: "outside",
@@ -201,7 +201,7 @@ export const customSerializers: PortableTextComponents = {
 		bullet: ({ children }) => {
 			return (
 				<li
-					className='mb-2 text-gray-700 '
+					className='mb-2 text-myBlack'
 					style={{
 						listStyleType: "disc",
 						listStylePosition: "inside",

@@ -9,7 +9,7 @@ const NoResultsMessage: React.FC = () => {
 			<h3 className='mb-2 text-xl font-semibold'>
 				No jobs found
 			</h3>
-			<p className='text-gray-600'>
+			<p className='text-myBlack'>
 				Try adjusting your search criteria or browse all
 				available jobs.
 			</p>

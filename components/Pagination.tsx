@@ -12,13 +12,13 @@ const totalPages = Math.ceil(jobs.length / jobsPerPage);
 
 const Pagination = () => {
 	return (
-		<div className='flex justify-center mt-6 gap-2'>
+		<div className='flex justify-center gap-2 mt-6'>
 			<button
 				onClick={() => setCurrentPage(currentPage - 1)}
 				disabled={currentPage === 1}
 				className={`px-3 py-1 rounded ${
 					currentPage === 1
-						? "bg-gray-200 text-gray-500"
+						? "bg-gray-200 text-myBlack"
 						: "bg-pry text-white"
 				}`}>
 				Previous
@@ -45,7 +45,7 @@ const Pagination = () => {
 				disabled={currentPage === totalPages}
 				className={`px-3 py-1 rounded ${
 					currentPage === totalPages
-						? "bg-gray-200 text-gray-500"
+						? "bg-gray-200 text-myBlack"
 						: "bg-pry text-white"
 				}`}>
 				Next
