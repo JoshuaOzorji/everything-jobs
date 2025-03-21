@@ -46,6 +46,10 @@ body {
 	@apply first-letter:uppercase;
 }
 
+.company-aside-icon {
+	@apply w-5 h-5 mr-2 text-myBlack;
+}
+
 .two-line-summary {
 	display: -webkit-box;
 	-webkit-line-clamp: 2;

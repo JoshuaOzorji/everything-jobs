@@ -12,21 +12,26 @@ export interface Company {
 		current: string;
 	};
 	website?: string;
+	industry?: {
+		name: string;
+		slug: { current: string };
+	};
+	jobs?: Job[];
 }
 
-export interface CompanyWithJobs extends Company {
-	jobs?: {
-		_id: string;
-		title: string;
-		summary: any[];
-		slug: { current: string };
-		publishedAt: string;
-		deadline?: string;
-		jobType: { name: string };
-		location: { name: string };
-		level: { name: string };
-	}[];
-}
+// export interface CompanyWithJobs extends Company {
+// 	jobs?: {
+// 		_id: string;
+// 		title: string;
+// 		summary: any[];
+// 		slug: { current: string };
+// 		publishedAt: string;
+// 		deadline?: string;
+// 		jobType: { name: string };
+// 		location: { name: string };
+// 		level: { name: string };
+// 	}[];
+// }
 
 export interface Location {
 	name: string;
@@ -70,7 +75,7 @@ export interface Job {
 	_id: string;
 	title: string;
 	slug: { current: string };
-	summary: any[];
+	summary?: any[];
 	company: Company;
 	location: Location;
 	jobType: JobType;

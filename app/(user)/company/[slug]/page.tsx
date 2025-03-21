@@ -13,21 +13,6 @@ import CompanyJobCard from "@/components/CompanyJobCard";
 import placeholder from "@/public/placeholderCompany.png";
 import { RxExternalLink } from "react-icons/rx";
 
-// Extend the Company type to include related jobs
-interface CompanyWithJobs extends Company {
-	jobs?: {
-		_id: string;
-		title: string;
-		summary: any[];
-		slug: { current: string };
-		publishedAt: string;
-		deadline?: string;
-		jobType: { name: string };
-		location: { name: string };
-		level: { name: string };
-	}[];
-}
-
 // Generate static params for commonly accessed companies
 export async function generateStaticParams() {
 	const query = groq`*[_type == "company"][0...10].slug.current`;
@@ -47,6 +32,7 @@ const companyQuery = groq`
     description,
     slug,
     website,
+		industry-> { name, slug },
     "jobs": *[_type == "job" && references(^._id)] {
       _id,
       title,
@@ -61,12 +47,12 @@ const companyQuery = groq`
 			slug
 		},	
       level->{name}
-    }
+    },
   }
 `;
 
 async function getCompany(slug: string) {
-	return await client.fetch<CompanyWithJobs>(companyQuery, { slug });
+	return await client.fetch<Company>(companyQuery, { slug });
 }
 
 export default async function CompanyDetailPage({
@@ -147,12 +133,12 @@ export default async function CompanyDetailPage({
 										}
 										target='_blank'
 										rel='noopener noreferrer'
-										className='flex items-center gap-1 text-sm text-pry2 hover:underline group'>
+										className='flex items-center gap-1 text-sm text-pry2 hover:underline group animate'>
 										<span>
 											Visit
-											Website
+											website
 										</span>
-										<RxExternalLink className='hidden w-4 h-4 group-hover:inline animate' />
+										<RxExternalLink className='hidden w-4 h-4 group-hover:inline ' />
 									</a>
 								)}
 							</div>
@@ -174,9 +160,12 @@ export default async function CompanyDetailPage({
 										}
 										target='_blank'
 										rel='noopener noreferrer'
-										className='inline-block mb-3 text-sm text-pry2 hover:underline'>
-										Visit
-										Website
+										className='inline-block mb-3 text-sm text-pry2 hover:underline group animate'>
+										<span>
+											Visit
+											website
+										</span>
+										<RxExternalLink className='hidden w-4 h-4 group-hover:inline ' />
 									</a>
 								)}
 							</div>

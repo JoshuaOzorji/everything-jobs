@@ -72,6 +72,16 @@ export const companySchema = defineType({
 		}),
 
 		defineField({
+			name: "industry",
+			title: "Industry",
+			type: "reference",
+			to: [{ type: "industry" }],
+			description:
+				"Select the primary industry for this company",
+			validation: (Rule) => Rule.required(),
+		}),
+
+		defineField({
 			name: "logo",
 			type: "image",
 			title: "Logo",

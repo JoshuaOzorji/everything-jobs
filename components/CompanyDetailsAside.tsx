@@ -6,6 +6,7 @@ import {
 	BriefcaseIcon,
 	MapPinIcon,
 	UsersIcon,
+	BuildingOfficeIcon,
 } from "@heroicons/react/24/outline";
 import { RiTwitterXFill } from "react-icons/ri";
 import { BsFacebook } from "react-icons/bs";
@@ -15,47 +16,12 @@ import { IoSearchOutline } from "react-icons/io5";
 import { RxExternalLink } from "react-icons/rx";
 import { formatDate2 } from "@/lib/formatDate2";
 interface CompanyDetailsAsideProps {
-	company: Company & {
-		jobs?: {
-			_id: string;
-			title: string;
-			slug: { current: string };
-			jobType: { name: string };
-			location: { name: string };
-			level: { name: string };
-			publishedAt: string;
-			deadline?: string;
-		}[];
-	};
+	company: Company;
 }
 
 export default function CompanyDetailsAside({
 	company,
 }: CompanyDetailsAsideProps) {
-	// Group jobs by location
-	const jobsByLocation =
-		company.jobs?.reduce(
-			(acc, job) => {
-				const location = job.location.name;
-				if (!acc[location]) acc[location] = [];
-				acc[location].push(job);
-				return acc;
-			},
-			{} as Record<string, (typeof company.jobs)[0][]>,
-		) || {};
-
-	// Group jobs by job type
-	// const jobsByType =
-	// 	company.jobs?.reduce(
-	// 		(acc, job) => {
-	// 			const type = job.jobType.name;
-	// 			if (!acc[type]) acc[type] = [];
-	// 			acc[type].push(job);
-	// 			return acc;
-	// 		},
-	// 		{} as Record<string, (typeof company.jobs)[0][]>,
-	// 	) || {};
-
 	// Get upcoming deadlines
 	const upcomingDeadlines =
 		company.jobs
@@ -83,8 +49,26 @@ export default function CompanyDetailsAside({
 				</h3>
 
 				<div className='space-y-3'>
+					{/* Industry */}
+					{company.industry && (
+						<div className='flex items-center'>
+							<BuildingOfficeIcon className='company-aside-icon' />
+							<div className='text-sm'>
+								<span className='font-medium'>
+									Industry:
+								</span>{" "}
+								<span className='capitalize'>
+									{
+										company
+											.industry
+											.name
+									}
+								</span>
+							</div>
+						</div>
+					)}
 					<div className='flex items-center'>
-						<BriefcaseIcon className='w-5 h-5 mr-2 text-myBlack' />
+						<BriefcaseIcon className='company-aside-icon' />
 						<span className='text-sm'>
 							<span className='font-medium'>
 								{company.jobs
@@ -97,7 +81,7 @@ export default function CompanyDetailsAside({
 
 					{mostRecentJob && (
 						<div className='flex items-center'>
-							<CalendarIcon className='w-5 h-5 mr-2 text-myBlack' />
+							<CalendarIcon className='company-aside-icon' />
 							<span className='text-sm'>
 								Latest job
 								posted on{" "}
@@ -110,27 +94,6 @@ export default function CompanyDetailsAside({
 						</div>
 					)}
 
-					{/* {Object.keys(jobsByLocation).length >
-						0 && (
-						<div className='flex items-center'>
-							<MapPinIcon className='w-5 h-5 mr-2 text-myBlack' />
-							<span className='text-sm'>
-								Hiring in{" "}
-								{
-									Object.keys(
-										jobsByLocation,
-									).length
-								}{" "}
-								location
-								{Object.keys(
-									jobsByLocation,
-								).length > 1
-									? "s"
-									: ""}
-							</span>
-						</div>
-					)} */}
-
 					{company.website && (
 						<div className='mt-3 '>
 							<a
@@ -141,7 +104,7 @@ export default function CompanyDetailsAside({
 								rel='noopener noreferrer'
 								className='inline-flex items-center text-sm text-pry2 hover:underline'>
 								<RxExternalLink className='w-5 h-5 mr-2' />
-								Visit Website
+								Visit website
 							</a>
 						</div>
 					)}

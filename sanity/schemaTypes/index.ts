@@ -8,6 +8,7 @@ import { qualificationSchema } from "./qualificationSchema";
 import { companySchema } from "./companySchema";
 import { jobFieldSchema } from "./jobFieldsSchema";
 import { jobLevelSchema } from "./jobLevelSchema";
+import { industrySchema } from "./industrySchema";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
 	types: [
@@ -19,5 +20,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
 		jobLevelSchema,
 		locationSchema,
 		qualificationSchema,
+		industrySchema,
 	],
 };

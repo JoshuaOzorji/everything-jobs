@@ -18,6 +18,7 @@ import { RiUserStarFill } from "react-icons/ri";
 import { FaGraduationCap } from "react-icons/fa";
 import { formatDate2 } from "@/lib/formatDate2";
 import { FaRegCalendarXmark } from "react-icons/fa6";
+import Link from "next/link";
 const jobQuery = defineQuery(groq`
   *[_type == "job" && slug.current == $slug][0]{
     title,
@@ -90,13 +91,16 @@ export default async function JobPage({ params: { slug } }: PageProps) {
 									}
 								/>
 
-								<p>
-									{
-										job
-											.company
-											.name
-									}
-								</p>
+								<Link
+									href={`/company/${job.company.slug}`}>
+									<p className='hover:underline'>
+										{
+											job
+												.company
+												.name
+										}
+									</p>
+								</Link>
 							</div>
 
 							{job.publishedAt && (
