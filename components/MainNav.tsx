@@ -2,8 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import logo from "@/public/logo.png";
-import { navItems } from "@/lib/data";
 import { IoSearchOutline } from "react-icons/io5";
+import FindJobsDropdown from "./FindJobsDropdown";
 
 const MainNav = ({
 	toggleSearch,
@@ -20,22 +20,21 @@ const MainNav = ({
 				</Link>
 
 				<div className='flex items-center gap-5'>
-					<ul className='flex gap-6'>
-						{navItems.map((item, index) => (
-							<li key={index}>
-								<Link
-									href={
-										item.href
-									}>
-									<p className='hover:text-pry animate'>
-										{
-											item.label
-										}
-									</p>
-								</Link>
-							</li>
-						))}
-					</ul>
+					<div className='flex gap-6'>
+						<Link href='/'>
+							<FindJobsDropdown />
+						</Link>
+						<Link href='/'>
+							<span className='hover:text-pry animate'>
+								Remote Jobs
+							</span>
+						</Link>
+						<Link href='/companies'>
+							<span className='hover:text-pry animate'>
+								Find Company
+							</span>
+						</Link>
+					</div>
 				</div>
 
 				<div className='flex items-center gap-4'>

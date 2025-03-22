@@ -21,6 +21,7 @@ export const locationSchema = defineType({
 			of: [{ type: "string" }],
 			options: {
 				list: [
+					{ title: "Remote", value: "Remote" },
 					{ title: "Abia", value: "Abia" },
 					{ title: "Adamawa", value: "Adamawa" },
 					{

@@ -8,6 +8,7 @@ import placeholder from "@/public/placeholderCompany.png";
 import { PortableText } from "@portabletext/react";
 import { customSerializers } from "@/lib/customSerializers";
 import Link from "next/link";
+import { CiLocationOn } from "react-icons/ci";
 
 const JobCard = ({ job }: JobCardProps) => {
 	const imageUrl = job.company.logo?.asset?._ref
@@ -56,7 +57,9 @@ const JobCard = ({ job }: JobCardProps) => {
 						</p>
 					</span>
 
-					<div className='flex gap-2 text-sm border-b font-poppins'>
+					<div className='flex text-sm border-b font-poppins items-center'>
+						<CiLocationOn className='w-4 h-4' />
+
 						<p>{locationDisplay}</p>
 					</div>
 

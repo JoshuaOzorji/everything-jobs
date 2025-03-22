@@ -29,7 +29,7 @@ const CompanyJobCard: React.FC<CompanyJobCardProps> = ({ job }) => {
 	return (
 		<div className='p-4 transition-shadow bg-white border rounded-lg hover:shadow-md font-openSans'>
 			<Link
-				href={`/jobs/${job.slug.current}`}
+				href={`/job/${job.slug.current}`}
 				className='mb-2 text-base font-poppins hover:text-pry2'>
 				{job.title}
 			</Link>

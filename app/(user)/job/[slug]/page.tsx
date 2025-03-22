@@ -12,7 +12,7 @@ import { IoIosCash } from "react-icons/io";
 import { IoBriefcase } from "react-icons/io5";
 import { PiBuildingsFill } from "react-icons/pi";
 import { RiMedalFill } from "react-icons/ri";
-import { CiCalendarDate } from "react-icons/ci";
+import { LuCalendar1 } from "react-icons/lu";
 import { formatDate } from "@/lib/formatDate";
 import { RiUserStarFill } from "react-icons/ri";
 import { FaGraduationCap } from "react-icons/fa";
@@ -105,7 +105,7 @@ export default async function JobPage({ params: { slug } }: PageProps) {
 
 							{job.publishedAt && (
 								<p className='flex items-center gap-1 '>
-									<CiCalendarDate />
+									<LuCalendar1 />
 									{formatDate(
 										new Date(
 											job.publishedAt,
@@ -226,7 +226,7 @@ export default async function JobPage({ params: { slug } }: PageProps) {
 							</div>
 
 							{job.level?.name && (
-								<p className='icon-container2'>
+								<div className='icon-container2'>
 									<RiUserStarFill className='icon' />
 									<span>
 										Career
@@ -239,7 +239,7 @@ export default async function JobPage({ params: { slug } }: PageProps) {
 												.name
 										}
 									</p>
-								</p>
+								</div>
 							)}
 							{job.qualification
 								?.name && (
