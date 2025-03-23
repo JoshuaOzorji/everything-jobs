@@ -3,12 +3,13 @@ import { type SchemaTypeDefinition } from "sanity";
 import { blockContentType } from "./blockContentType";
 import { jobSchema } from "./jobSchema";
 import { jobTypeSchema } from "./jobTypeSchema";
-import { locationSchema } from "./locationSchema";
+import { stateSchema } from "./stateSchema";
 import { qualificationSchema } from "./qualificationSchema";
 import { companySchema } from "./companySchema";
 import { jobFieldSchema } from "./jobFieldsSchema";
 import { jobLevelSchema } from "./jobLevelSchema";
 import { industrySchema } from "./industrySchema";
+import { citySchema } from "./citySchema";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
 	types: [
@@ -18,8 +19,9 @@ export const schema: { types: SchemaTypeDefinition[] } = {
 		jobSchema,
 		jobTypeSchema,
 		jobLevelSchema,
-		locationSchema,
+		stateSchema,
 		qualificationSchema,
 		industrySchema,
+		citySchema,
 	],
 };

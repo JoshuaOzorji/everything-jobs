@@ -27,7 +27,8 @@
 		"**/*.ts",
 		"**/*.tsx",
 		".next/types/**/*.ts",
-		"sanity/schemaTypes/jobSchemats"
+		"sanity/schemaTypes/jobSchemats",
+		"scripts/migrateStates.js"
 	],
 	"exclude": ["node_modules"]
 }

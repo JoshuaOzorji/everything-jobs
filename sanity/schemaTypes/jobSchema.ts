@@ -33,7 +33,7 @@ export const jobSchema = defineType({
 			name: "location",
 			type: "reference",
 			title: "Location",
-			to: [{ type: "location" }],
+			to: [{ type: "state" }],
 			validation: (Rule) => Rule.required(),
 		}),
 
