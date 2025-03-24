@@ -9,13 +9,13 @@ const NoResultsMessage: React.FC = () => {
 			<h3 className='mb-2 text-xl font-semibold'>
 				No jobs found
 			</h3>
-			<p className='text-myBlack'>
+			<p className='text-myBlack font-openSans'>
 				Try adjusting your search criteria or browse all
 				available jobs.
 			</p>
 			<button
 				onClick={() => router.push("/")}
-				className='px-4 py-2 mt-4 text-white rounded bg-pry hover:bg-sec'>
+				className='px-4 py-1 mt-4 text-white rounded bg-pry2 hover:bg-pry animate'>
 				View All Jobs
 			</button>
 		</div>

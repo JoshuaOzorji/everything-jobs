@@ -208,6 +208,11 @@ export const jobSchema = defineType({
 			type: "datetime",
 			title: "Published At",
 			validation: (Rule) => Rule.required(),
+			options: {
+				dateFormat: "DD-MM-YYYY",
+				timeFormat: "HH:mm",
+				timeStep: 15,
+			},
 		}),
 		defineField({
 			name: "deadline",

@@ -12,7 +12,7 @@ const SmallScreenCompanyCard = ({ company }: CompanyCardProps) => {
 	return (
 		<div className='block w-full'>
 			<div className='flex flex-row items-center w-full gap-2 p-2 bg-white border rounded-lg shadow-sm hover:shadow-md font-poppins'>
-				<div className='flex items-center justify-center w-14 h-14 rounded'>
+				<div className='flex items-center justify-center rounded w-14 h-14'>
 					{company.logo ? (
 						<Image
 							src={urlFor(
@@ -42,7 +42,7 @@ const SmallScreenCompanyCard = ({ company }: CompanyCardProps) => {
 				</div>
 
 				<Link href={`/company/${company.slug.current}`}>
-					<h3 className='flex-1 text-[0.9rem] font-semibold hover:underline'>
+					<h3 className='flex-1 text-[0.9rem] hover:underline'>
 						{company.name}
 					</h3>
 				</Link>
@@ -83,7 +83,7 @@ const LargeScreenCompanyCard = ({ company }: CompanyCardProps) => {
 			</div>
 
 			<div className='relative group'>
-				<div className='mb-2 text-sm font-semibold text-center truncate hover:underline'>
+				<div className='mb-2 text-sm text-center truncate hover:underline'>
 					<Link
 						href={`/company/${company.slug.current}`}>
 						{company.name}

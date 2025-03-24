@@ -15,8 +15,7 @@ const JobCard = ({ job }: JobCardProps) => {
 		? urlFor(job.company.logo).url()
 		: placeholder;
 
-	const locationDisplay =
-		job.location?.states?.[0] || job.location?.name || "Nigeria";
+	const locationDisplay = job.location?.name || "Nigeria";
 
 	return (
 		<>
@@ -74,7 +73,7 @@ const JobCard = ({ job }: JobCardProps) => {
 					</div>
 					<div className='text-[12px] md:text-sm text-black'>
 						<span className='flex gap-3'>
-							<p className='px-1 bg-blue-100 rounded-md text-pry first-letter:uppercase'>
+							<p className='px-2 bg-blue-100 rounded-md text-pry first-letter:uppercase'>
 								{
 									job
 										.jobType
@@ -82,7 +81,7 @@ const JobCard = ({ job }: JobCardProps) => {
 								}
 							</p>
 
-							<p className='px-1 text-green-800 bg-green-100 rounded-md first-letter:uppercase'>
+							<p className='px-2 text-green-800 bg-green-100 rounded-md first-letter:uppercase'>
 								{
 									job
 										.level

@@ -42,10 +42,9 @@ const companyQuery = groq`
       deadline,
       jobType->{name},
       location->{
-			name,
-			states,
-			slug
-		},	
+				name,
+				slug
+			},	
       level->{name}
     },
   }

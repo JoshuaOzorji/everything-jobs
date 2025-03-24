@@ -51,16 +51,11 @@ const JobCard2: React.FC<JobCardProps2> = ({ job }) => {
 					</div>
 
 					<div className='flex flex-wrap gap-3 mt-2 font-openSans'>
-						{job.location &&
-							job.location.length >
-								0 && (
-								<span className='px-2 py-0.5 text-sm text-blue-800 bg-blue-100 rounded first-letter:uppercase'>
-									{
-										job
-											.location[0]
-									}
-								</span>
-							)}
+						{job.location && (
+							<span className='px-2 py-0.5 text-sm text-blue-800 bg-blue-100 rounded first-letter:uppercase'>
+								{job.location}
+							</span>
+						)}
 						<span className='px-2 py-0.5 text-sm text-green-800 bg-green-100 rounded first-letter:uppercase'>
 							{job.jobType}
 						</span>

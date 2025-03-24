@@ -165,20 +165,20 @@ export default function CompanyDetailsAside({
 					</li>
 					<li>
 						<Link
-							href='/jobs'
+							href='/search'
 							className='flex items-center text-sm text-pry2 hover:underline'>
 							<BriefcaseIcon className='w-4 h-4 mr-1' />
 							All Jobs
 						</Link>
 					</li>
-					<li>
+					{/* <li>
 						<Link
 							href='/search'
 							className='flex items-center text-sm text-pry2 hover:underline'>
 							<IoSearchOutline className='w-4 h-4 mr-1' />
 							Advanced Job Search
 						</Link>
-					</li>
+					</li> */}
 				</ul>
 			</div>
 

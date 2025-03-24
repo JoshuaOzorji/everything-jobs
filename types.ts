@@ -19,23 +19,8 @@ export interface Company {
 	jobs?: Job[];
 }
 
-// export interface CompanyWithJobs extends Company {
-// 	jobs?: {
-// 		_id: string;
-// 		title: string;
-// 		summary: any[];
-// 		slug: { current: string };
-// 		publishedAt: string;
-// 		deadline?: string;
-// 		jobType: { name: string };
-// 		location: { name: string };
-// 		level: { name: string };
-// 	}[];
-// }
-
-export interface Location {
+export interface State {
 	name: string;
-	states: string[];
 	slug: { current: string };
 }
 
@@ -77,7 +62,7 @@ export interface Job {
 	slug: { current: string };
 	summary?: any[];
 	company: Company;
-	location: Location;
+	location: State;
 	jobType: JobType;
 	qualification: Qualification;
 	jobField: JobField;
@@ -107,7 +92,6 @@ export interface JobCardProps {
 		};
 		location?: {
 			name: string;
-			states?: string[];
 			slug?: {
 				current: string;
 			};
@@ -130,7 +114,7 @@ export interface JobQuery {
 	slug: string;
 	company: string;
 	companyLogo?: string;
-	location: string[];
+	location: string;
 	jobType: string;
 	level: string;
 	qualification: string;

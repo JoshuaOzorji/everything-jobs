@@ -74,7 +74,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
 			<button
 				onClick={clearAllFilters}
-				className='w-full px-4 py-2 bg-gray-200 rounded text-myBlack hover:bg-gray-300'>
+				className='w-full px-2 py-1 bg-gray-200 rounded text-myBlack hover:bg-gray-300'>
 				Clear Filters
 			</button>
 		</div>

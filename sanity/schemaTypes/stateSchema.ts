@@ -44,12 +44,56 @@ export const stateSchema = defineType({
 			title: "Slug",
 			options: {
 				source: "name",
+				maxLength: 96,
 				slugify: (input) =>
 					input
 						.toLowerCase()
-						.replace(/\s+/g, "-"),
+						.replace(/\s+/g, "-")
+						.replace(/[^\w-]+/g, ""),
 			},
-			validation: (Rule) => Rule.required(),
+			description:
+				"Slug will only be generated once. Be sure of the State name before generating",
+			readOnly: ({ value }) => {
+				// Lock slug field if it already has a value
+				return Boolean(value?.current);
+			},
+			validation: (Rule) =>
+				Rule.required().custom(
+					async (slug, context) => {
+						if (!slug?.current)
+							return "Slug is required.";
+
+						const doc = context.document;
+						if (!doc) return true;
+
+						const docId = doc._id ?? "";
+						const existingSlug =
+							await context
+								.getClient({
+									apiVersion: "2025-02-02",
+								})
+								.fetch(
+									`*[_type == "state" && slug.current == $slug && _id != $id][0]`,
+									{
+										slug: slug.current,
+										id: docId,
+									},
+								);
+						// Skip validation if the slug hasn't changed
+						if (
+							existingSlug &&
+							existingSlug.slug
+								.current ===
+								slug.current
+						) {
+							return true;
+						}
+
+						return existingSlug
+							? "This slug is already in use."
+							: true;
+					},
+				),
 		}),
 	],
 });

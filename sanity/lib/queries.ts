@@ -3,7 +3,8 @@ import { groq } from "next-sanity";
 export const searchJobsQuery = groq`
   *[_type == "job" && 
     (title match $q + "*" || company->name match $q + "*") &&
-    ($location == "" || location->states[] match $location) &&
+    // ($location == "" || location->states[] match $location) &&
+    ($location == "" || location->name match $location) &&
     ($jobType == "" || jobType->name == $jobType) &&
     ($jobLevel == "" || level->name == $jobLevel) &&
     ($qualification == "" || qualification->name == $qualification) &&
@@ -14,7 +15,7 @@ export const searchJobsQuery = groq`
     "slug": slug.current,
     "company": company->name,
     "companyLogo": company->logo.asset->url,
-    "location": location->states,
+    "location": location->name,
     "jobType": jobType->name,
     "level": level->name,
     "qualification": qualification->name,

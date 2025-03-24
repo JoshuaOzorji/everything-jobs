@@ -17,7 +17,6 @@ const latestJobsQuery = groq`*[_type == "job"] | order(publishedAt desc)[0...10]
   },
   location->{
     name,
-    states,
     slug
   },
   jobType->{

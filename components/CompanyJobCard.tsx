@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { formatDate2 } from "@/lib/formatDate2";
+import { CiLocationOn } from "react-icons/ci";
 
 type JobType = {
 	_id: string;
@@ -23,8 +24,7 @@ interface CompanyJobCardProps {
 const CompanyJobCard: React.FC<CompanyJobCardProps> = ({ job }) => {
 	// const locationDisplay = job.location?.name || "Nigeria";
 
-	const locationDisplay =
-		job.location?.states?.[0] || job.location?.name || "Nigeria";
+	const locationDisplay = job.location?.name || "Nigeria";
 
 	return (
 		<div className='p-4 transition-shadow bg-white border rounded-lg hover:shadow-md font-openSans'>
@@ -35,11 +35,14 @@ const CompanyJobCard: React.FC<CompanyJobCardProps> = ({ job }) => {
 			</Link>
 
 			<div className='flex flex-wrap gap-2 mb-3 text-xs md:text-[0.85rem]'>
-				<span className='bg-blue-100 text-blue-800 font-medium px-2.5 py-0.5 rounded first-letter:uppercase'>
-					{job.jobType.name}
+				<span className='bg-blue-100 text-blue-800  px-2.5 py-0.5 rounded flex items-center'>
+					<CiLocationOn />
+					<p className='first-letter:uppercase font-medium'>
+						{locationDisplay}
+					</p>
 				</span>
 				<span className='bg-green-100 text-green-800 font-medium px-2.5 py-0.5 rounded first-letter:uppercase'>
-					{locationDisplay}
+					{job.jobType.name}
 				</span>
 				<span className='bg-purple-100 text-purple-800  font-medium px-2.5 py-0.5 rounded first-letter:uppercase'>
 					{job.level.name}
