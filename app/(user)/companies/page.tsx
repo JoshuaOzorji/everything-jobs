@@ -33,7 +33,7 @@ export default async function CompaniesPage() {
 		<>
 			<SubLayout aside={<AsideComponent />}>
 				<div className=''>
-					<h1 className='p-2 mb-6 text-xl font-bold bg-white rounded-md md:text-3xl font-poppins'>
+					<h1 className='mb-6 text-xl font-bold  md:text-3xl font-poppins'>
 						Companies
 					</h1>
 

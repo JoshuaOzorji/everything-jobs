@@ -13,7 +13,7 @@ const FindJobsDropdown = () => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	return (
-		<DropdownMenu onOpenChange={(open) => setIsOpen(open)}>
+		<DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
 			<DropdownMenuTrigger asChild>
 				<span className='flex items-center gap-1 text-base cursor-pointer hover:text-pry animate'>
 					Find Jobs
@@ -30,8 +30,16 @@ const FindJobsDropdown = () => {
 				{findJobsDropdownItems.map((item, index) => (
 					<DropdownMenuItem
 						key={index}
-						className='text-base rounded-md hover:bg-acc'>
-						<Link href={item.href}>
+						className='text-base rounded-md hover:bg-acc p-0'
+						onSelect={() =>
+							setIsOpen(false)
+						}>
+						<Link
+							href={item.href}
+							className='block w-full h-full px-3 py-2'
+							onClick={() =>
+								setIsOpen(false)
+							}>
 							<p className='text-myBlack'>
 								{item.label}
 							</p>

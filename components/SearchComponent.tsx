@@ -103,7 +103,7 @@ const SearchComponent = ({
 
 						{/* Location Dropdown */}
 						<select
-							className='border hero-input'
+							className='hero-input'
 							value={selectedLocation}
 							onChange={
 								handleLocationChange
@@ -130,7 +130,7 @@ const SearchComponent = ({
 
 						<button
 							type='submit'
-							className='p-1 text-white border md:p-[0.38rem] bg-pry2 hover:bg-pry animate hover:text-acc border-pry2'>
+							className='p-1.5 text-white border md:p-[0.38rem] bg-pry2 hover:bg-pry animate hover:text-acc border-pry2'>
 							<IoSearchOutline className='w-6 h-6' />
 						</button>
 						{/* Search Icon */}

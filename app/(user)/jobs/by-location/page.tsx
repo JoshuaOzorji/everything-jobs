@@ -1,6 +1,5 @@
 import { Metadata } from "next";
-import Link from "next/link";
-import { getLocations } from "@/lib/sanity/client";
+import { getLocations } from "@/sanity/lib/queries";
 import CategoryList from "@/components/CategoryList";
 
 export const metadata: Metadata = {
@@ -20,13 +19,13 @@ export default async function JobsByLocationPage() {
 	const locations = await getLocations();
 
 	return (
-		<div className='container mx-auto px-4 py-8'>
-			<h1 className='text-3xl font-bold mb-6'>
+		<div className='py-4 mx-auto md:py-8'>
+			<h1 className='mb-6 text-2xl font-bold md:text-3xl font-poppins'>
 				Jobs by Location
 			</h1>
 
-			<div className='mb-6'>
-				<p className='text-lg'>
+			<div className='mb-6 font-openSans'>
+				<p className='text-sm md:text-base'>
 					Find job opportunities in your state or
 					city across Nigeria. Browse jobs
 					available in all 36 states and the

@@ -1,58 +1,60 @@
-import { useState } from "react";
+import React from "react";
+import Link from "next/link";
 
-// Add to your search page
-const [currentPage, setCurrentPage] = useState(1);
-const jobsPerPage = 10;
+interface PaginationProps {
+	total: number;
+	itemsPerPage?: number;
+	currentPage?: number;
+	basePath?: string;
+}
 
-// Calculate pagination
-const indexOfLastJob = currentPage * jobsPerPage;
-const indexOfFirstJob = indexOfLastJob - jobsPerPage;
-const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob);
-const totalPages = Math.ceil(jobs.length / jobsPerPage);
+export default function Pagination({
+	total,
+	itemsPerPage = 10,
+	currentPage = 1,
+	basePath = "",
+}: PaginationProps) {
+	const totalPages = Math.ceil(total / itemsPerPage);
 
-const Pagination = () => {
+	// Generate an array of page numbers
+	const pageNumbers = Array.from(
+		{ length: totalPages },
+		(_, index) => index + 1,
+	);
+
 	return (
-		<div className='flex justify-center gap-2 mt-6'>
-			<button
-				onClick={() => setCurrentPage(currentPage - 1)}
-				disabled={currentPage === 1}
-				className={`px-3 py-1 rounded ${
-					currentPage === 1
-						? "bg-gray-200 text-myBlack"
-						: "bg-pry text-white"
-				}`}>
-				Previous
-			</button>
+		<div className='flex justify-center items-center space-x-2 mt-8'>
+			{/* Previous Button */}
+			{currentPage > 1 && (
+				<Link
+					href={`${basePath}?page=${currentPage - 1}`}
+					className='px-4 py-2 border rounded hover:bg-gray-100'>
+					Previous
+				</Link>
+			)}
 
-			{Array.from(
-				{ length: totalPages },
-				(_, i) => i + 1,
-			).map((page) => (
-				<button
+			{/* Page Numbers */}
+			{pageNumbers.map((page) => (
+				<Link
 					key={page}
-					onClick={() => setCurrentPage(page)}
-					className={`px-3 py-1 rounded ${
+					href={`${basePath}?page=${page}`}
+					className={`px-4 py-2 border rounded ${
 						currentPage === page
-							? "bg-pry text-white"
-							: "bg-gray-200"
+							? "bg-blue-500 text-white"
+							: "hover:bg-gray-100"
 					}`}>
 					{page}
-				</button>
+				</Link>
 			))}
 
-			<button
-				onClick={() => setCurrentPage(currentPage + 1)}
-				disabled={currentPage === totalPages}
-				className={`px-3 py-1 rounded ${
-					currentPage === totalPages
-						? "bg-gray-200 text-myBlack"
-						: "bg-pry text-white"
-				}`}>
-				Next
-			</button>
+			{/* Next Button */}
+			{currentPage < totalPages && (
+				<Link
+					href={`${basePath}?page=${currentPage + 1}`}
+					className='px-4 py-2 border rounded hover:bg-gray-100'>
+					Next
+				</Link>
+			)}
 		</div>
 	);
-};
-
-// Use currentJobs instead of jobs when rendering
-// Add the pagination component below the job listings
+}
