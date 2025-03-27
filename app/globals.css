@@ -50,6 +50,22 @@ body {
 	@apply w-5 h-5 mr-2 text-myBlack;
 }
 
+.page-container {
+	@apply my-2;
+}
+
+.page-h1 {
+	@apply mb-2 text-2xl font-bold md:text-3xl font-poppins;
+}
+
+.page-sub-div {
+	@apply mb-6 font-openSans;
+}
+
+.page-p {
+	@apply text-sm md:text-base;
+}
+
 .two-line-summary {
 	display: -webkit-box;
 	-webkit-line-clamp: 2;

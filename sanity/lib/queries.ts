@@ -45,43 +45,28 @@ export async function getLocations() {
   }`);
 }
 
-// Fetch jobs by location
-// export async function getJobsByLocation(locationSlug: string) {
-// 	return client.fetch(
-// 		`*[_type == "job" && state->slug.current == $locationSlug] {
-//           _id,
-//           title,
-//           company->,
-//           "slug": slug.current,
-//           salaryRange,
-//           location->,
-//           jobType->,
-//           jobField->,
-//           publishedAt,
-//           description,
-//           "logoUrl": company->logo.asset->url
-//       }`,
-// 		{ locationSlug },
-// 	);
-// }
-
 export async function getJobsByLocation(locationSlug: string) {
-	console.log("Fetching jobs for location slug:", locationSlug);
-
 	const jobs = await client.fetch(
-		`*[_type == "job" && state->slug.current == $locationSlug] {
+		groq`*[_type == "job" && defined(location) && location->slug.current == $locationSlug] {
           _id,
           title,
+          "slug": {
+            "current": slug.current
+          },
           "company": company->{
               _id,
               name,
-              "logo": logo.asset->url
+              logo{
+              asset{
+                _ref
+              }
+            } 
           },
-          "slug": slug.current,
           salaryRange,
           "location": location->{
               _id,
-              name
+              name,
+              slug
           },
           "jobType": jobType->{
               _id,
@@ -102,44 +87,62 @@ export async function getJobsByLocation(locationSlug: string) {
 		{ locationSlug },
 	);
 
-	console.log("Jobs found:", jobs.length);
-	console.log("First job details:", jobs[0]);
-
 	return jobs;
 }
 
 // Similar functions for education, field, and industry
-export async function getEducationLevels() {
+export async function getQualifications() {
 	return client.fetch(`
-    *[_type == "education"] | order(level asc) {
+      *[_type == "qualification"] | order(name asc) {
       _id,
-      level,
-      slug,
-      "jobCount": count(*[_type == "job" && references(^._id)])
-    }
-  `);
+      name,
+      "slug": slug.current,
+      "jobCount": count(*[_type == "job" && qualification._ref == ^._id])
+  }`);
 }
 
-export async function getJobsByEducation(educationSlug: string) {
-	return client.fetch(
-		`
-    *[_type == "job" && education->slug.current == $educationSlug] {
-      _id,
-      title,
-      company,
-      slug,
-      salary,
-      location->,
-      education->,
-      field->,
-      industry->,
-      postedDate,
-      description,
-      "logoUrl": company->logo.asset->url
-    }
-  `,
-		{ educationSlug },
+export async function getJobsByQualification(qualificationSlug: string) {
+	const jobs = await client.fetch(
+		groq`*[_type == "job" && defined(qualification) && qualification->slug.current == $qualificationSlug] {
+          _id,
+          title,
+          "slug": {
+            "current": slug.current
+          },
+          "company": company->{
+              _id,
+              name,
+              logo{
+              asset{
+                _ref
+              }
+            } 
+          },
+          salaryRange,
+          "location": location->{
+              _id,
+              name,
+              slug
+          },
+          "jobType": jobType->{
+              _id,
+              name
+          },
+          "jobField": jobField->{
+              _id,
+              name
+          },
+          "level": level->{
+              _id,
+              name
+          },
+          publishedAt,
+          description,
+          summary
+      }`,
+		{ qualificationSlug },
 	);
-}
 
+	return jobs;
+}
 // Add similar functions for fields and industries

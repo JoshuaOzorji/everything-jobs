@@ -24,8 +24,8 @@ export default async function JobsByLocationPage() {
 				Jobs by Location
 			</h1>
 
-			<div className='mb-6 font-openSans'>
-				<p className='text-sm md:text-base'>
+			<div className='page-sub-div'>
+				<p className='page-p'>
 					Find job opportunities in your state or
 					city across Nigeria. Browse jobs
 					available in all 36 states and the
