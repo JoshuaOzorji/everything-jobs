@@ -143,6 +143,61 @@ export async function getJobsByQualification(qualificationSlug: string) {
 		{ qualificationSlug },
 	);
 
+	console.log("Jobs By Qualification", jobs);
 	return jobs;
 }
-// Add similar functions for fields and industries
+
+export async function getJobFields() {
+	return client.fetch(`
+      *[_type == "jobField"] | order(name asc) {
+      _id,
+      name,
+      "slug": slug.current,
+      "jobCount": count(*[_type == "job" && jobField._ref == ^._id])
+  }`);
+}
+
+export async function getJobsByField(fieldSlug: string) {
+	const jobs = await client.fetch(
+		groq`*[_type == "job" && defined(jobField) && jobField->slug.current == $fieldSlug] {
+          _id,
+          title,
+          "slug": {
+            "current": slug.current
+          },
+          "company": company->{
+              _id,
+              name,
+              logo{
+              asset{
+                _ref
+              }
+            } 
+          },
+          salaryRange,
+          "location": location->{
+              _id,
+              name,
+              slug
+          },
+          "jobType": jobType->{
+              _id,
+              name
+          },
+          "jobField": jobField->{
+              _id,
+              name
+          },
+          "level": level->{
+              _id,
+              name
+          },
+          publishedAt,
+          description,
+          summary
+      }`,
+		{ fieldSlug },
+	);
+
+	return jobs;
+}
