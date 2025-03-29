@@ -1,9 +1,9 @@
 import { defineField, defineType } from "sanity";
 import { DocumentTextIcon } from "@sanity/icons";
 
-export const qualificationSchema = defineType({
-	name: "qualification",
-	title: "Qualification",
+export const educationSchema = defineType({
+	name: "education",
+	title: "Education",
 	type: "document",
 	icon: DocumentTextIcon,
 
@@ -16,7 +16,7 @@ export const qualificationSchema = defineType({
 				Rule.required().custom(
 					async (name, context) => {
 						if (!name)
-							return "Qualification name is required.";
+							return "Education name is required.";
 
 						const { document, getClient } =
 							context;
@@ -24,9 +24,9 @@ export const qualificationSchema = defineType({
 							apiVersion: "2023-01-01",
 						});
 
-						const existingQualification =
+						const existingEducation =
 							await client.fetch(
-								`*[_type == "qualification" && name == $name && _id != $id][0]`,
+								`*[_type == "education" && name == $name && _id != $id][0]`,
 								{
 									name,
 									id:
@@ -35,8 +35,8 @@ export const qualificationSchema = defineType({
 								},
 							);
 
-						return existingQualification
-							? "A qualification with this name already exists."
+						return existingEducation
+							? "A education with this name already exists."
 							: true;
 					},
 				),
@@ -90,7 +90,7 @@ export const qualificationSchema = defineType({
 						});
 						const existingSlug =
 							await client.fetch(
-								`*[_type == "qualification" && slug.current == $slug && _id != $id][0]`,
+								`*[_type == "education" && slug.current == $slug && _id != $id][0]`,
 								{
 									slug: slug?.current,
 									id:
@@ -100,7 +100,7 @@ export const qualificationSchema = defineType({
 							);
 
 						return existingSlug
-							? "A qualification with this slug already exists."
+							? "A education with this slug already exists."
 							: true;
 					},
 				),

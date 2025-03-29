@@ -27,13 +27,12 @@ const jobQuery = defineQuery(groq`
 			name,
       logo,
 			"slug": slug.current, },
-    location->{
-      name,
-      states,
-			 "slug": slug.current 
-    },
+		location->{
+			name,
+			slug
+		},
     jobType-> { name },
-    qualification-> { name },
+    education-> { name },
     jobField-> { name },
     salaryRange,
     publishedAt,
@@ -131,14 +130,14 @@ export default async function JobPage({ params: { slug } }: PageProps) {
 									{Array.isArray(
 										job
 											.location
-											?.states,
+											?.name,
 									)
-										? job.location.states.join(
+										? job.location.name.join(
 												", ",
 											)
 										: job
 												.location
-												?.states}
+												?.name}
 								</p>
 							</div>
 
@@ -241,17 +240,17 @@ export default async function JobPage({ params: { slug } }: PageProps) {
 									</p>
 								</div>
 							)}
-							{job.qualification
+							{job.education
 								?.name && (
 								<div className='icon-container2'>
 									<FaGraduationCap className='icon' />
 									<span>
 										Qualification:
 									</span>{" "}
-									<p className='job-input'>
+									<p className='job-input uppercase'>
 										{
 											job
-												.qualification
+												.education
 												.name
 										}
 									</p>

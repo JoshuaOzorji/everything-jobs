@@ -24,7 +24,7 @@ const SearchPage = () => {
 	const location = searchParams.get("location") || "";
 	const jobType = searchParams.get("jobType") || "";
 	const jobLevel = searchParams.get("jobLevel") || "";
-	const qualification = searchParams.get("qualification") || "";
+	const education = searchParams.get("education") || "";
 	const jobField = searchParams.get("jobField") || "";
 
 	// Fetch jobs based on search params
@@ -40,11 +40,8 @@ const SearchPage = () => {
 				if (jobType) params.append("jobType", jobType);
 				if (jobLevel)
 					params.append("jobLevel", jobLevel);
-				if (qualification)
-					params.append(
-						"qualification",
-						qualification,
-					);
+				if (education)
+					params.append("education", education);
 				if (jobField)
 					params.append("jobField", jobField);
 
@@ -68,7 +65,7 @@ const SearchPage = () => {
 		};
 
 		fetchJobs();
-	}, [query, location, jobType, jobLevel, qualification, jobField]);
+	}, [query, location, jobType, jobLevel, education, jobField]);
 
 	// Update URL with filter selection
 	const updateFilters = (filterName: string, value: string) => {
@@ -114,9 +111,7 @@ const SearchPage = () => {
 							location={location}
 							jobType={jobType}
 							jobLevel={jobLevel}
-							qualification={
-								qualification
-							}
+							education={education}
 							jobField={jobField}
 							query={query}
 							updateFilters={
@@ -130,9 +125,7 @@ const SearchPage = () => {
 							filters={filters}
 							jobType={jobType}
 							jobLevel={jobLevel}
-							qualification={
-								qualification
-							}
+							education={education}
 							jobField={jobField}
 							showFilters={
 								showFilters

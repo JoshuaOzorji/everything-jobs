@@ -5,7 +5,7 @@ interface ActiveFiltersProps {
 	location: string;
 	jobType: string;
 	jobLevel: string;
-	qualification: string;
+	education: string;
 	jobField: string;
 	query: string;
 	updateFilters: (filterName: string, value: string) => void;
@@ -15,7 +15,7 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({
 	location,
 	jobType,
 	jobLevel,
-	qualification,
+	education,
 	jobField,
 	query,
 	updateFilters,
@@ -27,7 +27,7 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({
 		{ name: "Location", value: location },
 		{ name: "Job Type", value: jobType },
 		{ name: "Level", value: jobLevel },
-		{ name: "Qualification", value: qualification },
+		{ name: "Education", value: education },
 		{ name: "Field", value: jobField },
 	].filter((filter) => filter.value);
 

@@ -4,7 +4,7 @@ import { blockContentType } from "./blockContentType";
 import { jobSchema } from "./jobSchema";
 import { jobTypeSchema } from "./jobTypeSchema";
 import { stateSchema } from "./stateSchema";
-import { qualificationSchema } from "./qualificationSchema";
+import { educationSchema } from "./educationSchema";
 import { companySchema } from "./companySchema";
 import { jobFieldSchema } from "./jobFieldsSchema";
 import { jobLevelSchema } from "./jobLevelSchema";
@@ -20,7 +20,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
 		jobTypeSchema,
 		jobLevelSchema,
 		stateSchema,
-		qualificationSchema,
+		educationSchema,
 		industrySchema,
 		citySchema,
 	],

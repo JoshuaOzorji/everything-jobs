@@ -28,7 +28,7 @@ export interface JobType {
 	name: string;
 }
 
-export interface Qualification {
+export interface Education {
 	name: string;
 }
 
@@ -64,7 +64,7 @@ export interface Job {
 	company: Company;
 	location: State;
 	jobType: JobType;
-	qualification: Qualification;
+	education: Education;
 	jobField: JobField;
 	salaryRange: SalaryRange;
 	publishedAt: string;
@@ -117,7 +117,7 @@ export interface JobQuery {
 	location: string;
 	jobType: string;
 	level: string;
-	qualification: string;
+	education: string;
 	jobField: string;
 	salaryRange: { min: number; max: number };
 	publishedAt: string;
@@ -132,6 +132,6 @@ export interface Filter {
 export interface FilterOptions {
 	jobTypes: Filter[];
 	jobLevels: Filter[];
-	qualifications: Filter[];
+	educationLevels: Filter[];
 	jobFields: Filter[];
 }

@@ -24,7 +24,7 @@ const MainNav = ({
 						<Link href='/'>
 							<FindJobsDropdown />
 						</Link>
-						<Link href='/'>
+						<Link href='/remote-jobs'>
 							<span className='hover:text-pry animate'>
 								Remote Jobs
 							</span>

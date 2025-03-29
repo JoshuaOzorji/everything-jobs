@@ -155,10 +155,10 @@ export const jobSchema = defineType({
 		}),
 
 		defineField({
-			name: "qualification",
+			name: "education",
 			type: "reference",
-			title: "Qualification",
-			to: [{ type: "qualification" }],
+			title: "Education",
+			to: [{ type: "education" }],
 			validation: (Rule) => Rule.required(),
 		}),
 		defineField({

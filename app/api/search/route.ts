@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
 	const location = searchParams.get("location") || "";
 	const jobType = searchParams.get("jobType") || "";
 	const jobLevel = searchParams.get("jobLevel") || "";
-	const qualification = searchParams.get("qualification") || "";
+	const education = searchParams.get("education") || "";
 	const jobField = searchParams.get("jobField") || "";
 
 	try {
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
 			location,
 			jobType,
 			jobLevel,
-			qualification,
+			education,
 			jobField,
 		});
 

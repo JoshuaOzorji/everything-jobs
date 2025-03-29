@@ -6,7 +6,7 @@ interface FilterSidebarProps {
 	filters: FilterOptions | null;
 	jobType: string;
 	jobLevel: string;
-	qualification: string;
+	education: string;
 	jobField: string;
 	showFilters: boolean;
 	updateFilters: (filterName: string, value: string) => void;
@@ -17,7 +17,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 	filters,
 	jobType,
 	jobLevel,
-	qualification,
+	education,
 	jobField,
 	showFilters,
 	updateFilters,
@@ -53,13 +53,13 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 			/>
 
 			<FilterSelect
-				label='Qualification'
-				value={qualification}
-				options={filters.qualifications}
+				label='Education'
+				value={education}
+				options={filters.educationLevels}
 				onChange={(value) =>
-					updateFilters("qualification", value)
+					updateFilters("education", value)
 				}
-				placeholder='All Qualifications'
+				placeholder='All Education levels'
 			/>
 
 			<FilterSelect

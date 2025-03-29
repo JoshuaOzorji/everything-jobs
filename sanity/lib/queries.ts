@@ -8,7 +8,7 @@ export const searchJobsQuery = groq`
     ($location == "" || location->name match $location) &&
     ($jobType == "" || jobType->name == $jobType) &&
     ($jobLevel == "" || level->name == $jobLevel) &&
-    ($qualification == "" || qualification->name == $qualification) &&
+    ($education == "" || education->name == $education) &&
     ($jobField == "" || jobField->name == $jobField)
   ] {
     _id,
@@ -19,7 +19,7 @@ export const searchJobsQuery = groq`
     "location": location->name,
     "jobType": jobType->name,
     "level": level->name,
-    "qualification": qualification->name,
+    "education": education->name,
     "jobField": jobField->name,
     salaryRange,
     publishedAt,
@@ -30,7 +30,7 @@ export const searchJobsQuery = groq`
 export const getFiltersQuery = groq`{
   "jobTypes": *[_type == "jobType"] { _id, name },
   "jobLevels": *[_type == "jobLevel"] { _id, name },
-  "qualifications": *[_type == "qualification"] { _id, name },
+  "educationLevels": *[_type == "education"] { _id, name },
   "jobFields": *[_type == "jobField"] { _id, name }
 }`;
 
@@ -90,63 +90,6 @@ export async function getJobsByLocation(locationSlug: string) {
 	return jobs;
 }
 
-// Similar functions for education, field, and industry
-export async function getQualifications() {
-	return client.fetch(`
-      *[_type == "qualification"] | order(name asc) {
-      _id,
-      name,
-      "slug": slug.current,
-      "jobCount": count(*[_type == "job" && qualification._ref == ^._id])
-  }`);
-}
-
-export async function getJobsByQualification(qualificationSlug: string) {
-	const jobs = await client.fetch(
-		groq`*[_type == "job" && defined(qualification) && qualification->slug.current == $qualificationSlug] {
-          _id,
-          title,
-          "slug": {
-            "current": slug.current
-          },
-          "company": company->{
-              _id,
-              name,
-              logo{
-              asset{
-                _ref
-              }
-            } 
-          },
-          salaryRange,
-          "location": location->{
-              _id,
-              name,
-              slug
-          },
-          "jobType": jobType->{
-              _id,
-              name
-          },
-          "jobField": jobField->{
-              _id,
-              name
-          },
-          "level": level->{
-              _id,
-              name
-          },
-          publishedAt,
-          description,
-          summary
-      }`,
-		{ qualificationSlug },
-	);
-
-	console.log("Jobs By Qualification", jobs);
-	return jobs;
-}
-
 export async function getJobFields() {
 	return client.fetch(`
       *[_type == "jobField"] | order(name asc) {
@@ -197,6 +140,111 @@ export async function getJobsByField(fieldSlug: string) {
           summary
       }`,
 		{ fieldSlug },
+	);
+
+	return jobs;
+}
+
+export async function getEducationLevels() {
+	return client.fetch(`
+      *[_type == "education"] | order(name asc) {
+      _id,
+      name,
+      "slug": slug.current,
+      "jobCount": count(*[_type == "job" && education._ref == ^._id])
+  }`);
+}
+
+export async function getJobsByEducation(educationSlug: string) {
+	const jobs = await client.fetch(
+		groq`*[_type == "job" && defined(education) && education->slug.current == $educationSlug] {
+          _id,
+          title,
+          "slug": {
+            "current": slug.current
+          },
+          "company": company->{
+              _id,
+              name,
+              logo{
+              asset{
+                _ref
+              }
+            } 
+          },
+          level->{
+            name
+          },
+          salaryRange,
+          "location": location->{
+              _id,
+              name,
+              slug
+          },
+          "jobType": jobType->{
+              _id,
+              name
+          },
+          "jobField": jobField->{
+              _id,
+              name
+          },
+          "education": education->{
+              _id,
+              name
+          },
+          publishedAt,
+          description,
+          summary
+      }`,
+		{ educationSlug },
+	);
+
+	return jobs;
+}
+
+export async function getRemoteJobs() {
+	const jobs = await client.fetch(
+		groq`*[_type == "job" && location->name == "Remote"] {
+          _id,
+          title,
+          "slug": {
+            "current": slug.current
+          },
+          "company": company->{
+              _id,
+              name,
+              logo{
+              asset{
+                _ref
+              }
+            } 
+          },
+          salaryRange,
+          "location": location->{
+              _id,
+              name,
+              slug
+          },
+          "jobType": jobType->{
+              _id,
+              name
+          },
+          level->{
+            name
+          }, 
+          "jobField": jobField->{
+              _id,
+              name
+          },
+          "education": education->{
+              _id,
+              name
+          },
+          publishedAt,
+          description,
+          summary
+      }`,
 	);
 
 	return jobs;

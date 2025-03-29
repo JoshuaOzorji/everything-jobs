@@ -1,8 +1,5 @@
 import { Metadata } from "next";
-import {
-	getQualifications,
-	getJobsByQualification,
-} from "@/sanity/lib/queries";
+import { getEducationLevels, getJobsByEducation } from "@/sanity/lib/queries";
 import Pagination from "@/components/Pagination";
 import { notFound } from "next/navigation";
 import AsideComponent from "@/components/AsideComponent";
@@ -10,85 +7,84 @@ import SubLayout from "@/components/SubLayout";
 import { Job } from "@/types";
 import JobCardCategories from "@/components/JobCardCategories";
 
-type QualificationType = {
+type EducationLevelType = {
 	slug: string;
 	name: string;
 	jobCount?: number;
 };
 
 export async function generateStaticParams() {
-	const qualifications: QualificationType[] = await getQualifications();
-	return qualifications
-		.filter((qualification) => qualification.slug)
-		.map((qualification) => ({
-			qualification: qualification.slug,
+	const educationLevels: EducationLevelType[] =
+		await getEducationLevels();
+	return educationLevels
+		.filter((level) => level.slug)
+		.map((level) => ({
+			education: level.slug,
 		}));
 }
 
 export async function generateMetadata({
 	params,
 }: {
-	params: { qualification: string };
+	params: { education: string };
 }): Promise<Metadata> {
-	const qualifications = await getQualifications();
-	const qualificationData = qualifications.find(
-		(qual: QualificationType) => qual.slug === params.qualification,
+	const educationLevels = await getEducationLevels();
+	const educationData = educationLevels.find(
+		(level: EducationLevelType) => level.slug === params.education,
 	);
 
-	if (!qualificationData) return { title: "Qualification not found" };
+	if (!educationData) return { title: "Education Level not found" };
 
 	return {
-		title: `${qualificationData.name} Jobs in Nigeria | Career Opportunities`,
-		description: `Find job opportunities for ${qualificationData.name} qualification. Browse ${qualificationData.jobCount || 0} job listings suitable for ${qualificationData.name} holders.`,
-		keywords: `${qualificationData.name} jobs, jobs for ${qualificationData.name}, career opportunities for ${qualificationData.name} holders`,
+		title: `${educationData.name} Jobs in Nigeria | Career Opportunities`,
+		description: `Find job vacancies suitable for ${educationData.name} professionals. Browse ${educationData.jobCount || 0} job listings matching this education level.`,
+		keywords: `${educationData.name} jobs, jobs for ${educationData.name}, career opportunities`,
 		openGraph: {
-			title: `${qualificationData.name} Jobs in Nigeria | Career Opportunities`,
-			description: `Find job opportunities for ${qualificationData.name} qualification in Nigeria.`,
+			title: `${educationData.name} Jobs in Nigeria | Career Opportunities`,
+			description: `Job vacancies for ${educationData.name} professionals in Nigeria.`,
 			type: "website",
 		},
 	};
 }
 
-export default async function QualificationJobsPage({
+export default async function EducationJobsPage({
 	params,
 }: {
-	params: { qualification: string };
+	params: { education: string };
 }) {
-	const { qualification } = params;
+	const { education } = params;
 
-	// Validate qualification parameter
-	if (!qualification || qualification === "null") {
+	// Validate education parameter
+	if (!education || education === "null") {
 		return notFound();
 	}
 
-	const qualifications: QualificationType[] = await getQualifications();
-	const qualificationData = qualifications.find(
-		(qual: QualificationType) =>
-			qual.slug === decodeURIComponent(qualification),
+	const educationLevels: EducationLevelType[] =
+		await getEducationLevels();
+	const educationData = educationLevels.find(
+		(level: EducationLevelType) => level.slug === education,
 	);
 
-	if (!qualificationData) {
+	if (!educationData) {
 		return notFound();
 	}
 
-	const jobs = await getJobsByQualification(qualificationData.slug);
+	const jobs = await getJobsByEducation(education);
 
 	return (
 		<SubLayout aside={<AsideComponent />}>
 			<div className='page-container'>
 				<h1 className='page-h1'>
-					{qualificationData.name} Jobs in Nigeria
+					{educationData.name} Jobs in Nigeria
 				</h1>
 
 				<div className='page-sub-div'>
 					<p className='page-p'>
 						Browse {jobs.length} job
 						opportunities for{" "}
-						{qualificationData.name}{" "}
-						qualification holders. Find your
-						next career opportunity that
-						matches your educational
-						background.
+						{educationData.name}{" "}
+						professionals. Find your next
+						career move.
 					</p>
 				</div>
 
@@ -111,13 +107,12 @@ export default async function QualificationJobsPage({
 						<h2 className='text-xl font-semibold'>
 							No jobs currently
 							available for{" "}
-							{qualificationData.name}{" "}
-							qualification
+							{educationData.name}
 						</h2>
 						<p className='mt-2'>
 							Check back later or
-							browse jobs for other
-							qualifications.
+							browse jobs in other
+							education levels.
 						</p>
 					</div>
 				)}
