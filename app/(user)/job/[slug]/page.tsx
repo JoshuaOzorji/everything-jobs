@@ -48,12 +48,13 @@ const jobQuery = defineQuery(groq`
 `);
 
 type PageProps = {
-	params: {
+	params: Promise<{
 		slug: string;
-	};
+	}>;
 };
 
-export default async function JobPage({ params: { slug } }: PageProps) {
+export default async function JobPage({ params }: PageProps) {
+	const { slug } = await params;
 	const job: Job | null = await client.fetch(jobQuery, { slug });
 
 	if (!job) {

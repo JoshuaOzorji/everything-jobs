@@ -1,5 +1,6 @@
 import { groq } from "next-sanity";
 import { client } from "./client";
+import { Job } from "@/types";
 
 export const searchJobsQuery = groq`
   *[_type == "job" && 
@@ -218,7 +219,7 @@ export async function getRemoteJobs() {
               asset{
                 _ref
               }
-            } 
+            }
           },
           salaryRange,
           "location": location->{
@@ -232,7 +233,7 @@ export async function getRemoteJobs() {
           },
           level->{
             name
-          }, 
+          },
           "jobField": jobField->{
               _id,
               name
@@ -248,4 +249,42 @@ export async function getRemoteJobs() {
 	);
 
 	return jobs;
+}
+
+export interface JobReference {
+	_id: string;
+	jobField: { _ref: string };
+	company: { _ref: string };
+	jobType: { _ref: string };
+	location: { _ref: string };
+}
+
+export async function fetchRelatedJobs(currentJob: JobReference) {
+	return client.fetch(
+		`*[_type == "job" && 
+      _id != $currentJobId && 
+      (!defined(deadline) || deadline > now())
+    ] {
+      _id,
+      title,
+      "slug": slug.current,
+      "company": company->name,
+      "companyLogo": company->logo.asset->url,
+      "location": location->name,
+      "jobType": jobType->name,
+      publishedAt,
+      "score": 0
+        + (jobField._ref == $jobFieldRef ? 5 : 0)
+        + (company._ref == $companyRef ? 4 : 0)
+        + (jobType._ref == $jobTypeRef ? 3 : 0)
+        + (location._ref == $locationRef ? 3 : 0)
+    } | order(score desc) [0...4]`,
+		{
+			currentJobId: currentJob._id,
+			jobFieldRef: currentJob.jobField._ref,
+			companyRef: currentJob.company._ref,
+			jobTypeRef: currentJob.jobType._ref,
+			locationRef: currentJob.location._ref,
+		},
+	);
 }
