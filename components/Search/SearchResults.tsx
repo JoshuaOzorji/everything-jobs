@@ -1,4 +1,3 @@
-import React from "react";
 import { JobQuery } from "@/types";
 import JobList from "./JobList";
 import NoResultsMessage from "./NoResultsMessage";
@@ -11,15 +10,6 @@ interface SearchResultsProps {
 
 const SearchResults: React.FC<SearchResultsProps> = ({ jobs, isLoading }) => {
 	return (
-		// <div className='md:w-3/4'>
-		// 	{isLoading ? (
-		// 		<Loading />
-		// 	) : jobs.length > 0 ? (
-		// 		<JobList jobs={jobs} />
-		// 	) : (
-		// 		<NoResultsMessage />
-		// 	)}
-		// </div>
 		<div className='md:w-3/4'>
 			{isLoading ? (
 				<Loading />

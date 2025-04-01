@@ -1,11 +1,26 @@
-// components/RelatedJobs.tsx
+"use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { fetchRelatedJobs } from "@/lib/queries";
+import { fetchRelatedJobs } from "@/sanity/lib/queries";
+import { Job } from "@/types";
+interface RelatedJobsProps {
+	currentJob: Job;
+}
 
-export default function RelatedJobs({ currentJob }) {
-	const [relatedJobs, setRelatedJobs] = useState([]);
+export interface RelatedJob {
+	_id: string;
+	title: string;
+	slug: string;
+	company: string;
+	companyLogo?: string;
+	location: string;
+	jobType: string;
+	publishedAt: string;
+}
+
+export default function RelatedJobs({ currentJob }: RelatedJobsProps) {
+	const [relatedJobs, setRelatedJobs] = useState<RelatedJob[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {

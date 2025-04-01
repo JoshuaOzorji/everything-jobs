@@ -36,7 +36,7 @@ export default async function JobsByEducationPage() {
 			<CategoryList
 				items={educationLevels}
 				basePath='/jobs/by-education'
-				nameKey='name'
+				nameKey='displayName'
 				slugKey='slug.current'
 				countKey='jobCount'
 			/>

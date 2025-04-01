@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { JobQuery } from "@/types";
 import { formatDate } from "@/lib/formatDate";
+import { PortableText } from "next-sanity";
+import { customSerializers } from "@/lib/customSerializers";
 
 interface JobCardProps2 {
 	job: JobQuery;
@@ -50,16 +52,30 @@ const JobCard2: React.FC<JobCardProps2> = ({ job }) => {
 						</p>
 					</div>
 
+					{/* Summary */}
+					<div className='hidden overflow-hidden text-sm md:block font-openSans'>
+						<div className='line-clamp-2'>
+							<PortableText
+								value={
+									job.summary
+								}
+								components={
+									customSerializers
+								}
+							/>
+						</div>
+					</div>
+
 					<div className='flex flex-wrap gap-3 mt-2 font-openSans'>
 						{job.location && (
-							<span className='px-2 py-0.5 text-sm text-blue-800 bg-blue-100 rounded first-letter:uppercase'>
+							<span className='px-2 py-0.5 text-[12.5px] text-blue-800 bg-blue-100 rounded first-letter:uppercase'>
 								{job.location}
 							</span>
 						)}
-						<span className='px-2 py-0.5 text-sm text-green-800 bg-green-100 rounded first-letter:uppercase'>
+						<span className='px-2 py-0.5 text-[12.5px] text-green-800 bg-green-100 rounded first-letter:uppercase'>
 							{job.jobType}
 						</span>
-						<span className='px-2 py-0.5 text-sm text-purple-800 bg-purple-100 rounded first-letter:uppercase'>
+						<span className='px-2 py-0.5 text-[12.5px]  text-purple-800 bg-purple-100 rounded first-letter:uppercase'>
 							{job.level}
 						</span>
 					</div>

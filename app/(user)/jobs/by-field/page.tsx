@@ -36,7 +36,7 @@ export default async function JobsByFieldPage() {
 			<CategoryList
 				items={jobFields}
 				basePath='/jobs/by-field'
-				nameKey='name'
+				nameKey='displayName'
 				slugKey='slug.current'
 				countKey='jobCount'
 			/>

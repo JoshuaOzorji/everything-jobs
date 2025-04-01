@@ -19,6 +19,7 @@ import { FaGraduationCap } from "react-icons/fa";
 import { formatDate2 } from "@/lib/formatDate2";
 import { FaRegCalendarXmark } from "react-icons/fa6";
 import Link from "next/link";
+import RelatedJobs from "@/components/RelatedJobs";
 const jobQuery = defineQuery(groq`
   *[_type == "job" && slug.current == $slug][0]{
     title,
@@ -419,6 +420,7 @@ export default async function JobPage({ params }: PageProps) {
 							</div>
 						)}
 					</section>
+					{/* <RelatedJobs currentJob={job} /> */}
 				</div>
 			</SubLayout>
 		</>

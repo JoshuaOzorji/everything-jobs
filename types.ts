@@ -77,6 +77,7 @@ export interface Job {
 	mainImage: MainImage;
 	apply: any[];
 }
+
 export interface JobCardProps {
 	job: {
 		_id: string;
@@ -115,6 +116,7 @@ export interface JobQuery {
 	company: string;
 	companyLogo?: string;
 	location: string;
+	summary?: any[];
 	jobType: string;
 	level: string;
 	education: string;

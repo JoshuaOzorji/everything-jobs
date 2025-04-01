@@ -27,7 +27,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
 	return (
 		<div
-			className={`${showFilters ? "block" : "hidden"} md:block md:w-1/4 bg-white p-3 rounded shadow font-poppins text-sm`}>
+			className={`${showFilters ? "block" : "hidden"} md:block md:w-1/4 bg-white p-3 rounded shadow font-poppins text-sm h-fit sticky top-2`}>
 			<h2 className='mb-4 text-lg font-semibold'>
 				Filter Results
 			</h2>

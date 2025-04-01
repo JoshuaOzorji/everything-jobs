@@ -8,8 +8,6 @@ import FilterToggle from "../../../components/Search/FilterToggle";
 import ActiveFilters from "../../../components/Search/ActiveFilters";
 import FilterSidebar from "../../../components/Search/FilterSidebar";
 import SearchResults from "../../../components/Search/SearchResults";
-import AsideComponent from "@/components/AsideComponent";
-import SubLayout from "@/components/SubLayout";
 
 const SearchPage = () => {
 	const searchParams = useSearchParams();
@@ -89,62 +87,50 @@ const SearchPage = () => {
 
 	return (
 		<main>
-			<SubLayout aside={<AsideComponent />}>
-				<div className='mx-auto '>
-					<div className='bg-white rounded-md '>
-						<SearchHeader
-							query={query}
-							location={location}
-							jobCount={jobs.length}
-						/>
+			<div className='mx-auto '>
+				<div className='px-2 bg-white rounded-md'>
+					<SearchHeader
+						query={query}
+						location={location}
+						jobCount={jobs.length}
+					/>
 
-						<FilterToggle
-							showFilters={
-								showFilters
-							}
-							setShowFilters={
-								setShowFilters
-							}
-						/>
+					<FilterToggle
+						showFilters={showFilters}
+						setShowFilters={setShowFilters}
+					/>
 
-						<ActiveFilters
-							location={location}
-							jobType={jobType}
-							jobLevel={jobLevel}
-							education={education}
-							jobField={jobField}
-							query={query}
-							updateFilters={
-								updateFilters
-							}
-						/>
-					</div>
-
-					<div className='flex flex-col gap-2 md:flex-row my-2'>
-						<FilterSidebar
-							filters={filters}
-							jobType={jobType}
-							jobLevel={jobLevel}
-							education={education}
-							jobField={jobField}
-							showFilters={
-								showFilters
-							}
-							updateFilters={
-								updateFilters
-							}
-							clearAllFilters={
-								clearAllFilters
-							}
-						/>
-
-						<SearchResults
-							isLoading={loading}
-							jobs={jobs}
-						/>
-					</div>
+					<ActiveFilters
+						location={location}
+						jobType={jobType}
+						jobLevel={jobLevel}
+						education={education}
+						jobField={jobField}
+						query={query}
+						updateFilters={updateFilters}
+					/>
 				</div>
-			</SubLayout>
+
+				<div className='flex flex-col gap-4 my-2 md:flex-row'>
+					<FilterSidebar
+						filters={filters}
+						jobType={jobType}
+						jobLevel={jobLevel}
+						education={education}
+						jobField={jobField}
+						showFilters={showFilters}
+						updateFilters={updateFilters}
+						clearAllFilters={
+							clearAllFilters
+						}
+					/>
+
+					<SearchResults
+						isLoading={loading}
+						jobs={jobs}
+					/>
+				</div>
+			</div>
 		</main>
 	);
 };

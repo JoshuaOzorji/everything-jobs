@@ -22,13 +22,13 @@ const FilterSelect: React.FC<FilterSelectProps> = ({
 }) => {
 	return (
 		<div className='mb-4'>
-			<label className='block mb-2 text-sm font-medium'>
+			<label className='block mb-2 text-sm font-bold text-myBlack'>
 				{label}
 			</label>
 			<select
 				value={value}
 				onChange={(e) => onChange(e.target.value)}
-				className='w-full p-2 border rounded'>
+				className='w-full p-2 border rounded focus:outline-none'>
 				<option value=''>{placeholder}</option>
 				{options.map((option) => (
 					<option

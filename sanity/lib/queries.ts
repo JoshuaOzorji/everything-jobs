@@ -1,6 +1,7 @@
 import { groq } from "next-sanity";
 import { client } from "./client";
-import { Job } from "@/types";
+import { RelatedJob } from "@/components/RelatedJobs";
+import { getDisplayNameForEducation, getDisplayNameForJobField } from "./data";
 
 export const searchJobsQuery = groq`
   *[_type == "job" && 
@@ -24,7 +25,8 @@ export const searchJobsQuery = groq`
     "jobField": jobField->name,
     salaryRange,
     publishedAt,
-    deadline
+    deadline,
+    summary
   } | order(publishedAt desc)[0...50]
 `;
 
@@ -92,14 +94,42 @@ export async function getJobsByLocation(locationSlug: string) {
 }
 
 export async function getJobFields() {
-	return client.fetch(`
-      *[_type == "jobField"] | order(name asc) {
+	const jobFields = await client.fetch(`
+    *[_type == "jobField"] | order(name asc) {
       _id,
       name,
       "slug": slug.current,
       "jobCount": count(*[_type == "job" && jobField._ref == ^._id])
-  }`);
+    }
+  `);
+
+	// Map the display names
+	return jobFields.map(
+		(field: {
+			_id: string;
+			name: string;
+			slug: string;
+			jobCount: number;
+		}) => ({
+			...field,
+			displayName: getDisplayNameForJobField(field.name),
+		}),
+	);
 }
+
+interface JobFieldMap {
+	[key: string]: string;
+}
+
+// export async function getJobFields() {
+// 	return client.fetch(`
+//       *[_type == "jobField"] | order(name asc) {
+//       _id,
+//       name,
+//       "slug": slug.current,
+//       "jobCount": count(*[_type == "job" && jobField._ref == ^._id])
+//   }`);
+// }
 
 export async function getJobsByField(fieldSlug: string) {
 	const jobs = await client.fetch(
@@ -147,13 +177,27 @@ export async function getJobsByField(fieldSlug: string) {
 }
 
 export async function getEducationLevels() {
-	return client.fetch(`
-      *[_type == "education"] | order(name asc) {
+	const educationLevels = await client.fetch(`
+    *[_type == "education"] | order(name asc) {
       _id,
       name,
       "slug": slug.current,
       "jobCount": count(*[_type == "job" && education._ref == ^._id])
-  }`);
+    }
+  `);
+
+	// Map the display names
+	return educationLevels.map(
+		(level: {
+			_id: string;
+			name: string;
+			slug: string;
+			jobCount: number;
+		}) => ({
+			...level,
+			displayName: getDisplayNameForEducation(level.name),
+		}),
+	);
 }
 
 export async function getJobsByEducation(educationSlug: string) {
@@ -259,7 +303,9 @@ export interface JobReference {
 	location: { _ref: string };
 }
 
-export async function fetchRelatedJobs(currentJob: JobReference) {
+export async function fetchRelatedJobs(
+	currentJob: JobReference,
+): Promise<RelatedJob[]> {
 	return client.fetch(
 		`*[_type == "job" && 
       _id != $currentJobId && 
