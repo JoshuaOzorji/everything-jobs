@@ -28,9 +28,11 @@ export async function generateMetadata({
 }: {
 	params: { education: string };
 }): Promise<Metadata> {
+	const education = params.education;
+
 	const educationLevels = await getEducationLevels();
 	const educationData = educationLevels.find(
-		(level: EducationLevelType) => level.slug === params.education,
+		(level: EducationLevelType) => level.slug === education,
 	);
 
 	if (!educationData) return { title: "Education Level not found" };
@@ -52,7 +54,7 @@ export default async function EducationJobsPage({
 }: {
 	params: { education: string };
 }) {
-	const { education } = params;
+	const education = await params.education;
 
 	// Validate education parameter
 	if (!education || education === "null") {

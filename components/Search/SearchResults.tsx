@@ -1,7 +1,7 @@
 import { JobQuery } from "@/types";
 import JobList from "./JobList";
 import NoResultsMessage from "./NoResultsMessage";
-import Loading from "@/app/(user)/loading";
+import { LoadingComponent } from "../Loading";
 
 interface SearchResultsProps {
 	jobs: JobQuery[];
@@ -11,13 +11,17 @@ interface SearchResultsProps {
 const SearchResults: React.FC<SearchResultsProps> = ({ jobs, isLoading }) => {
 	return (
 		<div className='md:w-3/4'>
-			{isLoading ? (
-				<Loading />
-			) : jobs.length > 0 ? (
-				<JobList jobs={jobs} />
-			) : (
-				<NoResultsMessage />
-			)}
+			<div className='min-h-[50vh] relative'>
+				{isLoading ? (
+					<div className='absolute inset-0 flex items-center justify-center'>
+						<LoadingComponent />
+					</div>
+				) : jobs.length > 0 ? (
+					<JobList jobs={jobs} />
+				) : (
+					<NoResultsMessage />
+				)}
+			</div>
 		</div>
 	);
 };

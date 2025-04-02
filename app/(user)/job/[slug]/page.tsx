@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { groq, defineQuery } from "next-sanity";
 import { client } from "@/sanity/lib/client";
 import Image from "next/image";
@@ -18,8 +19,7 @@ import { RiUserStarFill } from "react-icons/ri";
 import { FaGraduationCap } from "react-icons/fa";
 import { formatDate2 } from "@/lib/formatDate2";
 import { FaRegCalendarXmark } from "react-icons/fa6";
-import Link from "next/link";
-import RelatedJobs from "@/components/RelatedJobs";
+
 const jobQuery = defineQuery(groq`
   *[_type == "job" && slug.current == $slug][0]{
     title,
@@ -117,7 +117,7 @@ export default async function JobPage({ params }: PageProps) {
 						</div>
 
 						{/* JOB TITLE */}
-						<h1 className='mt-6 mb-2 font-bold ext-xl md:text-3xl font-poppins text-pry'>
+						<h1 className='mt-6 mb-2 font-bold text-xl md:text-3xl font-poppins text-pry'>
 							{job.title}
 						</h1>
 
@@ -411,6 +411,7 @@ export default async function JobPage({ params }: PageProps) {
 							<div className='py-4 '>
 								<h2 className='inline-block px-3 text-white rounded-md job-h2 bg-pry'>
 									Apply
+									for Job
 								</h2>
 								<PortableText
 									value={

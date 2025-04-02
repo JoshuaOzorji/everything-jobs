@@ -117,10 +117,6 @@ export async function getJobFields() {
 	);
 }
 
-interface JobFieldMap {
-	[key: string]: string;
-}
-
 // export async function getJobFields() {
 // 	return client.fetch(`
 //       *[_type == "jobField"] | order(name asc) {

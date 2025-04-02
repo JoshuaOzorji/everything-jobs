@@ -26,7 +26,7 @@ const FindJobsDropdown = () => {
 					/>
 				</span>
 			</DropdownMenuTrigger>
-			<DropdownMenuContent className='p-3 mt-1 font-poppins'>
+			<DropdownMenuContent className='px-2 py-3 mt-1 font-poppins'>
 				{findJobsDropdownItems.map((item, index) => (
 					<DropdownMenuItem
 						key={index}

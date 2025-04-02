@@ -1,5 +1,3 @@
-"use client";
-
 import { JobCardProps } from "@/types";
 import Image from "next/image";
 import { formatDate } from "@/lib/formatDate";

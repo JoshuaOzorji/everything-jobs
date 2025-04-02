@@ -4,9 +4,8 @@ import "./../globals.css";
 import AuthProvider from "@/components/AuthProvider";
 import { Toaster } from "react-hot-toast";
 import BaseLayout from "@/components/BaseLayout";
-import { ErrorBoundary } from "react-error-boundary";
 import { Suspense } from "react";
-import LoadingSpinner from "@/components/LoadingComponent";
+import { LoadingComponent } from "@/components/Loading";
 
 export const metadata: Metadata = {
 	title: "Everything Jobs",
@@ -46,14 +45,7 @@ export default function RootLayout({
 				</ErrorBoundary> */}
 
 				<BaseLayout>
-					<AuthProvider>
-						<Suspense
-							fallback={
-								<LoadingSpinner />
-							}>
-							{children}
-						</Suspense>
-					</AuthProvider>
+					<AuthProvider>{children}</AuthProvider>
 					<Toaster
 						position='bottom-center'
 						reverseOrder={false}

@@ -4,6 +4,8 @@ import CompanyCard from "@/components/CompanyCard";
 import { Company } from "@/types";
 import SubLayout from "@/components/SubLayout";
 import AsideComponent from "@/components/AsideComponent";
+import { Suspense } from "react";
+import { LoadingComponent } from "@/components/Loading";
 
 // This ensures the page will be dynamically rendered
 export const dynamic = "force-dynamic";
@@ -32,7 +34,7 @@ export default async function CompaniesPage() {
 	return (
 		<>
 			<SubLayout aside={<AsideComponent />}>
-				<div className=''>
+				<div>
 					<h1 className='mb-6 text-xl font-bold  md:text-3xl font-poppins'>
 						Companies
 					</h1>
@@ -48,14 +50,21 @@ export default async function CompaniesPage() {
 						<div className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
 							{companies.map(
 								(company) => (
-									<CompanyCard
+									<Suspense
 										key={
 											company._id
 										}
-										company={
-											company
-										}
-									/>
+										fallback={
+											<div className='flex items-center justify-center w-full h-full min-h-[150px]'>
+												<LoadingComponent />
+											</div>
+										}>
+										<CompanyCard
+											company={
+												company
+											}
+										/>
+									</Suspense>
 								),
 							)}
 						</div>

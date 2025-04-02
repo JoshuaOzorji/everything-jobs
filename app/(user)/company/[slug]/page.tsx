@@ -13,7 +13,6 @@ import CompanyJobCard from "@/components/CompanyJobCard";
 import placeholder from "@/public/placeholderCompany.png";
 import { RxExternalLink } from "react-icons/rx";
 
-// Generate static params for commonly accessed companies
 export async function generateStaticParams() {
 	const query = groq`*[_type == "company"][0...10].slug.current`;
 	const slugs = await client.fetch<string[]>(query);
@@ -44,7 +43,7 @@ const companyQuery = groq`
       location->{
 				name,
 				slug
-			},	
+			},
       level->{name}
     },
   }
@@ -59,7 +58,8 @@ export default async function CompanyDetailPage({
 }: {
 	params: { slug: string };
 }) {
-	const company = await getCompany(params.slug);
+	const { slug } = await params;
+	const company = await getCompany(slug);
 
 	if (!company) {
 		notFound();
@@ -69,7 +69,7 @@ export default async function CompanyDetailPage({
 		<SubLayout aside={<CompanyDetailsAside company={company} />}>
 			<div className='font-openSans'>
 				<Link href='/companies'>
-					<p className='inline-flex items-center gap-1 mb-6 text-[13px] text-pry2 hover:underline animate md:text-sm'>
+					<p className='inline-flex items-center gap-1 mb-4 text-[13px] text-pry2 hover:underline animate md:text-sm'>
 						<FaArrowLeft />
 						Back to Companies
 					</p>

@@ -25,11 +25,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({
 	params,
 }: {
-	params: { field: string };
+	params: Promise<{ field: string }>;
 }): Promise<Metadata> {
+	const { field: fieldSlug } = await params;
 	const jobFields = await getJobFields();
 	const fieldData = jobFields.find(
-		(field: JobFieldType) => field.slug === params.field,
+		(f: JobFieldType) => f.slug === fieldSlug,
 	);
 
 	if (!fieldData) return { title: "Job Field not found" };
@@ -49,25 +50,24 @@ export async function generateMetadata({
 export default async function JobsByFieldPage({
 	params,
 }: {
-	params: { field: string };
+	params: Promise<{ field: string }>;
 }) {
-	const { field } = params;
+	const { field: fieldSlug } = await params;
 
 	// Validate field parameter
-	if (!field || field === "null") {
+	if (!fieldSlug || fieldSlug === "null") {
 		return notFound();
 	}
 
 	const jobFields: JobFieldType[] = await getJobFields();
 	const fieldData = jobFields.find(
-		(fld: JobFieldType) => fld.slug === field,
+		(jobField: JobFieldType) => jobField.slug === fieldSlug,
 	);
-
 	if (!fieldData) {
 		return notFound();
 	}
 
-	const jobs = await getJobsByField(field);
+	const jobs = await getJobsByField(fieldSlug);
 
 	return (
 		<SubLayout aside={<AsideComponent />}>
