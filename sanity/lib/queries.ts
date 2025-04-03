@@ -117,16 +117,6 @@ export async function getJobFields() {
 	);
 }
 
-// export async function getJobFields() {
-// 	return client.fetch(`
-//       *[_type == "jobField"] | order(name asc) {
-//       _id,
-//       name,
-//       "slug": slug.current,
-//       "jobCount": count(*[_type == "job" && jobField._ref == ^._id])
-//   }`);
-// }
-
 export async function getJobsByField(fieldSlug: string) {
 	const jobs = await client.fetch(
 		groq`*[_type == "job" && defined(jobField) && jobField->slug.current == $fieldSlug] {
@@ -169,7 +159,20 @@ export async function getJobsByField(fieldSlug: string) {
 		{ fieldSlug },
 	);
 
-	return jobs;
+	return jobs.map((job: any) => {
+		if (job.jobField && job.jobField.name) {
+			return {
+				...job,
+				jobField: {
+					...job.jobField,
+					displayName: getDisplayNameForJobField(
+						job.jobField.name,
+					),
+				},
+			};
+		}
+		return job;
+	});
 }
 
 export async function getEducationLevels() {
@@ -241,7 +244,20 @@ export async function getJobsByEducation(educationSlug: string) {
 		{ educationSlug },
 	);
 
-	return jobs;
+	return jobs.map((job: any) => {
+		if (job.education && job.education.name) {
+			return {
+				...job,
+				education: {
+					...job.education,
+					displayName: getDisplayNameForEducation(
+						job.education.name,
+					),
+				},
+			};
+		}
+		return job;
+	});
 }
 
 export async function getRemoteJobs() {

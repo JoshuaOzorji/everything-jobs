@@ -7,10 +7,15 @@ import SubLayout from "@/components/SubLayout";
 import { Job } from "@/types";
 import JobCardCategories from "@/components/JobCardCategories";
 
+type Params = {
+	params: Promise<{ field: string }>;
+};
+
 type JobFieldType = {
 	slug: string;
 	name: string;
 	jobCount?: number;
+	displayName?: string;
 };
 
 export async function generateStaticParams() {
@@ -22,11 +27,7 @@ export async function generateStaticParams() {
 		}));
 }
 
-export async function generateMetadata({
-	params,
-}: {
-	params: Promise<{ field: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
 	const { field: fieldSlug } = await params;
 	const jobFields = await getJobFields();
 	const fieldData = jobFields.find(
@@ -36,22 +37,18 @@ export async function generateMetadata({
 	if (!fieldData) return { title: "Job Field not found" };
 
 	return {
-		title: `${fieldData.name} Jobs in Nigeria | Latest Openings`,
-		description: `Find the latest job vacancies and career opportunities in ${fieldData.name}. Browse ${fieldData.jobCount || 0} job listings in this field.`,
-		keywords: `${fieldData.name} jobs, jobs in ${fieldData.name}, ${fieldData.name} career opportunities, Nigeria ${fieldData.name} jobs`,
+		title: `${fieldData.displayName} Jobs in Nigeria | Latest Openings`,
+		description: `Find the latest job vacancies and career opportunities in ${fieldData.displayName}. Browse ${fieldData.jobCount || 0} job listings in this field.`,
+		keywords: `${fieldData.displayName} jobs, jobs in ${fieldData.displayName}, ${fieldData.displayName} career opportunities, Nigeria ${fieldData.displayName} jobs`,
 		openGraph: {
-			title: `${fieldData.name} Jobs in Nigeria | Latest Openings`,
-			description: `Find the latest job vacancies in ${fieldData.name} across Nigeria.`,
+			title: `${fieldData.displayName} Jobs in Nigeria | Latest Openings`,
+			description: `Find the latest job vacancies in ${fieldData.displayName} across Nigeria.`,
 			type: "website",
 		},
 	};
 }
 
-export default async function JobsByFieldPage({
-	params,
-}: {
-	params: Promise<{ field: string }>;
-}) {
+export default async function JobsByFieldPage({ params }: Params) {
 	const { field: fieldSlug } = await params;
 
 	// Validate field parameter
@@ -73,16 +70,18 @@ export default async function JobsByFieldPage({
 		<SubLayout aside={<AsideComponent />}>
 			<div className='page-container'>
 				<h1 className='page-h1'>
-					{fieldData.name} Jobs in Nigeria
+					{fieldData.displayName ||
+						fieldData.name}{" "}
+					Jobs in Nigeria
 				</h1>
 
 				<div className='page-sub-div'>
 					<p className='page-p'>
 						Browse {jobs.length} job
 						opportunities in{" "}
-						{fieldData.name}. Find your next
-						career opportunity in this
-						field.
+						{fieldData.displayName}. Find
+						your next career opportunity in
+						this field.
 					</p>
 				</div>
 
@@ -105,7 +104,7 @@ export default async function JobsByFieldPage({
 						<h2 className='text-xl font-semibold'>
 							No jobs currently
 							available in{" "}
-							{fieldData.name}
+							{fieldData.displayName}
 						</h2>
 						<p className='mt-2'>
 							Check back later or

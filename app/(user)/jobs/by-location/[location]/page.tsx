@@ -7,6 +7,10 @@ import SubLayout from "@/components/SubLayout";
 import { Job } from "@/types";
 import JobCardCategories from "@/components/JobCardCategories";
 
+type Params = {
+	params: Promise<{ location: string }>;
+};
+
 type LocationType = {
 	slug: string;
 	name: string;
@@ -22,14 +26,11 @@ export async function generateStaticParams() {
 		}));
 }
 
-export async function generateMetadata({
-	params,
-}: {
-	params: { location: string };
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
+	const { location } = await params;
 	const locations = await getLocations();
 	const locationData = locations.find(
-		(loc: LocationType) => loc.slug === params.location,
+		(loc: LocationType) => loc.slug === location,
 	);
 
 	if (!locationData) return { title: "Location not found" };
@@ -46,12 +47,8 @@ export async function generateMetadata({
 	};
 }
 
-export default async function LocationJobsPage({
-	params,
-}: {
-	params: { location: string };
-}) {
-	const { location } = params;
+export default async function LocationJobsPage({ params }: Params) {
+	const { location } = await params;
 
 	// Validate location parameter
 	if (!location || location === "null") {
