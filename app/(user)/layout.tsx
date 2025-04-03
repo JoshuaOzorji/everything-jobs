@@ -6,6 +6,8 @@ import { Toaster } from "react-hot-toast";
 import BaseLayout from "@/components/BaseLayout";
 import { Suspense } from "react";
 import { LoadingComponent } from "@/components/Loading";
+import NavigationEvents from "@/components/NavigationEvents";
+import ProgressBar from "@/components/ProgressBar";
 
 export const metadata: Metadata = {
 	title: "Everything Jobs",
@@ -39,10 +41,9 @@ export default function RootLayout({
 		<html lang='en'>
 			<body
 				className={`${lato.variable} ${openSans.variable} ${poppins.variable}  antialiased`}>
-				{/* <ErrorBoundary
-					fallback={<>Something went wrong!</>}>
+				<Suspense fallback={null}>
 					<ProgressBar />
-				</ErrorBoundary> */}
+				</Suspense>
 
 				<BaseLayout>
 					<AuthProvider>{children}</AuthProvider>

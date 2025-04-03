@@ -66,6 +66,20 @@ body {
 	@apply text-sm md:text-base;
 }
 
+.progress-bar-indicator {
+	transition: width 300ms ease;
+	background: linear-gradient(90deg, #003ecb, #60a5fa);
+}
+
+.progress-bar-indicator::after {
+	content: "";
+	position: absolute;
+	right: 0;
+	height: 100%;
+	width: 5px;
+	box-shadow: 0 0 10px 2px #003ecb;
+}
+
 .two-line-summary {
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
