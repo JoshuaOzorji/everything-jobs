@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { getEducationLevels, getJobsByEducation } from "@/sanity/lib/queries";
 import Pagination from "@/components/Pagination";
 import { notFound } from "next/navigation";
-import AsideComponent from "@/components/AsideComponent";
+import AsideMain from "@/components/sidebar/AsideMain";
 import SubLayout from "@/components/SubLayout";
 import { Job } from "@/types";
 import JobCardCategories from "@/components/JobCardCategories";
@@ -70,7 +70,7 @@ export default async function EducationJobsPage({ params }: Params) {
 	const jobs = await getJobsByEducation(education);
 
 	return (
-		<SubLayout aside={<AsideComponent />}>
+		<SubLayout aside={<AsideMain />}>
 			<div className='page-container'>
 				<h1 className='page-h1'>
 					{educationData.displayName ||

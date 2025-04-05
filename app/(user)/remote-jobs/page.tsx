@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { getRemoteJobs } from "@/sanity/lib/queries";
 import Pagination from "@/components/Pagination";
-import AsideComponent from "@/components/AsideComponent";
+import AsideMain from "@/components/sidebar/AsideMain";
 import SubLayout from "@/components/SubLayout";
 import { Job } from "@/types";
 import JobCardCategories from "@/components/JobCardCategories";
@@ -23,7 +23,7 @@ export default async function RemoteJobsPage() {
 	const jobs = await getRemoteJobs();
 
 	return (
-		<SubLayout aside={<AsideComponent />}>
+		<SubLayout aside={<AsideMain />}>
 			<div className='page-container'>
 				<h1 className='page-h1'>
 					Remote Jobs in Nigeria

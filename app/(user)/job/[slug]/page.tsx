@@ -5,7 +5,7 @@ import Image from "next/image";
 import { PortableText } from "@portabletext/react";
 import { Job } from "@/types";
 import SubLayout from "@/components/SubLayout";
-import AsideComponent from "@/components/AsideComponent";
+import AsideMain from "@/components/sidebar/AsideMain";
 import placeholder from "@/public/placeholderCompany.png";
 import { urlFor } from "@/sanity/lib/image";
 import { ImLocation } from "react-icons/im";
@@ -68,7 +68,7 @@ export default async function JobPage({ params }: PageProps) {
 
 	return (
 		<>
-			<SubLayout aside={<AsideComponent />}>
+			<SubLayout aside={<AsideMain />}>
 				<div className='p-4 bg-white rounded-md font-openSans text-myBlack md:p-8'>
 					<section className='pb-4 mb-4 border-b border-zinc-300'>
 						{/* COMPANY IMAGE & NAME */}

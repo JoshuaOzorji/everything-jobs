@@ -2,7 +2,6 @@ import { JobCardProps } from "@/types";
 import JobCard from "./JobCard";
 import { client } from "@/sanity/lib/client";
 import { groq } from "next-sanity";
-import { cache, Suspense } from "react";
 
 const latestJobsQuery = groq`*[_type == "job"] | order(publishedAt desc)[0...10] {
   _id,

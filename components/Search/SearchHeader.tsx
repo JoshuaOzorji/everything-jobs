@@ -14,11 +14,13 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
 			<h1 className='font-bold font-poppins'>
 				{query
 					? `Search Results for "${query}"`
-					: "All Jobs: "}
+					: "All Jobs "}
 				{location && ` in ${location}`}
 			</h1>
 			<span className='flex gap-1 text-myBlack font-openSans'>
-				<p>{jobCount} jobs found</p>
+				<p className='ml-1'>
+					&bull; {jobCount} jobs found
+				</p>
 			</span>
 		</div>
 	);

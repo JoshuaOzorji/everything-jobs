@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { getLocations, getJobsByLocation } from "@/sanity/lib/queries";
 import Pagination from "@/components/Pagination";
 import { notFound } from "next/navigation";
-import AsideComponent from "@/components/AsideComponent";
+import AsideMain from "@/components/sidebar/AsideMain";
 import SubLayout from "@/components/SubLayout";
 import { Job } from "@/types";
 import JobCardCategories from "@/components/JobCardCategories";
@@ -67,7 +67,7 @@ export default async function LocationJobsPage({ params }: Params) {
 	const jobs = await getJobsByLocation(location);
 
 	return (
-		<SubLayout aside={<AsideComponent />}>
+		<SubLayout aside={<AsideMain />}>
 			<div className='page-container'>
 				<h1 className='page-h1'>
 					Jobs in {locationData.name}, Nigeria

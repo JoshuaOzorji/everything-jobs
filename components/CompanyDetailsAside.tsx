@@ -4,7 +4,6 @@ import { Company } from "@/types";
 import {
 	CalendarIcon,
 	BriefcaseIcon,
-	MapPinIcon,
 	UsersIcon,
 	BuildingOfficeIcon,
 } from "@heroicons/react/24/outline";
@@ -12,7 +11,6 @@ import { RiTwitterXFill } from "react-icons/ri";
 import { BsFacebook } from "react-icons/bs";
 import { FaLinkedin } from "react-icons/fa";
 import { FiBookmark } from "react-icons/fi";
-import { IoSearchOutline } from "react-icons/io5";
 import { RxExternalLink } from "react-icons/rx";
 import { formatDate2 } from "@/lib/formatDate2";
 interface CompanyDetailsAsideProps {

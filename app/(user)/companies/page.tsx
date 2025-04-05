@@ -3,7 +3,7 @@ import { client } from "@/sanity/lib/client";
 import CompanyCard from "@/components/CompanyCard";
 import { Company } from "@/types";
 import SubLayout from "@/components/SubLayout";
-import AsideComponent from "@/components/AsideComponent";
+import AsideMain from "@/components/sidebar/AsideMain";
 import { Suspense } from "react";
 import { LoadingComponent } from "@/components/Loading";
 
@@ -33,7 +33,7 @@ export default async function CompaniesPage() {
 
 	return (
 		<>
-			<SubLayout aside={<AsideComponent />}>
+			<SubLayout aside={<AsideMain />}>
 				<div>
 					<h1 className='mb-6 text-xl font-bold  md:text-3xl font-poppins'>
 						Companies
