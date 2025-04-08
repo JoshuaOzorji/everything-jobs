@@ -1,16 +1,21 @@
-import { getTrendingLocations } from "./TrendingLocations";
-import FeaturedLocations from "./TrendingLocations";
+import { getTopLocations } from "./TopLocations";
+import TopLocations from "./TopLocations";
 import { getTrendingJobFields } from "./TrendingJobFields";
 import TrendingJobFields from "./TrendingJobFields";
+import JobTypes, { getJobTypes } from "./JobTypes";
+import JobLevels, { getJobLevels } from "./JobLevels";
 
 const AsideMain = async () => {
-	const featuredLocations = await getTrendingLocations();
+	const topLocations = await getTopLocations();
 	const trendingJobFields = await getTrendingJobFields();
-
+	const jobTypes = await getJobTypes();
+	const jobLevels = await getJobLevels();
 	return (
-		<aside className='bg-white p-4 rounded-lg shadow-sm border border-[#e6e6eb] divide-y divide-gray-200 gap-2 '>
-			<FeaturedLocations locations={featuredLocations} />
+		<aside className='gap-2 p-4 bg-white border divide-y divide-gray-300 rounded-lg shadow-sm md:px-6'>
+			<TopLocations locations={topLocations} />
 			<TrendingJobFields jobFields={trendingJobFields} />
+			<JobTypes jobTypes={jobTypes} />
+			<JobLevels jobLevels={jobLevels} />
 		</aside>
 	);
 };

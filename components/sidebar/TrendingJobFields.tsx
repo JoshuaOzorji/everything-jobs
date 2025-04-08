@@ -1,14 +1,15 @@
-// TrendingJobFields.tsx
 import { client } from "@/sanity/lib/client";
+import { getDisplayNameForJobField } from "@/sanity/lib/data";
 import Link from "next/link";
 import React from "react";
-import { MdOutlineWork } from "react-icons/md"; // Or any other suitable icon
+import { HiOutlineBriefcase } from "react-icons/hi2";
 
 interface JobField {
 	_id: string;
 	name: string;
 	slug: string;
 	jobCount: number;
+	displayName: string;
 }
 
 interface TrendingJobFieldsProps {
@@ -16,7 +17,7 @@ interface TrendingJobFieldsProps {
 }
 
 export const getTrendingJobFields = async function () {
-	return client.fetch(`
+	const jobFields = await client.fetch(`
     *[_type == "jobField"] {
       _id,
       name,
@@ -24,6 +25,18 @@ export const getTrendingJobFields = async function () {
       "jobCount": count(*[_type == "job" && jobField._ref == ^._id])
     } | order(jobCount desc)[0...4]
   `);
+
+	return jobFields.map(
+		(field: {
+			_id: string;
+			name: string;
+			slug: string;
+			jobCount: number;
+		}) => ({
+			...field,
+			displayName: getDisplayNameForJobField(field.slug),
+		}),
+	);
 };
 
 const TrendingJobFields: React.FC<TrendingJobFieldsProps> = ({
@@ -34,9 +47,9 @@ const TrendingJobFields: React.FC<TrendingJobFieldsProps> = ({
 	}
 
 	return (
-		<section className='py-4'>
-			<h2 className='mb-3 text-lg font-semibold text-pry font-poppins'>
-				Jobs By Field
+		<section className='pt-4 mb-4 text-sm md:text-base '>
+			<h2 className='mb-3 font-semibold font-poppins text-pry2'>
+				Top Jobs Field
 			</h2>
 			<nav aria-label='Featured job fields navigation'>
 				<ul className='font-openSans'>
@@ -45,23 +58,27 @@ const TrendingJobFields: React.FC<TrendingJobFieldsProps> = ({
 							<Link
 								href={`/jobs/fields/${jobField.slug}`}
 								className='flex items-center justify-between py-1.5 px-2 rounded hover:bg-[#e6e6eb] text-myBlack group'>
-								<span className='flex items-center'>
-									<MdOutlineWork className='mr-1' />
+								<span className='flex items-center gap-1'>
+									<HiOutlineBriefcase />
 									<span className='truncate'>
 										{
-											jobField.name
+											jobField.displayName
 										}
 									</span>
-								</span>
-								<span className='bg-[#e6e6eb] text-myBlack text-xs px-2 py-0.5 rounded-full ml-1 group-hover:bg-[#2563eb] group-hover:text-white transition-colors'>
-									{
-										jobField.jobCount
-									}
 								</span>
 							</Link>
 						</li>
 					))}
 				</ul>
+
+				<div className='flex justify-end mt-2 text-sm font-openSans'>
+					<Link href='/jobs/by-field'>
+						{/* CTA */}
+						<button className='flex items-center gap-1 underline text-pry2 hover:text-pry'>
+							Explore all job fields
+						</button>
+					</Link>
+				</div>
 			</nav>
 		</section>
 	);

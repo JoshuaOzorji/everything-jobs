@@ -12,13 +12,13 @@ const SmallScreenCompanyCard = ({ company }: CompanyCardProps) => {
 	return (
 		<div className='block w-full'>
 			<div className='flex flex-row items-center w-full gap-2 p-2 bg-white border rounded-lg shadow-sm hover:shadow-md font-poppins'>
-				<div className='flex items-center justify-center rounded w-14 h-14'>
+				<div className='flex items-center justify-center rounded w-10 h-10'>
 					{company.logo ? (
 						<Image
 							src={urlFor(
 								company.logo,
 							)
-								.width(100)
+								.width(50)
 								.height(50)
 								.url()}
 							alt={
@@ -26,17 +26,17 @@ const SmallScreenCompanyCard = ({ company }: CompanyCardProps) => {
 									.alt ||
 								company.name
 							}
-							width={100}
+							width={50}
 							height={50}
-							className='object-cover rounded-md w-full h-full aspect-[2/1]'
+							className='object-cover rounded-md'
 						/>
 					) : (
 						<Image
 							src={placeholder}
 							alt={company.name}
-							width={100}
+							width={50}
 							height={50}
-							className='object-cover rounded-md w-full h-full aspect-[2/1]'
+							className='object-cover rounded-md'
 						/>
 					)}
 				</div>

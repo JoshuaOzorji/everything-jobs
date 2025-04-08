@@ -6,7 +6,6 @@ import { getDisplayNameForEducation, getDisplayNameForJobField } from "./data";
 export const searchJobsQuery = groq`
   *[_type == "job" && 
     (title match $q + "*" || company->name match $q + "*") &&
-    // ($location == "" || location->states[] match $location) &&
     ($location == "" || location->name match $location) &&
     ($jobType == "" || jobType->name == $jobType) &&
     ($jobLevel == "" || level->name == $jobLevel) &&
@@ -103,7 +102,6 @@ export async function getJobFields() {
     }
   `);
 
-	// Map the display names
 	return jobFields.map(
 		(field: {
 			_id: string;

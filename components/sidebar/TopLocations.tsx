@@ -7,35 +7,32 @@ interface Location {
 	_id: string;
 	name: string;
 	slug: string;
-	jobCount: number;
 }
 
-interface TrendingLocationsProps {
+interface TopLocationsProps {
 	locations?: Location[];
 }
 
-export const getTrendingLocations = async function () {
+export const getTopLocations = async function () {
 	return client.fetch(`
     *[_type == "state" && name != "Remote"] {
       _id,
       name,
       "slug": slug.current,
-      "jobCount": count(*[_type == "job" && location._ref == ^._id])
-    } | order(jobCount desc)[0...4]
+			  "jobCount": count(*[_type == "job" && location._ref == ^._id])
+    } | order(jobCount desc)[0...6]
   `);
 };
 
-const TrendingLocations: React.FC<TrendingLocationsProps> = ({
-	locations = [],
-}) => {
+const TopLocations: React.FC<TopLocationsProps> = ({ locations = [] }) => {
 	if (!locations || locations.length === 0) {
 		return null;
 	}
 
 	return (
-		<section className='mb-4'>
-			<h2 className='mb-3 text-lg font-semibold text-pry font-poppins'>
-				Trending Jobs Locations
+		<section className='pt-4 mb-4 text-sm md:text-base'>
+			<h2 className='mb-3 font-semibold text-pry2 font-poppins'>
+				Top Jobs Locations
 			</h2>
 			<nav aria-label='Featured locations navigation '>
 				<ul className='grid grid-cols-2 gap-2 font-openSans'>
@@ -44,7 +41,7 @@ const TrendingLocations: React.FC<TrendingLocationsProps> = ({
 							<Link
 								href={`/jobs/by-location/${location.slug}`}
 								className='flex items-center justify-between py-1.5 px-2 rounded hover:bg-[#e6e6eb] text-myBlack group'>
-								<span className='flex items-center'>
+								<span className='flex items-center gap-1'>
 									<CiLocationOn />
 									<span className='truncate'>
 										{
@@ -52,18 +49,21 @@ const TrendingLocations: React.FC<TrendingLocationsProps> = ({
 										}
 									</span>
 								</span>
-								<span className='bg-[#e6e6eb] text-myBlack text-xs px-2 py-0.5 rounded-full ml-1 group-hover:bg-[#2563eb] group-hover:text-white transition-colors'>
-									{
-										location.jobCount
-									}
-								</span>
 							</Link>
 						</li>
 					))}
 				</ul>
+				{/* CTA */}
+				<div className='flex justify-end mt-2 text-sm font-openSans'>
+					<Link href='/jobs/by-location'>
+						<button className='flex items-center gap-1 underline text-pry2 hover:text-pry'>
+							Explore all locations
+						</button>
+					</Link>
+				</div>
 			</nav>
 		</section>
 	);
 };
 
-export default TrendingLocations;
+export default TopLocations;

@@ -3,11 +3,10 @@ import { client } from "@/sanity/lib/client";
 import CompanyCard from "@/components/CompanyCard";
 import { Company } from "@/types";
 import SubLayout from "@/components/SubLayout";
-import AsideMain from "@/components/sidebar/AsideMain";
 import { Suspense } from "react";
 import { LoadingComponent } from "@/components/Loading";
+import CompaniesAside from "@/components/CompaniesAside";
 
-// This ensures the page will be dynamically rendered
 export const dynamic = "force-dynamic";
 
 const companyQuery = groq`
@@ -33,7 +32,7 @@ export default async function CompaniesPage() {
 
 	return (
 		<>
-			<SubLayout aside={<AsideMain />}>
+			<SubLayout aside={<CompaniesAside />}>
 				<div>
 					<h1 className='mb-6 text-xl font-bold  md:text-3xl font-poppins'>
 						Companies

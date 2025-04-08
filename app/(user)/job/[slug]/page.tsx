@@ -19,6 +19,7 @@ import { RiUserStarFill } from "react-icons/ri";
 import { FaGraduationCap } from "react-icons/fa";
 import { formatDate2 } from "@/lib/formatDate2";
 import { FaRegCalendarXmark } from "react-icons/fa6";
+import { MdErrorOutline } from "react-icons/md";
 
 const jobQuery = defineQuery(groq`
   *[_type == "job" && slug.current == $slug][0]{
@@ -117,11 +118,11 @@ export default async function JobPage({ params }: PageProps) {
 						</div>
 
 						{/* JOB TITLE */}
-						<h1 className='mt-6 mb-2 font-bold text-xl md:text-3xl font-poppins text-pry'>
+						<h1 className='mt-6 mb-2 text-xl font-bold md:text-3xl font-poppins text-pry'>
 							{job.title}
 						</h1>
 
-						<div className='space-y-1 font-poppins'>
+						<div className='space-y-1 font-openSans'>
 							{/* LOCATION */}
 							<div className='icon-container'>
 								<ImLocation className='icon' />
@@ -249,7 +250,7 @@ export default async function JobPage({ params }: PageProps) {
 									<span>
 										Qualification:
 									</span>{" "}
-									<p className='job-input uppercase'>
+									<p className='uppercase job-input'>
 										{
 											job
 												.education
@@ -261,10 +262,10 @@ export default async function JobPage({ params }: PageProps) {
 						</div>
 
 						{/* DEADLINE */}
-						<div className='flex justify-center w-full mt-4'>
+						<div className='flex justify-center w-full mt-4 font-openSans'>
 							{job.deadline && (
-								<p className='icon-container font-poppins'>
-									<FaRegCalendarXmark className='text-red-500 ' />
+								<p className='icon-container'>
+									{/* <FaRegCalendarXmark className='text-red-500 ' /> */}
 									{new Date(
 										job.deadline,
 									) >
@@ -280,9 +281,12 @@ export default async function JobPage({ params }: PageProps) {
 											)}
 										</>
 									) : (
-										<span className='text-red-500'>
-											Job
-											Expired
+										<span className='text-white bg-red-500 px-2 py-0.5 rounded-md flex items-center gap-1 font-normal'>
+											<MdErrorOutline />
+											<p>
+												Job
+												Expired
+											</p>
 										</span>
 									)}
 								</p>
