@@ -2,6 +2,7 @@ import { groq } from "next-sanity";
 import { client } from "./client";
 import { RelatedJob } from "@/components/RelatedJobs";
 import { getDisplayNameForEducation, getDisplayNameForJobField } from "./data";
+import { Job } from "@/types";
 
 export const searchJobsQuery = groq`
   *[_type == "job" && 
@@ -258,9 +259,62 @@ export async function getJobsByEducation(educationSlug: string) {
 	});
 }
 
-export async function getRemoteJobs() {
-	const jobs = await client.fetch(
-		groq`*[_type == "job" && location->name == "Remote"] {
+// export async function getRemoteJobs() {
+// 	const jobs = await client.fetch(
+// 		groq`*[_type == "job" && location->name == "Remote"] {
+//           _id,
+//           title,
+//           "slug": {
+//             "current": slug.current
+//           },
+//           "company": company->{
+//               _id,
+//               name,
+//               logo{
+//               asset{
+//                 _ref
+//               }
+//             }
+//           },
+//           salaryRange,
+//           "location": location->{
+//               _id,
+//               name,
+//               slug
+//           },
+//           "jobType": jobType->{
+//               _id,
+//               name
+//           },
+//           level->{
+//             name
+//           },
+//           "jobField": jobField->{
+//               _id,
+//               name
+//           },
+//           "education": education->{
+//               _id,
+//               name
+//           },
+//           publishedAt,
+//           description,
+//           summary
+//       }`,
+// 	);
+
+// 	return jobs;
+// }
+
+export async function getRemoteJobs(
+	page = 1,
+	perPage = 10,
+): Promise<{ jobs: Job[]; totalCount: number }> {
+	const start = (page - 1) * perPage;
+	const end = start + perPage;
+
+	const jobs = await client.fetch<Job[]>(
+		groq`*[_type == "job" && location->name == "Remote"] | order(publishedAt desc) [${start}...${end}] {
           _id,
           title,
           "slug": {
@@ -302,7 +356,12 @@ export async function getRemoteJobs() {
       }`,
 	);
 
-	return jobs;
+	// Get total count for pagination
+	const totalCount = await client.fetch<number>(
+		groq`count(*[_type == "job" && location->name == "Remote"])`,
+	);
+
+	return { jobs, totalCount };
 }
 
 export interface JobReference {

@@ -1,11 +1,12 @@
 import { Metadata } from "next";
 import { getLocations, getJobsByLocation } from "@/sanity/lib/queries";
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/PaginationComponent";
 import { notFound } from "next/navigation";
 import AsideMain from "@/components/sidebar/AsideMain";
 import SubLayout from "@/components/SubLayout";
 import { Job } from "@/types";
 import JobCardCategories from "@/components/JobCardCategories";
+import Link from "next/link";
 
 type Params = {
 	params: Promise<{ location: string }>;
@@ -97,17 +98,20 @@ export default async function LocationJobsPage({ params }: Params) {
 						))}
 					</div>
 				) : (
-					<div className='py-12 text-center'>
-						<h2 className='text-xl font-semibold'>
+					<div className='py-12 text-center font-openSans'>
+						<h2 className='text-base font-semibold md:text-lg'>
 							No jobs currently
 							available in{" "}
 							{locationData.name}
 						</h2>
-						<p className='mt-2'>
-							Check back later or
-							browse jobs in other
-							locations.
-						</p>
+						<Link
+							href='/jobs/by-location'
+							className=''>
+							<button className='px-4 py-2 mt-2 text-sm font-medium underline transition-colors text-pry2 md:text-base hover:text-pry'>
+								Browse all
+								locations
+							</button>
+						</Link>
 					</div>
 				)}
 

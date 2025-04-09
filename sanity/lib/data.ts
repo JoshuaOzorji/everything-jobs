@@ -68,3 +68,15 @@ export const getDisplayNameForJobField = (value: string): string => {
 
 	return jobFieldMap[value] || value;
 };
+
+export const getDisplayNameForJobLevel = (value: string): string => {
+	const jobLevelMap: Record<string, string> = {
+		"entry-level": "Entry level",
+		"mid-level": "Mid level",
+		"senior-level": "Senior level",
+		director: "Director",
+		executive: "Executive",
+	};
+
+	return jobLevelMap[value] || value;
+};

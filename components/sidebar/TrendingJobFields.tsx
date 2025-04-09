@@ -48,16 +48,14 @@ const TrendingJobFields: React.FC<TrendingJobFieldsProps> = ({
 
 	return (
 		<section className='pt-4 mb-4 text-sm md:text-base '>
-			<h2 className='mb-3 font-semibold font-poppins text-pry2'>
-				Top Jobs Field
-			</h2>
+			<h2 className='aside-title'>Trending Jobs Fields</h2>
 			<nav aria-label='Featured job fields navigation'>
 				<ul className='font-openSans'>
 					{jobFields.map((jobField) => (
 						<li key={jobField._id}>
 							<Link
-								href={`/jobs/fields/${jobField.slug}`}
-								className='flex items-center justify-between py-1.5 px-2 rounded hover:bg-[#e6e6eb] text-myBlack group'>
+								href={`/jobs/by-fields/${jobField.slug}`}
+								className='flex items-center justify-between px-2 py-1 text-sm rounded hover:text-pry2 text-myBlack group md:text-base'>
 								<span className='flex items-center gap-1'>
 									<HiOutlineBriefcase />
 									<span className='truncate'>
@@ -75,7 +73,7 @@ const TrendingJobFields: React.FC<TrendingJobFieldsProps> = ({
 					<Link href='/jobs/by-field'>
 						{/* CTA */}
 						<button className='flex items-center gap-1 underline text-pry2 hover:text-pry'>
-							Explore all job fields
+							Explore all fields
 						</button>
 					</Link>
 				</div>

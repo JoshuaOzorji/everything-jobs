@@ -18,7 +18,6 @@ import { formatDate } from "@/lib/formatDate";
 import { RiUserStarFill } from "react-icons/ri";
 import { FaGraduationCap } from "react-icons/fa";
 import { formatDate2 } from "@/lib/formatDate2";
-import { FaRegCalendarXmark } from "react-icons/fa6";
 import { MdErrorOutline } from "react-icons/md";
 
 const jobQuery = defineQuery(groq`

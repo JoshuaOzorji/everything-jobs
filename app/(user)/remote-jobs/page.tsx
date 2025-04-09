@@ -1,26 +1,41 @@
 import { Metadata } from "next";
 import { getRemoteJobs } from "@/sanity/lib/queries";
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/PaginationComponent";
 import AsideMain from "@/components/sidebar/AsideMain";
 import SubLayout from "@/components/SubLayout";
-import { Job } from "@/types";
 import JobCardCategories from "@/components/JobCardCategories";
 
 export const metadata: Metadata = {
-	title: "Remote Jobs in Nigeria | Work from Anywhere",
+	title: "Remote Jobs | Work from Anywhere",
 	description:
 		"Browse remote job opportunities across Nigeria. Find flexible, work-from-home positions in various industries and roles.",
 	keywords: "remote jobs Nigeria, work from home, online jobs, remote work opportunities",
 	openGraph: {
-		title: "Remote Jobs in Nigeria | Work from Anywhere",
+		title: "Remote Jobs | Work from Anywhere",
 		description:
 			"Discover remote job opportunities that allow you to work from anywhere in Nigeria.",
 		type: "website",
 	},
 };
 
-export default async function RemoteJobsPage() {
-	const jobs = await getRemoteJobs();
+type SearchParams = {
+	page?: string;
+};
+
+export default async function RemoteJobsPage({
+	searchParams,
+}: {
+	searchParams: Promise<SearchParams>;
+}) {
+	const resolvedSearchParams = await searchParams;
+
+	// Convert page to number, default to 1
+	const currentPage = resolvedSearchParams?.page
+		? parseInt(resolvedSearchParams.page, 10)
+		: 1;
+	const perPage = 10;
+
+	const { jobs, totalCount } = await getRemoteJobs(currentPage, perPage);
 
 	return (
 		<SubLayout aside={<AsideMain />}>
@@ -31,7 +46,7 @@ export default async function RemoteJobsPage() {
 
 				<div className='page-sub-div'>
 					<p className='page-p'>
-						Browse {jobs.length} remote job
+						Browse {totalCount} remote job
 						opportunities. Work flexibly
 						from anywhere in Nigeria or
 						beyond.
@@ -40,7 +55,7 @@ export default async function RemoteJobsPage() {
 
 				{jobs.length > 0 ? (
 					<div className='flex flex-col gap-2'>
-						{jobs.map((job: Job) => (
+						{jobs.map((job) => (
 							<JobCardCategories
 								key={job._id}
 								job={{
@@ -66,8 +81,12 @@ export default async function RemoteJobsPage() {
 					</div>
 				)}
 
-				{jobs.length > 10 && (
-					<Pagination total={jobs.length} />
+				{totalCount > perPage && (
+					<Pagination
+						currentPage={currentPage}
+						total={totalCount}
+						perPage={perPage}
+					/>
 				)}
 			</div>
 		</SubLayout>

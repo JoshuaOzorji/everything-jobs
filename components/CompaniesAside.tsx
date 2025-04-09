@@ -38,13 +38,13 @@ const CompaniesAside = async () => {
 	const topCompanies = await getTopCompanies();
 
 	return (
-		<div className='bg-white p-4 rounded-lg shadow'>
-			<h3 className='text-lg font-bold mb-4 font-poppins'>
+		<div className='p-4 bg-white rounded-lg shadow-sm md:px-6'>
+			<h3 className='mb-4 text-lg font-bold font-poppins'>
 				Top Companies
 			</h3>
 
 			{topCompanies.length === 0 ? (
-				<p className='text-gray-500 text-sm'>
+				<p className='text-sm text-gray-500'>
 					No companies found
 				</p>
 			) : (
@@ -53,7 +53,7 @@ const CompaniesAside = async () => {
 						<li
 							key={company._id}
 							className='flex items-center gap-2'>
-							<div className='h-8 w-8 rounded-full overflow-hidden flex-shrink-0'>
+							<div className='flex-shrink-0 w-8 h-8 overflow-hidden rounded-full'>
 								{company.logo
 									?.asset ? (
 									<Image
@@ -97,12 +97,12 @@ const CompaniesAside = async () => {
 							</div>
 
 							<Link
-								href={`/companies/${company.slug.current}`}
-								className='text-sm font-medium hover:text-blue-600 transition-colors flex-grow'>
+								href={`/company/${company.slug.current}`}
+								className='flex-grow text-sm font-medium transition-colors hover:text-blue-600'>
 								{company.name}
 							</Link>
 
-							<span className='text-xs px-2 py-1 bg-gray-100 rounded-md text-center'>
+							<span className='px-2 py-1 text-xs text-center bg-gray-100 rounded-md'>
 								{
 									company.jobCount
 								}{" "}
