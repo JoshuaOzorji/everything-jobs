@@ -56,27 +56,58 @@ export interface MainImage {
 	};
 	alt: string;
 }
-export interface Job {
-	_id: string;
+// export interface Job {
+// 	_id: string;
+// 	title: string;
+// 	slug: { current: string };
+// 	summary?: any[];
+// 	company: Company;
+// 	location: State;
+// 	jobType: JobType;
+// 	education: Education;
+// 	jobField: JobField;
+// 	salaryRange: SalaryRange;
+// 	publishedAt: string;
+// 	deadline: string;
+// 	level: JobLevel;
+// 	experienceRange: ExperienceRange;
+// 	requirements: string[];
+// 	responsibilities: string[];
+// 	recruitmentProcess: string[];
+// 	mainImage: MainImage;
+// 	apply: any[];
+// }
+
+// types.ts - Create optimized type definitions
+
+export type Job = {
 	title: string;
-	slug: { current: string };
-	summary?: any[];
-	company: Company;
-	location: State;
-	jobType: JobType;
-	education: Education;
-	jobField: JobField;
-	salaryRange: SalaryRange;
+	summary: any[];
+	company: {
+		name: string;
+		logo?: string;
+		slug: string;
+	};
+	location: string;
+	jobType: string;
+	education?: string;
+	jobField: string;
+	salaryRange?: {
+		min: number;
+		max: number;
+	};
 	publishedAt: string;
-	deadline: string;
-	level: JobLevel;
-	experienceRange: ExperienceRange;
-	requirements: string[];
-	responsibilities: string[];
-	recruitmentProcess: string[];
-	mainImage: MainImage;
-	apply: any[];
-}
+	deadline?: string;
+	level?: string;
+	experienceRange?: {
+		min: number;
+		max: number;
+	};
+	requirements?: string[];
+	responsibilities?: string[];
+	recruitmentProcess?: string[];
+	apply?: any[];
+};
 
 export interface JobCardProps {
 	job: {

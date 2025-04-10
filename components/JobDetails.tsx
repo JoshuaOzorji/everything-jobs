@@ -13,25 +13,34 @@ export default function JobDetails({ job }: { job: Job }) {
 			)}
 
 			{/* RESPONSIBILITIES */}
-			{job.responsibilities?.length > 0 && (
-				<div>
-					<h2 className='job-h2'>
-						Job Responsibilities
-					</h2>
-					<ul className='list-disc list-inside'>
-						{job.responsibilities.map(
-							(res, index) => (
-								<li key={index}>
-									{res}
-								</li>
-							),
-						)}
-					</ul>
-				</div>
-			)}
+			{job.responsibilities &&
+				job.responsibilities.length > 0 && (
+					<div>
+						<h2 className='job-h2'>
+							Job Responsibilities
+						</h2>
+						<ul className='list-disc list-inside'>
+							{job.responsibilities.map(
+								(
+									res,
+									index,
+								) => (
+									<li
+										key={
+											index
+										}>
+										{
+											res
+										}
+									</li>
+								),
+							)}
+						</ul>
+					</div>
+				)}
 
 			{/* REQUIREMENTS */}
-			{job.requirements?.length > 0 && (
+			{job.requirements && job.requirements.length > 0 && (
 				<div>
 					<h2 className='job-h2'>
 						Job Requirements / Skills
