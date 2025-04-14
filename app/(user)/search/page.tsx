@@ -114,6 +114,8 @@ const SearchPage = () => {
 				<div className='flex flex-col gap-4 my-2 md:flex-row'>
 					<FilterSidebar
 						filters={filters}
+						query={query}
+						location={location}
 						jobType={jobType}
 						jobLevel={jobLevel}
 						education={education}

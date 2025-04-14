@@ -27,6 +27,7 @@ const SearchComponent = ({
 		{ _id: string; name: string }[]
 	>([]);
 	const [selectedLocation, setSelectedLocation] = useState("");
+	const [isLoading, setIsLoading] = useState(false);
 
 	// Fetch locations from Sanity
 	useEffect(() => {
@@ -52,6 +53,7 @@ const SearchComponent = ({
 
 	const handleSubmit = (e: FormEvent) => {
 		e.preventDefault();
+		setIsLoading(true);
 
 		//Create query params
 		const params = new URLSearchParams();
@@ -130,10 +132,14 @@ const SearchComponent = ({
 
 						<button
 							type='submit'
+							disabled={isLoading}
 							className='p-1.5 text-white border md:p-[0.38rem] bg-pry2 hover:bg-pry animate hover:text-acc border-pry2'>
-							<IoSearchOutline className='w-6 h-6' />
+							{isLoading ? (
+								<div className='w-6 h-6 border-2 border-white rounded-full border-t-transparent animate-spin'></div>
+							) : (
+								<IoSearchOutline className='w-6 h-6' />
+							)}
 						</button>
-						{/* Search Icon */}
 					</div>
 				</form>
 			</div>

@@ -28,7 +28,7 @@ const FilterSelect: React.FC<FilterSelectProps> = ({
 			<select
 				value={value}
 				onChange={(e) => onChange(e.target.value)}
-				className='w-full p-2 border rounded focus:outline-none'>
+				className='w-full px-2 py-1.5 border rounded focus:outline-none'>
 				<option value=''>{placeholder}</option>
 				{options.map((option) => (
 					<option

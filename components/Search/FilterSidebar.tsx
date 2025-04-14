@@ -1,9 +1,13 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import { FilterOptions } from "@/types";
 import FilterSelect from "./FilterSelect";
 
 interface FilterSidebarProps {
 	filters: FilterOptions | null;
+	query: string;
+	location: string;
 	jobType: string;
 	jobLevel: string;
 	education: string;
@@ -15,6 +19,8 @@ interface FilterSidebarProps {
 
 const FilterSidebar: React.FC<FilterSidebarProps> = ({
 	filters,
+	query,
+	location,
 	jobType,
 	jobLevel,
 	education,
@@ -23,6 +29,30 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 	updateFilters,
 	clearAllFilters,
 }) => {
+	const [searchQuery, setSearchQuery] = useState(query);
+	const [selectedLocation, setSelectedLocation] = useState(location);
+
+	useEffect(() => {
+		setSearchQuery(query);
+		setSelectedLocation(location);
+	}, [query, location]);
+
+	const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setSearchQuery(e.target.value);
+	};
+
+	const handleSearchSubmit = () => {
+		updateFilters("q", searchQuery);
+	};
+
+	const handleLocationChange = (
+		e: React.ChangeEvent<HTMLSelectElement>,
+	) => {
+		const value = e.target.value;
+		setSelectedLocation(value);
+		updateFilters("location", value);
+	};
+
 	if (!filters) return null;
 
 	return (
@@ -31,6 +61,62 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 			<h2 className='mb-4 text-lg font-semibold'>
 				Filter Results
 			</h2>
+
+			{/* Search Query Input */}
+			<div className='mb-4'>
+				<label className='block mb-1 font-medium'>
+					Search Jobs
+				</label>
+				<div className='flex'>
+					<input
+						type='text'
+						value={searchQuery}
+						onChange={handleSearchChange}
+						placeholder='Job title or company'
+						className='w-full px-2 py-1.5 border rounded-l border-gray-300 focus:outline-none focus:border-pry2'
+					/>
+					<button
+						onClick={handleSearchSubmit}
+						className='px-2 py-1.5 text-white bg-pry2 rounded-r hover:bg-pry'>
+						Search
+					</button>
+				</div>
+			</div>
+
+			{/* Location Select */}
+			<div className='mb-4'>
+				<label className='block mb-1 font-medium'>
+					Location
+				</label>
+				<select
+					value={selectedLocation}
+					onChange={handleLocationChange}
+					className='w-full px-2 py-1.5 border rounded border-gray-300 focus:outline-none focus:border-pry2'>
+					<option value=''>All Locations</option>
+					{filters.locations?.map((loc) => (
+						<option key={loc} value={loc}>
+							{loc}
+						</option>
+					))}
+					{/* Add the current location if it's not in the filters list */}
+					{selectedLocation &&
+						!filters.locations?.includes(
+							selectedLocation,
+						) && (
+							<option
+								key={
+									selectedLocation
+								}
+								value={
+									selectedLocation
+								}>
+								{
+									selectedLocation
+								}
+							</option>
+						)}
+				</select>
+			</div>
 
 			<FilterSelect
 				label='Job Type'

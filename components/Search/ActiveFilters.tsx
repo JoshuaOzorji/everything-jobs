@@ -31,7 +31,12 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({
 		{ name: "Field", value: jobField },
 	].filter((filter) => filter.value);
 
-	if (activeFilters.length === 0) return null;
+	// if (activeFilters.length === 0) return null;
+
+	const shouldShowComponent =
+		activeFilters.length > 0 || (query && query.length > 0);
+
+	if (!shouldShowComponent) return null;
 
 	return (
 		<div className='flex flex-wrap items-center gap-2 p-2 mb-4 text-sm'>
@@ -68,7 +73,7 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({
 						)
 					}
 					className='px-2 py-1 text-sm text-red-600 underline'>
-					Clear All
+					Clear all
 				</button>
 			</div>
 		</div>

@@ -167,4 +167,5 @@ export interface FilterOptions {
 	jobLevels: Filter[];
 	educationLevels: Filter[];
 	jobFields: Filter[];
+	locations: string[];
 }
