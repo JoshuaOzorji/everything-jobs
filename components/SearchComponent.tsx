@@ -134,11 +134,7 @@ const SearchComponent = ({
 							type='submit'
 							disabled={isLoading}
 							className='p-1.5 text-white border md:p-[0.38rem] bg-pry2 hover:bg-pry animate hover:text-acc border-pry2'>
-							{isLoading ? (
-								<div className='w-6 h-6 border-2 border-white rounded-full border-t-transparent animate-spin'></div>
-							) : (
-								<IoSearchOutline className='w-6 h-6' />
-							)}
+							<IoSearchOutline className='w-6 h-6' />
 						</button>
 					</div>
 				</form>

@@ -86,52 +86,48 @@ const SearchPage = () => {
 	};
 
 	return (
-		<main>
-			<div className='mx-auto '>
-				<div className='px-2 bg-white rounded-md'>
-					<SearchHeader
-						query={query}
-						location={location}
-						jobCount={jobs.length}
-					/>
+		<main className='mx-auto '>
+			<div className='px-2 bg-white rounded-md'>
+				<SearchHeader
+					query={query}
+					location={location}
+					jobCount={jobs.length}
+				/>
 
-					<FilterToggle
-						showFilters={showFilters}
-						setShowFilters={setShowFilters}
-					/>
+				<FilterToggle
+					showFilters={showFilters}
+					setShowFilters={setShowFilters}
+				/>
 
-					<ActiveFilters
-						location={location}
-						jobType={jobType}
-						jobLevel={jobLevel}
-						education={education}
-						jobField={jobField}
-						query={query}
-						updateFilters={updateFilters}
-					/>
-				</div>
+				<ActiveFilters
+					location={location}
+					jobType={jobType}
+					jobLevel={jobLevel}
+					education={education}
+					jobField={jobField}
+					query={query}
+					updateFilters={updateFilters}
+				/>
+			</div>
 
-				<div className='flex flex-col gap-4 my-2 md:flex-row'>
-					<FilterSidebar
-						filters={filters}
-						query={query}
-						location={location}
-						jobType={jobType}
-						jobLevel={jobLevel}
-						education={education}
-						jobField={jobField}
-						showFilters={showFilters}
-						updateFilters={updateFilters}
-						clearAllFilters={
-							clearAllFilters
-						}
-					/>
+			<div className='flex flex-col gap-4 my-2 md:flex-row'>
+				<FilterSidebar
+					filters={filters}
+					query={query}
+					location={location}
+					jobType={jobType}
+					jobLevel={jobLevel}
+					education={education}
+					jobField={jobField}
+					showFilters={showFilters}
+					updateFilters={updateFilters}
+					clearAllFilters={clearAllFilters}
+				/>
 
-					<SearchResults
-						isLoading={loading}
-						jobs={jobs}
-					/>
-				</div>
+				<SearchResults
+					isLoading={loading}
+					jobs={jobs}
+				/>
 			</div>
 		</main>
 	);

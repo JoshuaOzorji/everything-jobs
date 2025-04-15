@@ -34,7 +34,8 @@ export const getFiltersQuery = groq`{
   "jobTypes": *[_type == "jobType"] { _id, name },
   "jobLevels": *[_type == "jobLevel"] { _id, name },
   "educationLevels": *[_type == "education"] { _id, name },
-  "jobFields": *[_type == "jobField"] { _id, name }
+  "jobFields": *[_type == "jobField"] { _id, name },
+  "locations": *[_type == "state" && name != "Remote"] { _id, name }
 }`;
 
 // Fetch all locations (states in Nigeria)
@@ -258,53 +259,6 @@ export async function getJobsByEducation(educationSlug: string) {
 		return job;
 	});
 }
-
-// export async function getRemoteJobs() {
-// 	const jobs = await client.fetch(
-// 		groq`*[_type == "job" && location->name == "Remote"] {
-//           _id,
-//           title,
-//           "slug": {
-//             "current": slug.current
-//           },
-//           "company": company->{
-//               _id,
-//               name,
-//               logo{
-//               asset{
-//                 _ref
-//               }
-//             }
-//           },
-//           salaryRange,
-//           "location": location->{
-//               _id,
-//               name,
-//               slug
-//           },
-//           "jobType": jobType->{
-//               _id,
-//               name
-//           },
-//           level->{
-//             name
-//           },
-//           "jobField": jobField->{
-//               _id,
-//               name
-//           },
-//           "education": education->{
-//               _id,
-//               name
-//           },
-//           publishedAt,
-//           description,
-//           summary
-//       }`,
-// 	);
-
-// 	return jobs;
-// }
 
 export async function getRemoteJobs(
 	page = 1,

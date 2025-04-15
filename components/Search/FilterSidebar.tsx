@@ -30,12 +30,29 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 	clearAllFilters,
 }) => {
 	const [searchQuery, setSearchQuery] = useState(query);
-	const [selectedLocation, setSelectedLocation] = useState(location);
+	const [selectedLocationId, setSelectedLocationId] = useState("");
 
 	useEffect(() => {
 		setSearchQuery(query);
-		setSelectedLocation(location);
-	}, [query, location]);
+
+		// When component loads or location changes, find the ID that matches the location name
+		if (filters?.locations && location) {
+			const locationObj = filters.locations.find(
+				(loc) => loc.name === location,
+			);
+			if (locationObj) {
+				setSelectedLocationId(locationObj._id);
+			} else if (location) {
+				// Handle case where location exists in URL but not in dropdown options
+				// (could be a custom location or one that was removed)
+				setSelectedLocationId("custom");
+			} else {
+				setSelectedLocationId("");
+			}
+		} else {
+			setSelectedLocationId("");
+		}
+	}, [query, location, filters]);
 
 	const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchQuery(e.target.value);
@@ -48,9 +65,20 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 	const handleLocationChange = (
 		e: React.ChangeEvent<HTMLSelectElement>,
 	) => {
-		const value = e.target.value;
-		setSelectedLocation(value);
-		updateFilters("location", value);
+		const selectedId = e.target.value;
+		setSelectedLocationId(selectedId);
+
+		const selectedLocation = filters?.locations?.find(
+			(loc) => loc._id === selectedId,
+		);
+
+		const locationValue = selectedLocation
+			? selectedLocation.name
+			: selectedId === "custom"
+				? location
+				: "";
+
+		updateFilters("location", locationValue);
 	};
 
 	if (!filters) return null;
@@ -84,35 +112,28 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 			</div>
 
 			{/* Location Select */}
+
 			<div className='mb-4'>
 				<label className='block mb-1 font-medium'>
 					Location
 				</label>
 				<select
-					value={selectedLocation}
+					value={selectedLocationId}
 					onChange={handleLocationChange}
 					className='w-full px-2 py-1.5 border rounded border-gray-300 focus:outline-none focus:border-pry2'>
 					<option value=''>All Locations</option>
 					{filters.locations?.map((loc) => (
-						<option key={loc} value={loc}>
-							{loc}
+						<option
+							key={loc._id}
+							value={loc._id}>
+							{loc.name}
 						</option>
 					))}
-					{/* Add the current location if it's not in the filters list */}
-					{selectedLocation &&
-						!filters.locations?.includes(
-							selectedLocation,
-						) && (
-							<option
-								key={
-									selectedLocation
-								}
-								value={
-									selectedLocation
-								}>
-								{
-									selectedLocation
-								}
+					{location &&
+						selectedLocationId ===
+							"custom" && (
+							<option value='custom'>
+								{location}
 							</option>
 						)}
 				</select>
