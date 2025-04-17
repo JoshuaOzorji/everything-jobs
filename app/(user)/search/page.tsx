@@ -3,11 +3,13 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FilterOptions, JobQuery } from "@/types";
-import SearchHeader from "../../../components/Search/SearchHeader";
-import FilterToggle from "../../../components/Search/FilterToggle";
-import ActiveFilters from "../../../components/Search/ActiveFilters";
-import FilterSidebar from "../../../components/Search/FilterSidebar";
-import SearchResults from "../../../components/Search/SearchResults";
+import SearchHeader from "@/components/Search/SearchHeader";
+import FilterToggle from "@/components/Search/FilterToggle";
+import ActiveFilters from "@/components/Search/ActiveFilters";
+import FilterSidebar from "@/components/Search/FilterSidebar";
+
+import SearchResults from "@/components/Search/SearchResults";
+import { LoadingComponent } from "@/components/Loading";
 
 const SearchPage = () => {
 	const searchParams = useSearchParams();
@@ -16,6 +18,7 @@ const SearchPage = () => {
 	const [loading, setLoading] = useState(true);
 	const [filters, setFilters] = useState<FilterOptions | null>(null);
 	const [showFilters, setShowFilters] = useState(false);
+	const [hasSearched, setHasSearched] = useState(false);
 
 	// Get current filter values from URL
 	const query = searchParams.get("q") || "";
@@ -30,7 +33,6 @@ const SearchPage = () => {
 		const fetchJobs = async () => {
 			setLoading(true);
 			try {
-				// Create query string for the API
 				const params = new URLSearchParams();
 				if (query) params.append("q", query);
 				if (location)
@@ -42,6 +44,16 @@ const SearchPage = () => {
 					params.append("education", education);
 				if (jobField)
 					params.append("jobField", jobField);
+
+				// Track if there's an active search
+				setHasSearched(
+					query !== "" ||
+						location !== "" ||
+						jobType !== "" ||
+						jobLevel !== "" ||
+						education !== "" ||
+						jobField !== "",
+				);
 
 				const response = await fetch(
 					`/api/search?${params.toString()}`,
@@ -78,57 +90,83 @@ const SearchPage = () => {
 		router.push(`/search?${params.toString()}`);
 	};
 
-	// Clear all filter values except search query and location
 	const clearAllFilters = () => {
-		router.push(
-			`/search${query ? `?q=${query}` : ""}${location ? `&location=${location}` : ""}`,
-		);
+		router.push("/search");
 	};
 
 	return (
-		<main className='mx-auto '>
-			<div className='px-2 bg-white rounded-md'>
-				<SearchHeader
-					query={query}
-					location={location}
-					jobCount={jobs.length}
-				/>
+		<main className='mx-auto'>
+			{loading ? (
+				<div className='h-screen flex items-center justify-center w-full'>
+					<LoadingComponent />
+				</div>
+			) : (
+				<>
+					<div className='px-2 bg-white rounded-md'>
+						<SearchHeader
+							query={query}
+							location={location}
+							jobCount={jobs.length}
+						/>
 
-				<FilterToggle
-					showFilters={showFilters}
-					setShowFilters={setShowFilters}
-				/>
+						<FilterToggle
+							showFilters={
+								showFilters
+							}
+							setShowFilters={
+								setShowFilters
+							}
+						/>
 
-				<ActiveFilters
-					location={location}
-					jobType={jobType}
-					jobLevel={jobLevel}
-					education={education}
-					jobField={jobField}
-					query={query}
-					updateFilters={updateFilters}
-				/>
-			</div>
+						<ActiveFilters
+							location={location}
+							jobType={jobType}
+							jobLevel={jobLevel}
+							education={education}
+							jobField={jobField}
+							query={query}
+							updateFilters={
+								updateFilters
+							}
+						/>
+					</div>
 
-			<div className='flex flex-col gap-4 my-2 md:flex-row'>
-				<FilterSidebar
-					filters={filters}
-					query={query}
-					location={location}
-					jobType={jobType}
-					jobLevel={jobLevel}
-					education={education}
-					jobField={jobField}
-					showFilters={showFilters}
-					updateFilters={updateFilters}
-					clearAllFilters={clearAllFilters}
-				/>
+					<div className='flex flex-col gap-4 my-2 md:flex-row'>
+						<FilterSidebar
+							filters={filters}
+							query={query}
+							location={location}
+							jobType={jobType}
+							jobLevel={jobLevel}
+							education={education}
+							jobField={jobField}
+							showFilters={
+								showFilters
+							}
+							updateFilters={
+								updateFilters
+							}
+							clearAllFilters={
+								clearAllFilters
+							}
+						/>
 
-				<SearchResults
+						{/* <SearchResults
 					isLoading={loading}
 					jobs={jobs}
-				/>
-			</div>
+				/> */}
+
+						<SearchResults
+							isLoading={loading}
+							jobs={jobs}
+							hasSearched={
+								hasSearched
+							}
+							query={query}
+						/>
+					</div>
+				</>
+			)}
 		</main>
 	);
 };

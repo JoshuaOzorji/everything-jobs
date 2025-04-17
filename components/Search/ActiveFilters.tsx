@@ -11,6 +11,8 @@ interface ActiveFiltersProps {
 	updateFilters: (filterName: string, value: string) => void;
 }
 
+type FilterName = "Location" | "Job Type" | "Level" | "Education" | "Field";
+
 const ActiveFilters: React.FC<ActiveFiltersProps> = ({
 	location,
 	jobType,
@@ -22,6 +24,15 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({
 }) => {
 	const router = useRouter();
 	const searchParams = useSearchParams();
+
+	// Map filter display names to their actual parameter names
+	const filterMapping: Record<FilterName, string> = {
+		Location: "location",
+		"Job Type": "jobType",
+		Level: "jobLevel",
+		Education: "education",
+		Field: "jobField",
+	};
 
 	const activeFilters = [
 		{ name: "Location", value: location },
@@ -37,6 +48,18 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({
 		activeFilters.length > 0 || (query && query.length > 0);
 
 	if (!shouldShowComponent) return null;
+
+	const handleClearAll = () => {
+		// Clear all filter values by calling updateFilters for each one
+		updateFilters("location", "");
+		updateFilters("jobtype", "");
+		updateFilters("joblevel", "");
+		updateFilters("education", "");
+		updateFilters("jobfield", "");
+
+		// Navigate to search page with only query parameter if it exists
+		router.push(`/search${query ? `?q=${query}` : ""}`);
+	};
 
 	return (
 		<div className='flex flex-wrap items-center gap-2 p-2 mb-4 text-sm'>
@@ -56,7 +79,9 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({
 						<button
 							onClick={() =>
 								updateFilters(
-									filter.name.toLowerCase(),
+									filterMapping[
+										filter.name as FilterName
+									],
 									"",
 								)
 							}
@@ -67,11 +92,7 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({
 				))}
 
 				<button
-					onClick={() =>
-						router.push(
-							`/search${query ? `?q=${query}` : ""}`,
-						)
-					}
+					onClick={handleClearAll}
 					className='px-2 py-1 text-sm text-red-600 underline'>
 					Clear all
 				</button>

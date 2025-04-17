@@ -5,7 +5,7 @@ import { getDisplayNameForEducation, getDisplayNameForJobField } from "./data";
 import { Job } from "@/types";
 
 export const searchJobsQuery = groq`
-  *[_type == "job" && 
+  *[_type == "job" &&
     (title match $q + "*" || company->name match $q + "*") &&
     ($location == "" || location->name match $location) &&
     ($jobType == "" || jobType->name == $jobType) &&
@@ -318,6 +318,73 @@ export async function getRemoteJobs(
 	return { jobs, totalCount };
 }
 
+export async function getJobTypes() {
+	return client.fetch(`
+    *[_type == "jobType"] | order(name asc) {
+      _id,
+      name,
+      "slug": slug.current,
+      "jobCount": count(*[_type == "job" && jobType._ref == ^._id])
+    }
+  `);
+}
+
+export async function getJobsByTypePaginated(
+	typeSlug: string,
+	page = 1,
+	perPage = 10,
+): Promise<{ jobs: Job[]; totalCount: number }> {
+	const start = (page - 1) * perPage;
+	const end = start + perPage;
+
+	const jobs = await client.fetch(
+		groq`*[_type == "job" && defined(jobType) && jobType->slug.current == $typeSlug] | order(publishedAt desc) [${start}...${end}] {
+      _id,
+      title,
+      "slug": {
+        "current": slug.current
+      },
+      "company": company->{
+        _id,
+        name,
+        logo{
+          asset{
+            _ref
+          }
+        }
+      },
+      salaryRange,
+      "location": location->{
+        _id,
+        name,
+        slug
+      },
+      "jobType": jobType->{
+        _id,
+        name
+      },
+      "level": level->{
+        name
+      },
+      "jobField": jobField->{
+        _id,
+        name
+      },
+      publishedAt,
+      description,
+      summary
+    }`,
+		{ typeSlug },
+	);
+
+	// Get total count for pagination
+	const totalCount = await client.fetch<number>(
+		groq`count(*[_type == "job" && defined(jobType) && jobType->slug.current == $typeSlug])`,
+		{ typeSlug },
+	);
+
+	return { jobs, totalCount };
+}
 export interface JobReference {
 	_id: string;
 	jobField: { _ref: string };

@@ -81,11 +81,19 @@ export interface MainImage {
 // types.ts - Create optimized type definitions
 
 export type Job = {
+	_id: string;
+	slug: {
+		current: string;
+	};
 	title: string;
 	summary: any[];
 	company: {
 		name: string;
-		logo?: string;
+		logo?: {
+			asset?: {
+				_ref: string;
+			};
+		}; // Change from string | undefined to this structure
 		slug: string;
 	};
 	location: string;

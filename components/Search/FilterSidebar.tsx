@@ -35,7 +35,6 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 	useEffect(() => {
 		setSearchQuery(query);
 
-		// When component loads or location changes, find the ID that matches the location name
 		if (filters?.locations && location) {
 			const locationObj = filters.locations.find(
 				(loc) => loc.name === location,
@@ -43,8 +42,6 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 			if (locationObj) {
 				setSelectedLocationId(locationObj._id);
 			} else if (location) {
-				// Handle case where location exists in URL but not in dropdown options
-				// (could be a custom location or one that was removed)
 				setSelectedLocationId("custom");
 			} else {
 				setSelectedLocationId("");
@@ -181,7 +178,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
 			<button
 				onClick={clearAllFilters}
-				className='w-full px-2 py-1 bg-gray-200 rounded text-myBlack hover:bg-gray-300'>
+				className='w-full p-2 bg-gray-200 rounded text-myBlack hover:bg-gray-300'>
 				Clear Filters
 			</button>
 		</div>
