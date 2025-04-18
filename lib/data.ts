@@ -9,4 +9,5 @@ export const findJobsDropdownItems = [
 	{ label: "Jobs by Field", href: "/jobs/by-field" },
 	// { label: "Jobs by Industry", href: "/jobs/by-industry" },
 	{ label: "Jobs by Location", href: "/jobs/by-location" },
+	{ label: "Jobs by Type", href: "/jobs/by-type" },
 ];

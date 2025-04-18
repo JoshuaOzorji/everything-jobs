@@ -96,7 +96,13 @@ export type Job = {
 		}; // Change from string | undefined to this structure
 		slug: string;
 	};
-	location: string;
+	// location: string;
+	location?: {
+		name: string;
+		slug?: {
+			current: string;
+		};
+	};
 	jobType: string;
 	education?: string;
 	jobField: string;

@@ -333,7 +333,7 @@ export async function getJobsByTypePaginated(
 	typeSlug: string,
 	page = 1,
 	perPage = 10,
-): Promise<{ jobs: Job[]; totalCount: number }> {
+) {
 	const start = (page - 1) * perPage;
 	const end = start + perPage;
 
@@ -381,6 +381,75 @@ export async function getJobsByTypePaginated(
 	const totalCount = await client.fetch<number>(
 		groq`count(*[_type == "job" && defined(jobType) && jobType->slug.current == $typeSlug])`,
 		{ typeSlug },
+	);
+
+	return { jobs, totalCount };
+}
+
+export async function getJobLevels() {
+	return client.fetch(`
+    *[_type == "jobLevel"] | order(name asc) {
+      _id,
+      name,
+      "slug": slug.current,
+      "jobCount": count(*[_type == "job" && level._ref == ^._id])
+    }
+  `);
+}
+
+export async function getJobsByLevelPaginated(
+	levelSlug: string,
+	page = 1,
+	perPage = 10,
+) {
+	const start = (page - 1) * perPage;
+	const end = start + perPage;
+
+	const jobs = await client.fetch(
+		groq`*[_type == "job" && defined(level) && level->slug.current == $levelSlug] | order(publishedAt desc) [${start}...${end}] {
+      _id,
+      title,
+      "slug": {
+        "current": slug.current
+      },
+      "company": company->{
+        _id,
+        name,
+        logo{
+          asset{
+            _ref
+          }
+        }
+      },
+      salaryRange,
+      "location": location->{
+        _id,
+        name,
+        slug
+      },
+      "jobType": jobType->{
+        _id,
+        name
+      },
+      "level": level->{
+        _id,
+        name
+      },
+      "jobField": jobField->{
+        _id,
+        name
+      },
+      publishedAt,
+      description,
+      summary
+    }`,
+		{ levelSlug },
+	);
+
+	// Get total count for pagination
+	const totalCount = await client.fetch<number>(
+		groq`count(*[_type == "job" && defined(level) && level->slug.current == $levelSlug])`,
+		{ levelSlug },
 	);
 
 	return { jobs, totalCount };
