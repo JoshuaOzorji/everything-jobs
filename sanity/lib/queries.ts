@@ -454,6 +454,7 @@ export async function getJobsByLevelPaginated(
 
 	return { jobs, totalCount };
 }
+
 export interface JobReference {
 	_id: string;
 	jobField: { _ref: string };

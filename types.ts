@@ -78,8 +78,6 @@ export interface MainImage {
 // 	apply: any[];
 // }
 
-// types.ts - Create optimized type definitions
-
 export type Job = {
 	_id: string;
 	slug: {
@@ -93,17 +91,19 @@ export type Job = {
 			asset?: {
 				_ref: string;
 			};
-		}; // Change from string | undefined to this structure
+		};
 		slug: string;
 	};
-	// location: string;
 	location?: {
 		name: string;
 		slug?: {
 			current: string;
 		};
 	};
-	jobType: string;
+	// Change from string to object
+	jobType: {
+		name: string;
+	};
 	education?: string;
 	jobField: string;
 	salaryRange?: {
@@ -112,7 +112,10 @@ export type Job = {
 	};
 	publishedAt: string;
 	deadline?: string;
-	level?: string;
+	// Change from string to object
+	level?: {
+		name: string;
+	};
 	experienceRange?: {
 		min: number;
 		max: number;

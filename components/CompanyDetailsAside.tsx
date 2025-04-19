@@ -181,7 +181,7 @@ export default function CompanyDetailsAside({
 			</div>
 
 			{/* Save or share section */}
-			<div className='p-4'>
+			{/* <div className='p-4'>
 				<button className='flex items-center justify-center w-full gap-1 px-4 py-2 text-sm font-medium text-white transition duration-200 bg-blue-600 rounded hover:bg-blue-700'>
 					<FiBookmark className='font-bold' />
 					Save Company
@@ -198,7 +198,7 @@ export default function CompanyDetailsAside({
 						<FaLinkedin />
 					</button>
 				</div>
-			</div>
+			</div> */}
 		</div>
 	);
 }

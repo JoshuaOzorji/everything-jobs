@@ -13,7 +13,7 @@ const MainNav = ({
 	isSearchOpen: boolean;
 }) => {
 	return (
-		<nav className='border-b font-poppins'>
+		<nav className='border-b font-poppins border-white'>
 			<div className='flex items-center justify-between w-[96%] mx-auto py-4 px-2 text-base'>
 				<Link href='/'>
 					<Image src={logo} alt='logo' />
