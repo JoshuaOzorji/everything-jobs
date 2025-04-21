@@ -17,6 +17,15 @@ export interface Company {
 		slug: { current: string };
 	};
 	jobs?: Job[];
+	totalJobs?: number;
+}
+
+export interface PaginatedCompanyData extends Company {
+	pagination: {
+		currentPage: number;
+		total: number;
+		perPage: number;
+	};
 }
 
 export interface State {
@@ -100,7 +109,6 @@ export type Job = {
 			current: string;
 		};
 	};
-	// Change from string to object
 	jobType: {
 		name: string;
 	};
@@ -112,7 +120,6 @@ export type Job = {
 	};
 	publishedAt: string;
 	deadline?: string;
-	// Change from string to object
 	level?: {
 		name: string;
 	};

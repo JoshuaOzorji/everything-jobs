@@ -75,6 +75,10 @@ body {
 	@apply mb-2 font-semibold text-myBlack font-poppins;
 }
 
+.footer-h2 {
+	@apply text-base font-semibold mb-2 font-poppins;
+}
+
 .progress-bar-indicator::after {
 	content: "";
 	position: absolute;

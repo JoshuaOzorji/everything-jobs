@@ -54,7 +54,7 @@ export default async function CompaniesPage() {
 											company._id
 										}
 										fallback={
-											<div className='flex items-center justify-center w-full h-full min-h-[150px]'>
+											<div className='flex items-center justify-center w-full h-full min-h-[200px]'>
 												<LoadingComponent />
 											</div>
 										}>

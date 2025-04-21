@@ -104,7 +104,7 @@ export default function Pagination({
 				<Link
 					href={`${pathname}?page=${currentPage + 1}`}
 					className='px-2 py-1 border rounded hover:bg-gray-100'>
-					Next
+					Next <span aria-hidden='true'></span>
 				</Link>
 			)}
 		</div>

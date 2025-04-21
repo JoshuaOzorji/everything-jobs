@@ -1,28 +1,13 @@
 import React from "react";
 import Link from "next/link";
 import { formatDate2 } from "@/lib/formatDate2";
-
-type JobType = {
-	_id: string;
-	title: string;
-	slug: { current: string };
-	publishedAt: string;
-	deadline?: string;
-	jobType: { name: string };
-	location: {
-		name: string;
-		states?: string[];
-	} | null;
-	level: { name: string };
-};
+import { Job } from "@/types";
 
 interface CompanyJobCardProps {
-	job: JobType;
+	job: Job;
 }
 
 const CompanyJobCard: React.FC<CompanyJobCardProps> = ({ job }) => {
-	// const locationDisplay = job.location?.name || "Nigeria";
-
 	const locationDisplay = job.location?.name || "Nigeria";
 
 	return (
@@ -43,7 +28,7 @@ const CompanyJobCard: React.FC<CompanyJobCardProps> = ({ job }) => {
 					{job.jobType.name}
 				</span>
 				<span className='bg-purple-100 text-purple-800  font-medium px-2.5 py-0.5 rounded first-letter:uppercase'>
-					{job.level.name}
+					{job.level?.name}
 				</span>
 			</div>
 

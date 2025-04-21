@@ -11,9 +11,7 @@ type HomepageProps = {
 	};
 };
 
-// Mark as async function to handle searchParams
 async function Homepage({ searchParams }: HomepageProps) {
-	// Await searchParams before accessing its properties
 	const pageParam = (await searchParams)?.page;
 	const page = pageParam ? parseInt(pageParam) : 1;
 
