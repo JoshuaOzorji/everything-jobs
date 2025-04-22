@@ -40,7 +40,7 @@ const CompaniesAside = async () => {
 	return (
 		<div className='p-4 bg-white rounded-lg shadow-sm md:px-6'>
 			<h3 className='mb-4 text-lg font-bold font-poppins'>
-				Top Companies
+				Top Companies Hiring
 			</h3>
 
 			{topCompanies.length === 0 ? (

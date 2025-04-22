@@ -15,10 +15,10 @@ const SearchPage = () => {
 	const searchParams = useSearchParams();
 	const router = useRouter();
 	const [jobs, setJobs] = useState<JobQuery[]>([]);
-	const [loading, setLoading] = useState(true);
 	const [filters, setFilters] = useState<FilterOptions | null>(null);
 	const [showFilters, setShowFilters] = useState(false);
 	const [hasSearched, setHasSearched] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	// Get current filter values from URL
 	const query = searchParams.get("q") || "";
@@ -31,7 +31,7 @@ const SearchPage = () => {
 	// Fetch jobs based on search params
 	useEffect(() => {
 		const fetchJobs = async () => {
-			setLoading(true);
+			setIsLoading(true);
 			try {
 				const params = new URLSearchParams();
 				if (query) params.append("q", query);
@@ -70,7 +70,7 @@ const SearchPage = () => {
 			} catch (error) {
 				console.error("Error fetching jobs:", error);
 			} finally {
-				setLoading(false);
+				setIsLoading(false);
 			}
 		};
 
@@ -96,77 +96,56 @@ const SearchPage = () => {
 
 	return (
 		<main className='mx-auto'>
-			{loading ? (
-				<div className='h-screen flex items-center justify-center w-full'>
-					<LoadingComponent />
-				</div>
-			) : (
-				<>
-					<div className='px-2 bg-white rounded-md'>
-						<SearchHeader
-							query={query}
-							location={location}
-							jobCount={jobs.length}
-						/>
+			<div className='px-2 bg-white rounded-md'>
+				<SearchHeader
+					query={query}
+					location={location}
+					jobCount={jobs.length}
+				/>
 
-						<FilterToggle
-							showFilters={
-								showFilters
-							}
-							setShowFilters={
-								setShowFilters
-							}
-						/>
+				<FilterToggle
+					showFilters={showFilters}
+					setShowFilters={setShowFilters}
+				/>
 
-						<ActiveFilters
-							location={location}
-							jobType={jobType}
-							jobLevel={jobLevel}
-							education={education}
-							jobField={jobField}
-							query={query}
-							updateFilters={
-								updateFilters
-							}
-						/>
-					</div>
+				<ActiveFilters
+					location={location}
+					jobType={jobType}
+					jobLevel={jobLevel}
+					education={education}
+					jobField={jobField}
+					query={query}
+					updateFilters={updateFilters}
+				/>
+			</div>
 
-					<div className='flex flex-col gap-4 my-2 md:flex-row'>
-						<FilterSidebar
-							filters={filters}
-							query={query}
-							location={location}
-							jobType={jobType}
-							jobLevel={jobLevel}
-							education={education}
-							jobField={jobField}
-							showFilters={
-								showFilters
-							}
-							updateFilters={
-								updateFilters
-							}
-							clearAllFilters={
-								clearAllFilters
-							}
-						/>
+			<div className='flex flex-col gap-6 my-2 md:flex-row'>
+				{filters === null ? (
+					<div className='md:w-1/4 min-h-[60vh] bg-gray-100 animate-pulse rounded'></div>
+				) : (
+					<FilterSidebar
+						filters={filters}
+						query={query}
+						location={location}
+						jobType={jobType}
+						jobLevel={jobLevel}
+						education={education}
+						jobField={jobField}
+						showFilters={showFilters}
+						updateFilters={updateFilters}
+						clearAllFilters={
+							clearAllFilters
+						}
+					/>
+				)}
 
-						{/* <SearchResults
-					isLoading={loading}
+				<SearchResults
+					isLoading={isLoading}
 					jobs={jobs}
-				/> */}
-
-						<SearchResults
-							isLoading={loading}
-							jobs={jobs}
-							hasSearched={
-								hasSearched
-							}
-							query={query}
-						/>
-					</div>
-				</>
-			)}
+					hasSearched={hasSearched}
+					query={query}
+				/>
+			</div>
 		</main>
 	);
 };

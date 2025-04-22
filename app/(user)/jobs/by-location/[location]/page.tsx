@@ -12,6 +12,10 @@ type Params = {
 	params: Promise<{ location: string }>;
 };
 
+type SearchParams = {
+	page?: string;
+};
+
 type LocationType = {
 	slug: string;
 	name: string;
@@ -48,13 +52,26 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 	};
 }
 
-export default async function LocationJobsPage({ params }: Params) {
+export default async function LocationJobsPage({
+	params,
+	searchParams,
+}: {
+	params: Promise<{ location: string }>;
+	searchParams: Promise<SearchParams>;
+}) {
 	const { location } = await params;
+	const resolvedSearchParams = await searchParams;
 
 	// Validate location parameter
 	if (!location || location === "null") {
 		return notFound();
 	}
+
+	// Convert page to number, default to 1
+	const currentPage = resolvedSearchParams?.page
+		? parseInt(resolvedSearchParams.page, 10)
+		: 1;
+	const perPage = 10;
 
 	const locations: LocationType[] = await getLocations();
 	const locationData = locations.find(
@@ -65,7 +82,11 @@ export default async function LocationJobsPage({ params }: Params) {
 		return notFound();
 	}
 
-	const jobs = await getJobsByLocation(location);
+	const { jobs, totalCount } = await getJobsByLocation(
+		location,
+		currentPage,
+		perPage,
+	);
 
 	return (
 		<SubLayout aside={<AsideMain />}>
@@ -76,7 +97,7 @@ export default async function LocationJobsPage({ params }: Params) {
 
 				<div className='page-sub-div'>
 					<p className='page-p'>
-						Browse {jobs.length} job
+						Browse {totalCount} job
 						opportunities in{" "}
 						{locationData.name}. Find your
 						next career opportunity locally.
@@ -115,8 +136,12 @@ export default async function LocationJobsPage({ params }: Params) {
 					</div>
 				)}
 
-				{jobs.length > 10 && (
-					<Pagination total={jobs.length} />
+				{totalCount > perPage && (
+					<Pagination
+						currentPage={currentPage}
+						total={totalCount}
+						perPage={perPage}
+					/>
 				)}
 			</div>
 		</SubLayout>

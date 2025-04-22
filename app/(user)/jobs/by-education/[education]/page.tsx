@@ -12,6 +12,10 @@ type Params = {
 	params: Promise<{ education: string }>;
 };
 
+type SearchParams = {
+	page?: string;
+};
+
 type EducationLevelType = {
 	slug: string;
 	name: string;
@@ -51,12 +55,26 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 	};
 }
 
-export default async function EducationJobsPage({ params }: Params) {
+export default async function EducationJobsPage({
+	params,
+	searchParams,
+}: {
+	params: Promise<{ education: string }>;
+	searchParams: Promise<SearchParams>;
+}) {
 	const { education } = await params;
+	const resolvedSearchParams = await searchParams;
+
 	// Validate education parameter
 	if (!education || education === "null") {
 		return notFound();
 	}
+
+	// Convert page to number, default to 1
+	const currentPage = resolvedSearchParams?.page
+		? parseInt(resolvedSearchParams.page, 10)
+		: 1;
+	const perPage = 10;
 
 	const educationLevels: EducationLevelType[] =
 		await getEducationLevels();
@@ -68,7 +86,11 @@ export default async function EducationJobsPage({ params }: Params) {
 		return notFound();
 	}
 
-	const jobs = await getJobsByEducation(education);
+	const { jobs, totalCount } = await getJobsByEducation(
+		education,
+		currentPage,
+		perPage,
+	);
 
 	return (
 		<SubLayout aside={<AsideMain />}>
@@ -81,7 +103,7 @@ export default async function EducationJobsPage({ params }: Params) {
 
 				<div className='page-sub-div'>
 					<p className='page-p'>
-						Browse {jobs.length} job
+						Browse {totalCount} job
 						opportunities for{" "}
 						{educationData.displayName}{" "}
 						professionals. Find your next
@@ -124,8 +146,12 @@ export default async function EducationJobsPage({ params }: Params) {
 					</div>
 				)}
 
-				{jobs.length > 10 && (
-					<Pagination total={jobs.length} />
+				{totalCount > perPage && (
+					<Pagination
+						currentPage={currentPage}
+						total={totalCount}
+						perPage={perPage}
+					/>
 				)}
 			</div>
 		</SubLayout>

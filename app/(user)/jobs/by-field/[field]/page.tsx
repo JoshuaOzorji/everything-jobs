@@ -12,6 +12,10 @@ type Params = {
 	params: Promise<{ field: string }>;
 };
 
+type SearchParams = {
+	page?: string;
+};
+
 type JobFieldType = {
 	slug: string;
 	name: string;
@@ -49,13 +53,26 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 	};
 }
 
-export default async function JobsByFieldPage({ params }: Params) {
+export default async function JobsByFieldPage({
+	params,
+	searchParams,
+}: {
+	params: Promise<{ field: string }>;
+	searchParams: Promise<SearchParams>;
+}) {
 	const { field: fieldSlug } = await params;
+	const resolvedSearchParams = await searchParams;
 
 	// Validate field parameter
 	if (!fieldSlug || fieldSlug === "null") {
 		return notFound();
 	}
+
+	// Convert page to number, default to 1
+	const currentPage = resolvedSearchParams?.page
+		? parseInt(resolvedSearchParams.page, 10)
+		: 1;
+	const perPage = 10;
 
 	const jobFields: JobFieldType[] = await getJobFields();
 	const fieldData = jobFields.find(
@@ -65,7 +82,11 @@ export default async function JobsByFieldPage({ params }: Params) {
 		return notFound();
 	}
 
-	const jobs = await getJobsByField(fieldSlug);
+	const { jobs, totalCount } = await getJobsByField(
+		fieldSlug,
+		currentPage,
+		perPage,
+	);
 
 	return (
 		<SubLayout aside={<AsideMain />}>
@@ -78,7 +99,7 @@ export default async function JobsByFieldPage({ params }: Params) {
 
 				<div className='page-sub-div'>
 					<p className='page-p'>
-						Browse {jobs.length} job
+						Browse {totalCount} job
 						opportunities in{" "}
 						{fieldData.displayName}. Find
 						your next career opportunity in
@@ -118,8 +139,12 @@ export default async function JobsByFieldPage({ params }: Params) {
 					</div>
 				)}
 
-				{jobs.length > 10 && (
-					<Pagination total={jobs.length} />
+				{totalCount > perPage && (
+					<Pagination
+						currentPage={currentPage}
+						total={totalCount}
+						perPage={perPage}
+					/>
 				)}
 			</div>
 		</SubLayout>

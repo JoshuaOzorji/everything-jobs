@@ -4,7 +4,8 @@ const LoadingSpinner = ({ size = "md" }) => {
 	const sizeClass = `loading-${size}`;
 
 	return (
-		<div className='flex items-center justify-center h-full w-full'>
+		<div
+			className={`flex items-center justify-center w-full h-full`}>
 			<span
 				className={`loading loading-spinner loading-sm text-pry ${sizeClass}`}
 			/>
@@ -12,6 +13,6 @@ const LoadingSpinner = ({ size = "md" }) => {
 	);
 };
 
-export function LoadingComponent() {
+export function LoadingComponent({ className = "" }) {
 	return <LoadingSpinner />;
 }
