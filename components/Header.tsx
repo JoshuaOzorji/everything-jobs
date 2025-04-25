@@ -7,9 +7,22 @@ import SearchComponent from "./SearchComponent";
 
 const Header = () => {
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 	const toggleSearch = () => {
 		setIsSearchOpen((prev) => !prev);
+		// Close menu when search is opened
+		if (!isSearchOpen) {
+			setIsMenuOpen(false);
+		}
+	};
+
+	const toggleMenu = () => {
+		setIsMenuOpen((prev) => !prev);
+		// Close search when menu is opened
+		if (!isMenuOpen) {
+			setIsSearchOpen(false);
+		}
 	};
 
 	return (
@@ -20,6 +33,8 @@ const Header = () => {
 					<MobileNav
 						toggleSearch={toggleSearch}
 						isSearchOpen={isSearchOpen}
+						isMenuOpen={isMenuOpen}
+						toggleMenu={toggleMenu}
 					/>
 				</div>
 				<div className='hidden md:block'>
