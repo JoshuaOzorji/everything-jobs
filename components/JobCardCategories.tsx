@@ -1,7 +1,7 @@
 import { JobCardProps } from "@/types";
 import Image from "next/image";
 import { formatDate } from "@/lib/formatDate";
-import { urlFor } from "../sanity/lib/image";
+import { urlForImage } from "../sanity/lib/image";
 import placeholder from "@/public/placeholderCompany.png";
 import { PortableText } from "@portabletext/react";
 import { customSerializers } from "@/lib/customSerializers";
@@ -9,7 +9,7 @@ import Link from "next/link";
 
 const JobCardCategories = ({ job }: JobCardProps) => {
 	const imageUrl = job.company.logo?.asset?._ref
-		? urlFor(job.company.logo).url()
+		? urlForImage(job.company.logo).url()
 		: placeholder;
 
 	return (
@@ -61,23 +61,29 @@ const JobCardCategories = ({ job }: JobCardProps) => {
 						/>
 					</div>
 					<div className='text-[12px] md:text-sm text-black'>
-						<span className='flex gap-3'>
-							<p className='px-2 bg-blue-100 rounded-md text-pry first-letter:uppercase'>
-								{
-									job
-										.jobType
-										?.name
-								}
-							</p>
+						<div className='flex gap-3'>
+							<Link
+								href={`/jobs/by-type/${job.jobType?.name}`}>
+								<p className='px-2 bg-blue-100 rounded-md text-pry first-letter:uppercase hover:underline'>
+									{
+										job
+											.jobType
+											?.name
+									}
+								</p>
+							</Link>
 
-							<p className='px-2 text-green-800 bg-green-100 rounded-md first-letter:uppercase'>
-								{
-									job
-										.level
-										?.name
-								}
-							</p>
-						</span>
+							<Link
+								href={`/jobs/by-level/${job.level?.name}`}>
+								<p className='px-2 text-green-800 bg-green-100 rounded-md first-letter:uppercase hover:underline'>
+									{
+										job
+											.level
+											?.name
+									}
+								</p>
+							</Link>
+						</div>
 					</div>
 				</div>
 			</div>

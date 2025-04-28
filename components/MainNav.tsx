@@ -49,7 +49,7 @@ const MainNav = ({
 					</button>
 
 					<Link href='/auth/signup'>
-						<button className='flex flex-col items-center px-2 py-1 text-white rounded-md bg-pry'>
+						<button className='flex flex-col items-center px-2 py-1 text-white rounded-md bg-pry '>
 							<p>Post Job</p>
 						</button>
 					</Link>

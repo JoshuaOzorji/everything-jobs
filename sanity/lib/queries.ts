@@ -1,8 +1,8 @@
-import { groq } from "next-sanity";
+import { defineQuery, groq } from "next-sanity";
 import { client } from "./client";
-import { RelatedJob } from "@/components/RelatedJobs";
 import { getDisplayNameForEducation, getDisplayNameForJobField } from "./data";
 import { Job } from "@/types";
+import { SanityClient } from "next-sanity";
 
 export const searchJobsQuery = groq`
   *[_type == "job" &&
@@ -484,42 +484,61 @@ export async function getJobsByLevelPaginated(
 	return { jobs, totalCount };
 }
 
-export interface JobReference {
+type JobReference = {
 	_id: string;
-	jobField: { _ref: string };
-	company: { _ref: string };
-	jobType: { _ref: string };
-	location: { _ref: string };
-}
+	name: string;
+};
+
+type CurrentJob = {
+	_id: string;
+	jobField?: JobReference | string;
+	jobType?: JobReference | string;
+	level?: JobReference | string;
+	education?: JobReference | string;
+	location?: JobReference | string;
+	jobFieldId?: string;
+	jobTypeId?: string;
+	levelId?: string;
+	educationId?: string;
+	locationId?: string;
+};
+
+export const relatedJobsQuery = groq`
+  *[_type == "job" && _id != $currentJobId] {
+    _id,
+    title,
+    "slug": slug.current,
+    publishedAt,
+    "company": company->name,
+    "companySlug": company->slug.current,
+    "jobType": jobType->name,
+    "location": location->name,
+    "jobField": jobField->name
+  } | score(
+    (jobField->_id == $jobFieldId ? 5 : 0) +
+    (jobType->_id == $jobTypeId ? 3 : 0) +
+    (level->_id == $levelId ? 2 : 0) +
+    (education->_id == $educationId ? 2 : 0) +
+    (location->_id == $locationId ? 1 : 0)
+  ) | order(^score desc, publishedAt desc)[0...6]
+`;
 
 export async function fetchRelatedJobs(
-	currentJob: JobReference,
-): Promise<RelatedJob[]> {
-	return client.fetch(
-		`*[_type == "job" && 
-      _id != $currentJobId && 
-      (!defined(deadline) || deadline > now())
-    ] {
-      _id,
-      title,
-      "slug": slug.current,
-      "company": company->name,
-      "companyLogo": company->logo.asset->url,
-      "location": location->name,
-      "jobType": jobType->name,
-      publishedAt,
-      "score": 0
-        + (jobField._ref == $jobFieldRef ? 5 : 0)
-        + (company._ref == $companyRef ? 4 : 0)
-        + (jobType._ref == $jobTypeRef ? 3 : 0)
-        + (location._ref == $locationRef ? 3 : 0)
-    } | order(score desc) [0...4]`,
-		{
-			currentJobId: currentJob._id,
-			jobFieldRef: currentJob.jobField._ref,
-			companyRef: currentJob.company._ref,
-			jobTypeRef: currentJob.jobType._ref,
-			locationRef: currentJob.location._ref,
-		},
-	);
+	client: SanityClient,
+	currentJob: CurrentJob,
+): Promise<any[]> {
+	if (!currentJob) return [];
+
+	// Prepare parameters for the query
+	const params = {
+		currentJobId: currentJob._id,
+		jobFieldId: currentJob.jobFieldId || "",
+		jobTypeId: currentJob.jobTypeId || "",
+		levelId: currentJob.levelId || "",
+		educationId: currentJob.educationId || "",
+		locationId: currentJob.locationId || "",
+	};
+
+	// Execute query
+	return client.fetch(relatedJobsQuery, params);
 }

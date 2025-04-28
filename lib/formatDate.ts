@@ -8,19 +8,19 @@ export const formatDate = (date: Date): string => {
 	if (minutesDiff < 1) {
 		return "just now";
 	} else if (minutesDiff < 60) {
-		return `${minutesDiff} min${minutesDiff > 1 ? "s" : ""} ago`;
+		return `${minutesDiff} min${minutesDiff > 1 ? "s" : ""} `;
 	} else if (hoursDiff < 24) {
-		return `${hoursDiff} hour${hoursDiff > 1 ? "s" : ""} ago`;
+		return `${hoursDiff} hour${hoursDiff > 1 ? "s" : ""} `;
 	} else if (daysDiff === 1) {
 		return "yesterday";
 	} else if (daysDiff < 7) {
-		return `${daysDiff} days ago`;
+		return `${daysDiff} d`;
 	} else if (daysDiff < 30) {
 		const weeksDiff = Math.floor(daysDiff / 7);
-		return `${weeksDiff}w ago`;
+		return `${weeksDiff}w`;
 	} else if (daysDiff < 365) {
 		const monthsDiff = Math.floor(daysDiff / 30);
-		return `${monthsDiff}mo ago`;
+		return `${monthsDiff}mo `;
 	} else {
 		return date.toLocaleDateString("en-US", {
 			month: "short",

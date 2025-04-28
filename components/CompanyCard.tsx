@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { urlFor } from "@/sanity/lib/image";
+import { urlForImage } from "@/sanity/lib/image";
 import { Company } from "@/types";
 import placeholder from "@/public/placeholderCompany.png";
 
@@ -15,7 +15,7 @@ const SmallScreenCompanyCard = ({ company }: CompanyCardProps) => {
 				<div className='flex items-center justify-center rounded w-10 h-10'>
 					{company.logo ? (
 						<Image
-							src={urlFor(
+							src={urlForImage(
 								company.logo,
 							)
 								.width(50)
@@ -57,7 +57,7 @@ const LargeScreenCompanyCard = ({ company }: CompanyCardProps) => {
 			<div className='flex flex-col items-center justify-center mb-2'>
 				{company.logo ? (
 					<Image
-						src={urlFor(company.logo)
+						src={urlForImage(company.logo)
 							.width(200)
 							.height(100)
 							.url()}

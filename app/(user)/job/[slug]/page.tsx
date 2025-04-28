@@ -18,23 +18,28 @@ import { formatDate } from "@/lib/formatDate";
 import { RiUserStarFill } from "react-icons/ri";
 import { FaGraduationCap } from "react-icons/fa";
 import { MdErrorOutline } from "react-icons/md";
-
+import { urlForImage } from "@/sanity/lib/image";
+import { relatedJobsQuery } from "@/sanity/lib/queries";
+import RelatedJobs from "@/components/RelatedJobs";
 const JobDetails = lazy(() => import("@/components/JobDetails"));
 
-// Optimized query with direct projections
+export const revalidate = 3600;
+
 const jobQuery = defineQuery(groq`
   *[_type == "job" && slug.current == $slug][0]{
+		_id,
     title,
     summary,
     "company": company-> { 
       name,
-      "logo": logo.asset->url,
+      logo,
       "slug": slug.current 
     },
     "location": location->name,
     "jobType": jobType->name,
     "education": education->name,
     "jobField": jobField->name,
+		"level": level->name,
     salaryRange,
     publishedAt,
     deadline,
@@ -43,11 +48,15 @@ const jobQuery = defineQuery(groq`
     requirements,
     responsibilities,
     recruitmentProcess,
-    apply
+    apply,
+		// Reference IDs needed for related job query
+    "jobFieldId": jobField->_id,
+    "jobTypeId": jobType->_id,
+    "levelId": level->_id,
+    "educationId": education->_id,
+    "locationId": location->_id,
   }
 `);
-
-export const revalidate = 3600;
 
 export async function generateStaticParams() {
 	// Pre-render popular job listings
@@ -75,7 +84,19 @@ export default async function JobPage({ params }: PageProps) {
 		return <div>Job not found.</div>;
 	}
 
-	const imageUrl = job.company.logo || placeholder;
+	// Fetch related jobs
+	const relatedJobs = await client.fetch(relatedJobsQuery, {
+		currentJobId: job._id,
+		jobFieldId: job.jobFieldId,
+		jobTypeId: job.jobTypeId,
+		levelId: job.levelId,
+		educationId: job.educationId,
+		locationId: job.locationId,
+	});
+
+	const imageUrl = job.company.logo?.asset?._ref
+		? urlForImage(job.company.logo).url()
+		: placeholder.src;
 
 	return (
 		<SubLayout aside={<AsideMain />}>
@@ -131,7 +152,13 @@ export default async function JobPage({ params }: PageProps) {
 						<div className='icon-container'>
 							<ImLocation className='icon' />
 							<span>Location: </span>
-							<p>{job.location}</p>
+							<p>
+								{
+									job
+										.location
+										?.name
+								}
+							</p>
 						</div>
 
 						{/* Job metadata fields */}
@@ -153,6 +180,11 @@ export default async function JobPage({ params }: PageProps) {
 					}>
 					<JobDetails job={job} />
 				</Suspense>
+
+				{/* Related Jobs section */}
+				{relatedJobs && relatedJobs.length > 0 && (
+					<RelatedJobs jobs={relatedJobs} />
+				)}
 			</div>
 		</SubLayout>
 	);
@@ -188,7 +220,7 @@ function JobMetadata({ job }: { job: Job }) {
 			<div className='icon-container'>
 				<IoBriefcase className='icon' />
 				<span>Job-Type:</span>
-				<p className='job-input'>{job.jobType}</p>
+				<p className='job-input'>{job.jobType?.name}</p>
 			</div>
 
 			<div className='icon-container'>
@@ -201,7 +233,9 @@ function JobMetadata({ job }: { job: Job }) {
 				<div className='icon-container2'>
 					<RiUserStarFill className='icon' />
 					<span>Career Levels: </span>
-					<p className='job-input'>{job.level}</p>
+					<p className='job-input'>
+						{job.level?.name}
+					</p>
 				</div>
 			)}
 

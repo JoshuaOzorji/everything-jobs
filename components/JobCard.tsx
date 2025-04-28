@@ -1,7 +1,7 @@
 import { JobCardProps } from "@/types";
 import Image from "next/image";
 import { formatDate } from "@/lib/formatDate";
-import { urlFor } from "../sanity/lib/image";
+import { urlForImage } from "../sanity/lib/image";
 import placeholder from "@/public/placeholderCompany.png";
 import { PortableText } from "@portabletext/react";
 import { customSerializers } from "@/lib/customSerializers";
@@ -9,7 +9,7 @@ import Link from "next/link";
 
 const JobCard = ({ job }: JobCardProps) => {
 	const imageUrl = job.company.logo?.asset?._ref
-		? urlFor(job.company.logo).url()
+		? urlForImage(job.company.logo).url()
 		: placeholder;
 
 	const locationDisplay = job.location?.name || "Nigeria";
@@ -64,19 +64,35 @@ const JobCard = ({ job }: JobCardProps) => {
 					</div>
 
 					<div className='flex flex-wrap gap-3 text-xs md:text-[0.85rem] my-1'>
-						<span className='bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded flex items-center'>
-							<p className='font-medium first-letter:uppercase'>
+						<Link
+							href={`/jobs/by-location/${job.location?.slug}`}>
+							<button className='font-medium first-letter:uppercase hover:underline bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded flex items-center'>
 								{
 									locationDisplay
 								}
-							</p>
-						</span>
-						<span className='bg-green-100 text-green-800 font-medium px-2.5 py-0.5 rounded first-letter:uppercase'>
-							{job.jobType?.name}
-						</span>
-						<span className='bg-purple-100 text-purple-800 font-medium px-2.5 py-0.5 rounded first-letter:uppercase'>
-							{job.level?.name}
-						</span>
+							</button>
+						</Link>
+
+						<Link
+							href={`jobs/by-type/${job.jobType?.name}`}>
+							<button className='bg-green-100 text-green-800 font-medium px-2.5 py-0.5 rounded first-letter:uppercase hover:underline'>
+								{
+									job
+										.jobType
+										?.name
+								}
+							</button>
+						</Link>
+						<Link
+							href={`/jobs/by-level/${job.level?.name}`}>
+							<button className='bg-purple-100 text-purple-800 font-medium px-2.5 py-0.5 rounded first-letter:uppercase'>
+								{
+									job
+										.level
+										?.name
+								}
+							</button>
+						</Link>
 					</div>
 				</div>
 			</div>

@@ -55,7 +55,7 @@ body {
 }
 
 .page-h1 {
-	@apply mb-2 text-2xl font-bold md:text-3xl font-poppins;
+	@apply mb-2 text-2xl font-bold md:text-3xl font-poppins first-letter:uppercase;
 }
 
 .page-sub-div {

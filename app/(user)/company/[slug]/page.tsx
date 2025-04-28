@@ -2,7 +2,7 @@ import { groq } from "next-sanity";
 import { client } from "@/sanity/lib/client";
 import Image from "next/image";
 import Link from "next/link";
-import { urlFor } from "@/sanity/lib/image";
+import { urlForImage } from "@/sanity/lib/image";
 import { notFound } from "next/navigation";
 import { Company, Job, PaginatedCompanyData } from "@/types";
 import SubLayout from "@/components/SubLayout";
@@ -16,8 +16,10 @@ import Pagination from "@/components/PaginationComponent";
 import { Suspense } from "react";
 import { LoadingComponent } from "@/components/Loading";
 
+export const revalidate = 3600; // Revalidate every hour
+
 export async function generateStaticParams() {
-	const query = groq`*[_type == "company"][0...10].slug.current`;
+	const query = groq`*[_type == "company"][0...50].slug.current`;
 	const slugs = await client.fetch<string[]>(query);
 	return slugs.map((slug) => ({ slug }));
 }
@@ -71,7 +73,7 @@ const companyJobsInfoQuery = groq`
 async function getAllCompanyData(
 	slug: string,
 	page: number = 1,
-	perPage: number = 4,
+	perPage: number = 10,
 ): Promise<{ companyData: PaginatedCompanyData; jobsInfo: Job[] } | null> {
 	// First fetch the company details
 	const company = await client.fetch<Company & { totalJobs: number }>(
@@ -134,7 +136,7 @@ function CompanyContent({
 						<div className='flex items-center justify-center flex-shrink-0 w-[8vh] h-[8vh] md:w-[20vh] md:h-[20vh]'>
 							{company.logo?.asset ? (
 								<Image
-									src={urlFor(
+									src={urlForImage(
 										company.logo,
 									).url()}
 									alt={

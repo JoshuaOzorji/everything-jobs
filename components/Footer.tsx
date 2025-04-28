@@ -21,12 +21,12 @@ const Footer = () => {
 	const currentYear = new Date().getFullYear();
 
 	return (
-		<footer className='mt-12 text-white bg-gray-900 font-openSans'>
+		<footer className='mt-12 text-white bg-[#0a2461] font-openSans'>
 			{/* Main Footer Content */}
 			<div className='w-[96%] mx-auto py-12 px-2 md:px-4 text-sm'>
-				<div className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4'>
+				<div className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-5'>
 					{/* Company Info & Logo */}
-					<div>
+					<div className='lg:col-span-2'>
 						<Link
 							href='/'
 							className='inline-block mb-6'>
@@ -74,8 +74,8 @@ const Footer = () => {
 						</div>
 					</div>
 
+					{/* CONTENTS */}
 					{/* Quick Links */}
-
 					<div>
 						<h3 className='footer-h2'>
 							Find Jobs
@@ -160,7 +160,7 @@ const Footer = () => {
 									id='email'
 									type='email'
 									placeholder='Your email address'
-									className='w-full px-4 py-2 text-white bg-gray-800 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
+									className='w-full px-4 py-2 text-white border border-gray-700 rounded bg-slate-200 focus:outline-none'
 									{...register(
 										"email",
 										{
@@ -193,15 +193,15 @@ const Footer = () => {
 			</div>
 
 			{/* Bottom Footer - Copyright & Legal */}
-			<div className='py-6 text-sm bg-gray-950 md:px-2'>
+			<div className='py-3 text-xs bg-gray-950 md:px-2'>
 				<div className='w-[96%] mx-auto'>
 					<div className='flex flex-col items-center justify-between md:flex-row'>
-						<p className='text-sm text-gray-400'>
+						<p className='text-gray-400 '>
 							© {currentYear} Your
 							Job Search Company. All
 							rights reserved.
 						</p>
-						<div className='flex mt-4 space-x-6 md:mt-0'>
+						<div className='flex mt-2 space-x-6 md:mt-0'>
 							{legalLinks.map(
 								(
 									link,
@@ -212,7 +212,7 @@ const Footer = () => {
 										href={
 											link.href
 										}
-										className='text-sm text-gray-400 transition hover:text-white'>
+										className='text-gray-400 transition hover:text-white'>
 										{
 											link.label
 										}
@@ -228,11 +228,3 @@ const Footer = () => {
 };
 
 export default Footer;
-
-// import React from "react";
-
-// const Footer = () => {
-// 	return <div className='py-10 bg-red-400'>Footer</div>;
-// };
-
-// export default Footer;

@@ -65,27 +65,6 @@ export interface MainImage {
 	};
 	alt: string;
 }
-// export interface Job {
-// 	_id: string;
-// 	title: string;
-// 	slug: { current: string };
-// 	summary?: any[];
-// 	company: Company;
-// 	location: State;
-// 	jobType: JobType;
-// 	education: Education;
-// 	jobField: JobField;
-// 	salaryRange: SalaryRange;
-// 	publishedAt: string;
-// 	deadline: string;
-// 	level: JobLevel;
-// 	experienceRange: ExperienceRange;
-// 	requirements: string[];
-// 	responsibilities: string[];
-// 	recruitmentProcess: string[];
-// 	mainImage: MainImage;
-// 	apply: any[];
-// }
 
 export type Job = {
 	_id: string;
@@ -131,6 +110,12 @@ export type Job = {
 	responsibilities?: string[];
 	recruitmentProcess?: string[];
 	apply?: any[];
+
+	jobFieldId?: string;
+	jobTypeId?: string;
+	levelId?: string;
+	educationId?: string;
+	locationId?: string;
 };
 
 export interface JobCardProps {
