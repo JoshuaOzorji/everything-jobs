@@ -82,15 +82,8 @@ export type Job = {
 		};
 		slug: string;
 	};
-	location?: {
-		name: string;
-		slug?: {
-			current: string;
-		};
-	};
-	jobType: {
-		name: string;
-	};
+	location?: string;
+	jobType?: string;
 	education?: string;
 	jobField: string;
 	salaryRange?: {
@@ -99,9 +92,7 @@ export type Job = {
 	};
 	publishedAt: string;
 	deadline?: string;
-	level?: {
-		name: string;
-	};
+	level?: string;
 	experienceRange?: {
 		min: number;
 		max: number;

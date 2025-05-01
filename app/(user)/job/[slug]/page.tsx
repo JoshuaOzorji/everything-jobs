@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { lazy, Suspense } from "react";
 import Link from "next/link";
 import { groq, defineQuery } from "next-sanity";
@@ -19,44 +20,34 @@ import { RiUserStarFill } from "react-icons/ri";
 import { FaGraduationCap } from "react-icons/fa";
 import { MdErrorOutline } from "react-icons/md";
 import { urlForImage } from "@/sanity/lib/image";
-import { relatedJobsQuery } from "@/sanity/lib/queries";
+import { jobQuery, relatedJobsQuery } from "@/sanity/lib/queries";
 import RelatedJobs from "@/components/RelatedJobs";
+
 const JobDetails = lazy(() => import("@/components/JobDetails"));
+
+type PageProps = {
+	params: {
+		slug: string;
+	};
+};
 
 export const revalidate = 3600;
 
-const jobQuery = defineQuery(groq`
-  *[_type == "job" && slug.current == $slug][0]{
-		_id,
-    title,
-    summary,
-    "company": company-> { 
-      name,
-      logo,
-      "slug": slug.current 
-    },
-    "location": location->name,
-    "jobType": jobType->name,
-    "education": education->name,
-    "jobField": jobField->name,
-		"level": level->name,
-    salaryRange,
-    publishedAt,
-    deadline,
-    "level": level->name,
-    experienceRange,
-    requirements,
-    responsibilities,
-    recruitmentProcess,
-    apply,
-		// Reference IDs needed for related job query
-    "jobFieldId": jobField->_id,
-    "jobTypeId": jobType->_id,
-    "levelId": level->_id,
-    "educationId": education->_id,
-    "locationId": location->_id,
-  }
-`);
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+	// In generateMetadata, params might be a Promise in some cases
+	const params = await Promise.resolve(props.params);
+	const slug = params.slug;
+	const job: Job | null = await client.fetch(jobQuery, { slug });
+
+	return {
+		title: job
+			? `${job.title} at ${job.company.name} | Everything Jobs`
+			: "Job Details | Everything Jobs",
+		description:
+			"Find your next career opportunity with detailed job listings across Nigeria",
+		keywords: "jobs in Nigeria, career opportunities, employment, job search, job listings, Nigerian jobs, job vacancies",
+	};
+}
 
 export async function generateStaticParams() {
 	// Pre-render popular job listings
@@ -65,16 +56,6 @@ export async function generateStaticParams() {
 	);
 	return jobs.map((job: { slug: string }) => ({ slug: job.slug }));
 }
-
-type PageProps = {
-	params: {
-		slug: string;
-	};
-};
-
-type Params = {
-	params: Promise<{ location: string }>;
-};
 
 export default async function JobPage({ params }: PageProps) {
 	const { slug } = await params;
@@ -152,13 +133,7 @@ export default async function JobPage({ params }: PageProps) {
 						<div className='icon-container'>
 							<ImLocation className='icon' />
 							<span>Location: </span>
-							<p>
-								{
-									job
-										.location
-										?.name
-								}
-							</p>
+							<p>{job.location}</p>
 						</div>
 
 						{/* Job metadata fields */}
@@ -220,7 +195,7 @@ function JobMetadata({ job }: { job: Job }) {
 			<div className='icon-container'>
 				<IoBriefcase className='icon' />
 				<span>Job-Type:</span>
-				<p className='job-input'>{job.jobType?.name}</p>
+				<p className='job-input'>{job.jobType}</p>
 			</div>
 
 			<div className='icon-container'>
@@ -233,9 +208,7 @@ function JobMetadata({ job }: { job: Job }) {
 				<div className='icon-container2'>
 					<RiUserStarFill className='icon' />
 					<span>Career Levels: </span>
-					<p className='job-input'>
-						{job.level?.name}
-					</p>
+					<p className='job-input'>{job.level}</p>
 				</div>
 			)}
 

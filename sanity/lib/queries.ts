@@ -484,6 +484,38 @@ export async function getJobsByLevelPaginated(
 	return { jobs, totalCount };
 }
 
+export const jobQuery = defineQuery(groq`
+  *[_type == "job" && slug.current == $slug][0]{
+    _id,
+    title,
+    summary,
+    "company": company-> { 
+      name,
+      logo,
+      "slug": slug.current 
+    },
+    "location": location->name,
+    "jobType": jobType->name,
+    "education": education->name,
+    "jobField": jobField->name,
+    "level": level->name,
+    salaryRange,
+    publishedAt,
+    deadline,
+    experienceRange,
+    requirements,
+    responsibilities,
+    recruitmentProcess,
+    apply,
+    // Reference IDs needed for related job query
+    "jobFieldId": jobField->_id,
+    "jobTypeId": jobType->_id,
+    "levelId": level->_id,
+    "educationId": education->_id,
+    "locationId": location->_id,
+  }
+`);
+
 type JobReference = {
 	_id: string;
 	name: string;
@@ -513,14 +545,14 @@ export const relatedJobsQuery = groq`
     "companySlug": company->slug.current,
     "jobType": jobType->name,
     "location": location->name,
-    "jobField": jobField->name
-  } | score(
-    (jobField->_id == $jobFieldId ? 5 : 0) +
-    (jobType->_id == $jobTypeId ? 3 : 0) +
-    (level->_id == $levelId ? 2 : 0) +
-    (education->_id == $educationId ? 2 : 0) +
-    (location->_id == $locationId ? 1 : 0)
-  ) | order(^score desc, publishedAt desc)[0...6]
+    "jobField": jobField->name,
+    "score": 
+      (jobField->_id == $jobFieldId) * 5 +
+      (jobType->_id == $jobTypeId) * 3 +
+      (level->_id == $levelId) * 2 +
+      (education->_id == $educationId) * 2 +
+      (location->_id == $locationId) * 1
+  } | order(score desc, publishedAt desc)[0...4]
 `;
 
 export async function fetchRelatedJobs(

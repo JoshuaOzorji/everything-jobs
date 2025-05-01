@@ -19,9 +19,9 @@ const Footer = () => {
 	};
 
 	const currentYear = new Date().getFullYear();
-
+	// bg-[#0a2461]
 	return (
-		<footer className='mt-12 text-white bg-[#0a2461] font-openSans'>
+		<footer className='mt-12 text-black bg-[#cbcbd6] font-openSans'>
 			{/* Main Footer Content */}
 			<div className='w-[96%] mx-auto py-12 px-2 md:px-4 text-sm'>
 				<div className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-5'>
@@ -39,7 +39,7 @@ const Footer = () => {
 								priority
 							/>
 						</Link>
-						<p className='mb-4 text-gray-400'>
+						<p className='mb-4 text-myBlack'>
 							Find your dream job with
 							our comprehensive job
 							search platform. Connect
@@ -49,7 +49,7 @@ const Footer = () => {
 						<div className='flex space-x-4'>
 							<a
 								href='#'
-								className='text-gray-400 transition hover:text-white'>
+								className='text-myBlack transition hover:text-pry'>
 								<span className='sr-only'>
 									Facebook
 								</span>
@@ -57,7 +57,7 @@ const Footer = () => {
 							</a>
 							<a
 								href='#'
-								className='text-gray-400 transition hover:text-white'>
+								className='text-myBlack transition hover:text-pry'>
 								<span className='sr-only'>
 									Twitter
 								</span>
@@ -65,7 +65,7 @@ const Footer = () => {
 							</a>
 							<a
 								href='#'
-								className='text-gray-400 transition hover:text-white'>
+								className='text-myBlack transition hover:text-pry'>
 								<span className='sr-only'>
 									LinkedIn
 								</span>
@@ -93,7 +93,7 @@ const Footer = () => {
 											href={
 												link.href
 											}
-											className='text-gray-400 transition hover:text-white'>
+											className='text-myBlack transition hover:text-pry'>
 											{
 												link.label
 											}
@@ -122,7 +122,7 @@ const Footer = () => {
 											href={
 												link.href
 											}
-											className='text-gray-400 transition hover:text-white'>
+											className='text-myBlack transition hover:text-pry'>
 											{
 												link.label
 											}
@@ -138,7 +138,7 @@ const Footer = () => {
 						<h3 className='footer-h2'>
 							Stay Updated
 						</h3>
-						<p className='mb-4 text-gray-400'>
+						<p className='mb-4 text-myBlack'>
 							Subscribe to our
 							newsletter for the
 							latest job opportunities

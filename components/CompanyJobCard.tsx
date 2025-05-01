@@ -19,15 +19,16 @@ const CompanyJobCard: React.FC<CompanyJobCardProps> = ({ job }) => {
 			</Link>
 
 			<div className='flex flex-wrap gap-2 mb-3 text-xs md:text-[0.85rem]'>
-				<span className='bg-blue-100 text-blue-800  px-2.5 py-0.5 rounded flex items-center'>
-					<p className='first-letter:uppercase font-medium'>
+				<span className='bg-blue-100 text-blue-800  px-2.5 py-0.5 rounded flex items-center first-letter:uppercase font-medium'>
+					<Link
+						href={`/jobs/by-location/${job.location?.name}`}>
 						{locationDisplay}
-					</p>
+					</Link>
 				</span>
 				<span className='bg-green-100 text-green-800 font-medium px-2.5 py-0.5 rounded first-letter:uppercase'>
 					<Link
 						href={`/jobs/by-type/${job.jobType?.name}`}>
-						{job.jobType.name}
+						{job.jobType}
 					</Link>
 				</span>
 				<span className='bg-purple-100 text-purple-800  font-medium px-2.5 py-0.5 rounded first-letter:uppercase'>
