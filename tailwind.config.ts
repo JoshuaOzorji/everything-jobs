@@ -27,7 +27,7 @@ export default {
 				pry: "#003ECB",
 				pry2: "#2563eb",
 				sec: "#4f5763",
-				acc: "#e6e6eb",
+				acc: "#eeeef1",
 				myBlack: "#374151",
 
 				background: "hsl(var(--background))",

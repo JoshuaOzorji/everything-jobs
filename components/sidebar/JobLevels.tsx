@@ -1,5 +1,5 @@
 import { client } from "@/sanity/lib/client";
-import { getDisplayNameForJobLevel } from "@/sanity/lib/data";
+import { getDisplayNameForJobLevel } from "@/sanity/lib/utility";
 import Link from "next/link";
 import React from "react";
 import { MdWorkOutline } from "react-icons/md";

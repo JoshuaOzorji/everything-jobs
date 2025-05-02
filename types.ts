@@ -39,6 +39,7 @@ export interface JobType {
 
 export interface Education {
 	name: string;
+	value?: string;
 }
 
 export interface JobField {
@@ -66,6 +67,15 @@ export interface MainImage {
 	alt: string;
 }
 
+export interface JobReference {
+	_id: string;
+	name: string;
+	value?: string;
+	slug?: {
+		current: string;
+	};
+}
+
 export type Job = {
 	_id: string;
 	slug: {
@@ -82,17 +92,17 @@ export type Job = {
 		};
 		slug: string;
 	};
-	location?: string;
-	jobType?: string;
-	education?: string;
-	jobField: string;
+	location?: JobReference;
+	jobType?: JobReference;
+	education?: JobReference;
+	jobField: JobReference;
+	level?: JobReference;
 	salaryRange?: {
 		min: number;
 		max: number;
 	};
 	publishedAt: string;
 	deadline?: string;
-	level?: string;
 	experienceRange?: {
 		min: number;
 		max: number;
@@ -146,12 +156,12 @@ export interface JobQuery {
 	slug: string;
 	company: string;
 	companyLogo?: string;
-	location: string;
 	summary?: any[];
-	jobType: string;
-	level: string;
-	education: string;
-	jobField: string;
+	location: JobReference;
+	jobType: JobReference;
+	level: JobReference;
+	education: JobReference;
+	jobField: JobReference;
 	salaryRange: { min: number; max: number };
 	publishedAt: string;
 	deadline: string;

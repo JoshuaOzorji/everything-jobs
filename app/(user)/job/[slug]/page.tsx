@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import { lazy, Suspense } from "react";
 import Link from "next/link";
-import { groq, defineQuery } from "next-sanity";
 import { client } from "@/sanity/lib/client";
 import Image from "next/image";
 import { Job } from "@/types";
@@ -22,6 +21,9 @@ import { MdErrorOutline } from "react-icons/md";
 import { urlForImage } from "@/sanity/lib/image";
 import { jobQuery, relatedJobsQuery } from "@/sanity/lib/queries";
 import RelatedJobs from "@/components/RelatedJobs";
+import { getDisplayNameForEducation } from "@/sanity/lib/utility";
+import { getDisplayNameForJobLevel } from "@/sanity/lib/utility";
+import { getDisplayNameForJobField } from "@/sanity/lib/utility";
 
 const JobDetails = lazy(() => import("@/components/JobDetails"));
 
@@ -79,6 +81,111 @@ export default async function JobPage({ params }: PageProps) {
 		? urlForImage(job.company.logo).url()
 		: placeholder.src;
 
+	// Function to format the date for the deadline
+	function JobDeadline({ deadline }: { deadline?: string }) {
+		if (!deadline) return null;
+
+		return (
+			<div className='flex justify-center w-full mt-4 font-openSans'>
+				<p className='icon-container'>
+					{new Date(deadline) > new Date() ? (
+						<>
+							<span className='text-red-500'>
+								Deadline:
+							</span>{" "}
+							{formatDate2(
+								new Date(
+									deadline,
+								),
+							)}
+						</>
+					) : (
+						<span className='text-white bg-red-500 px-2 py-0.5 rounded-md flex items-center gap-1 font-normal'>
+							<MdErrorOutline />
+							<p>Job Expired</p>
+						</span>
+					)}
+				</p>
+			</div>
+		);
+	}
+
+	// Function to display job metadata like experience, salary, job type, etc.
+	function JobMetadata({ job }: { job: Job }) {
+		return (
+			<>
+				{(job.experienceRange?.min != null ||
+					job.experienceRange?.max != null) && (
+					<p className='icon-container2'>
+						<RiMedalFill className='icon' />
+						<span>Experience:</span>{" "}
+						{job.experienceRange?.min ?? 0}{" "}
+						-{" "}
+						{job.experienceRange?.max ?? 0}+
+						years
+					</p>
+				)}
+
+				{job.salaryRange?.min &&
+					job.salaryRange?.max && (
+						<div className='icon-container'>
+							<IoIosCash className='icon' />
+							<span>Pay:</span>
+							<p>
+								₦
+								{job.salaryRange.min.toLocaleString()}{" "}
+								- ₦
+								{job.salaryRange.max.toLocaleString()}
+							</p>
+						</div>
+					)}
+
+				<div className='icon-container'>
+					<IoBriefcase className='icon' />
+					<span>Job-Type:</span>
+					<p className='job-input'>
+						{job.jobType?.name}
+					</p>
+				</div>
+
+				<div className='icon-container'>
+					<PiBuildingsFill className='icon' />
+					<span>Job Field:</span>
+					<p className='job-input'>
+						{getDisplayNameForJobField(
+							job.jobField?.name,
+						)}
+					</p>
+				</div>
+
+				{job.level && (
+					<div className='icon-container2'>
+						<RiUserStarFill className='icon' />
+						<span>Career Levels: </span>
+						<p className='job-input'>
+							{getDisplayNameForJobLevel(
+								job.level?.name,
+							)}
+						</p>
+					</div>
+				)}
+
+				{job.education && (
+					<div className='icon-container2'>
+						<FaGraduationCap className='icon' />
+						<span>Qualification:</span>
+						<p className='job-input'>
+							{getDisplayNameForEducation(
+								job.education
+									.name,
+							)}
+						</p>
+					</div>
+				)}
+			</>
+		);
+	}
+
 	return (
 		<SubLayout aside={<AsideMain />}>
 			<div className='p-4 bg-white rounded-md font-openSans text-myBlack md:p-8'>
@@ -133,7 +240,13 @@ export default async function JobPage({ params }: PageProps) {
 						<div className='icon-container'>
 							<ImLocation className='icon' />
 							<span>Location: </span>
-							<p>{job.location}</p>
+							<p>
+								{
+									job
+										.location
+										?.name
+								}
+							</p>
 						</div>
 
 						{/* Job metadata fields */}
@@ -166,87 +279,3 @@ export default async function JobPage({ params }: PageProps) {
 }
 
 // Split into smaller components for better code organization
-function JobMetadata({ job }: { job: Job }) {
-	return (
-		<>
-			{(job.experienceRange?.min != null ||
-				job.experienceRange?.max != null) && (
-				<p className='icon-container2'>
-					<RiMedalFill className='icon' />
-					<span>Experience:</span>{" "}
-					{job.experienceRange?.min ?? 0} -{" "}
-					{job.experienceRange?.max ?? 0}+ years
-				</p>
-			)}
-
-			{job.salaryRange?.min && job.salaryRange?.max && (
-				<div className='icon-container'>
-					<IoIosCash className='icon' />
-					<span>Pay:</span>
-					<p>
-						₦
-						{job.salaryRange.min.toLocaleString()}{" "}
-						- ₦
-						{job.salaryRange.max.toLocaleString()}
-					</p>
-				</div>
-			)}
-
-			<div className='icon-container'>
-				<IoBriefcase className='icon' />
-				<span>Job-Type:</span>
-				<p className='job-input'>{job.jobType}</p>
-			</div>
-
-			<div className='icon-container'>
-				<PiBuildingsFill className='icon' />
-				<span>Job Field:</span>
-				<p className='job-input'>{job.jobField}</p>
-			</div>
-
-			{job.level && (
-				<div className='icon-container2'>
-					<RiUserStarFill className='icon' />
-					<span>Career Levels: </span>
-					<p className='job-input'>{job.level}</p>
-				</div>
-			)}
-
-			{job.education && (
-				<div className='icon-container2'>
-					<FaGraduationCap className='icon' />
-					<span>Qualification:</span>
-					<p className='uppercase job-input'>
-						{job.education}
-					</p>
-				</div>
-			)}
-		</>
-	);
-}
-
-function JobDeadline({ deadline }: { deadline?: string }) {
-	if (!deadline) return null;
-
-	return (
-		<div className='flex justify-center w-full mt-4 font-openSans'>
-			<p className='icon-container'>
-				{new Date(deadline) > new Date() ? (
-					<>
-						<span className='text-red-500'>
-							Deadline:
-						</span>{" "}
-						{formatDate2(
-							new Date(deadline),
-						)}
-					</>
-				) : (
-					<span className='text-white bg-red-500 px-2 py-0.5 rounded-md flex items-center gap-1 font-normal'>
-						<MdErrorOutline />
-						<p>Job Expired</p>
-					</span>
-				)}
-			</p>
-		</div>
-	);
-}

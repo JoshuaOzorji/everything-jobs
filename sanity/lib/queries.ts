@@ -1,8 +1,10 @@
 import { defineQuery, groq } from "next-sanity";
 import { client } from "./client";
-import { getDisplayNameForEducation, getDisplayNameForJobField } from "./data";
+import {
+	getDisplayNameForEducation,
+	getDisplayNameForJobField,
+} from "./utility";
 import { Job } from "@/types";
-import { SanityClient } from "next-sanity";
 
 export const searchJobsQuery = groq`
   *[_type == "job" &&
@@ -494,11 +496,27 @@ export const jobQuery = defineQuery(groq`
       logo,
       "slug": slug.current 
     },
-    "location": location->name,
-    "jobType": jobType->name,
-    "education": education->name,
-    "jobField": jobField->name,
-    "level": level->name,
+    "location": location-> { 
+      _id,
+      name 
+    },
+    "jobType": jobType-> { 
+      _id,
+      name 
+    },
+    "education": education-> { 
+      _id,
+      name,
+      value 
+    },
+    "jobField": jobField-> { 
+      _id,
+      name 
+    },
+    "level": level-> { 
+      _id,
+      name 
+    },
     salaryRange,
     publishedAt,
     deadline,
@@ -507,7 +525,7 @@ export const jobQuery = defineQuery(groq`
     responsibilities,
     recruitmentProcess,
     apply,
-    // Reference IDs needed for related job query
+    // Reference IDs now come directly from the returned objects
     "jobFieldId": jobField->_id,
     "jobTypeId": jobType->_id,
     "levelId": level->_id,
@@ -543,9 +561,22 @@ export const relatedJobsQuery = groq`
     publishedAt,
     "company": company->name,
     "companySlug": company->slug.current,
-    "jobType": jobType->name,
-    "location": location->name,
-    "jobField": jobField->name,
+    "jobType": jobType-> { 
+      _id,
+      name 
+    },
+    "location": location-> { 
+      _id,
+      name 
+    },
+    "jobField": jobField-> { 
+      _id,
+      name 
+    },
+    "level": level-> { 
+      _id,
+      name 
+    },
     "score": 
       (jobField->_id == $jobFieldId) * 5 +
       (jobType->_id == $jobTypeId) * 3 +
@@ -554,23 +585,3 @@ export const relatedJobsQuery = groq`
       (location->_id == $locationId) * 1
   } | order(score desc, publishedAt desc)[0...4]
 `;
-
-export async function fetchRelatedJobs(
-	client: SanityClient,
-	currentJob: CurrentJob,
-): Promise<any[]> {
-	if (!currentJob) return [];
-
-	// Prepare parameters for the query
-	const params = {
-		currentJobId: currentJob._id,
-		jobFieldId: currentJob.jobFieldId || "",
-		jobTypeId: currentJob.jobTypeId || "",
-		levelId: currentJob.levelId || "",
-		educationId: currentJob.educationId || "",
-		locationId: currentJob.locationId || "",
-	};
-
-	// Execute query
-	return client.fetch(relatedJobsQuery, params);
-}

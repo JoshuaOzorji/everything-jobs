@@ -1,5 +1,5 @@
 import { client } from "@/sanity/lib/client";
-import { getDisplayNameForJobField } from "@/sanity/lib/data";
+import { getDisplayNameForJobField } from "@/sanity/lib/utility";
 import Link from "next/link";
 import React from "react";
 import { HiOutlineBriefcase } from "react-icons/hi2";

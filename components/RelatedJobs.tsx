@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { JobReference } from "@/types";
 
 type RelatedJob = {
 	_id: string;
@@ -7,9 +8,10 @@ type RelatedJob = {
 	slug: string;
 	company: string;
 	companySlug: string;
-	jobType: string;
-	location: string;
-	jobField: string;
+	jobType: JobReference;
+	location: JobReference;
+	jobField: JobReference;
+	level: JobReference;
 };
 
 interface RelatedJobCardProps {
@@ -18,28 +20,36 @@ interface RelatedJobCardProps {
 
 const RelatedJobCard: React.FC<RelatedJobCardProps> = ({ job }) => {
 	return (
-		<div className='p-4 transition-shadow bg-white border rounded-lg hover:shadow-md font-openSans'>
-			<Link
-				href={`/job/${job.slug}`}
-				className='mb-2 text-base font-poppins hover:text-pry2'>
-				{job.title} at {job.company}
-			</Link>
+		<div className='p-3 md:p-4 transition-shadow bg-white border rounded-lg hover:shadow-sm font-openSans'>
+			<div className='text-sm font-poppins hover:text-pry2 mb-2'>
+				<Link href={`/job/${job.slug}`}>
+					{job.title} at {job.company}
+				</Link>
+			</div>
 
-			<div className='flex flex-wrap gap-2 mb-3 text-xs md:text-[0.85rem]'>
+			<div className='flex flex-wrap gap-2 text-xs md:text-[0.85rem] '>
 				<span className='bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded flex items-center first-letter:uppercase font-medium'>
 					<Link
-						href={`/jobs/by-location/${job.location}`}>
-						{job.location || "Nigeria"}
+						href={`/jobs/by-location/${job.location?.name}`}>
+						{job.location?.name ||
+							"Nigeria"}
 					</Link>
 				</span>
 				{job.jobType && (
 					<span className='bg-green-100 text-green-800 font-medium px-2.5 py-0.5 rounded first-letter:uppercase'>
 						<Link
-							href={`/jobs/by-type/${job.jobType}`}>
-							{job.jobType}
+							href={`/jobs/by-type/${job.jobType?.name}`}>
+							{job.jobType?.name}
 						</Link>
 					</span>
 				)}
+
+				<span className='bg-purple-100 text-purple-800  font-medium px-2.5 py-0.5 rounded first-letter:uppercase'>
+					<Link
+						href={`/jobs/by-level/${job.level?.name}`}>
+						{job.level?.name}
+					</Link>
+				</span>
 			</div>
 		</div>
 	);

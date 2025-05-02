@@ -101,7 +101,7 @@ export default function JobDetails({ job }: { job: Job }) {
 			{/* APPLICATION INSTRUCTIONS */}
 			{job.apply && (
 				<div className='py-4'>
-					<h2 className='inline-block px-3 text-white rounded-md job-h2 bg-pry'>
+					<h2 className='inline-block px-3 text-white job-h2 bg-pry'>
 						Apply for Job
 					</h2>
 					<PortableText value={job.apply} />

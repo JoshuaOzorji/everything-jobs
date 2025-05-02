@@ -19,9 +19,9 @@ const Footer = () => {
 	};
 
 	const currentYear = new Date().getFullYear();
-	// bg-[#0a2461]
+
 	return (
-		<footer className='mt-12 text-black bg-[#cbcbd6] font-openSans'>
+		<footer className='mt-12 text-black bg-[#dadde3] font-openSans border-t '>
 			{/* Main Footer Content */}
 			<div className='w-[96%] mx-auto py-12 px-2 md:px-4 text-sm'>
 				<div className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-5'>

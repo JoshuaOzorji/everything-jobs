@@ -5,8 +5,6 @@ import AuthProvider from "@/components/AuthProvider";
 import { Toaster } from "react-hot-toast";
 import BaseLayout from "@/components/BaseLayout";
 import { Suspense } from "react";
-import { LoadingComponent } from "@/components/Loading";
-import NavigationEvents from "@/components/NavigationEvents";
 import ProgressBar from "@/components/ProgressBar";
 
 export const metadata: Metadata = {
