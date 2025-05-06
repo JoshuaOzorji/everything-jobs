@@ -13,8 +13,12 @@ const Footer = () => {
 		register,
 		handleSubmit,
 		formState: { errors },
-	} = useForm();
-	const onSubmit = (data) => {
+	} = useForm<FormData>();
+	interface FormData {
+		email: string;
+	}
+
+	const onSubmit = (data: FormData): void => {
 		console.log(data);
 	};
 
@@ -174,11 +178,13 @@ const Footer = () => {
 								/>
 								{errors.email && (
 									<p className='mt-1 text-sm text-red-400'>
-										{
+										{typeof errors
+											.email
+											?.message ===
+											"string" &&
 											errors
 												.email
-												.message
-										}
+												.message}
 									</p>
 								)}
 							</div>
