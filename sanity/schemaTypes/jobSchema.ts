@@ -28,7 +28,6 @@ export const jobSchema = defineType({
 			to: [{ type: "company" }],
 			validation: (Rule) => Rule.required(),
 		}),
-
 		defineField({
 			name: "location",
 			type: "reference",
@@ -202,7 +201,6 @@ export const jobSchema = defineType({
 						: true;
 				}),
 		}),
-
 		defineField({
 			name: "publishedAt",
 			type: "datetime",

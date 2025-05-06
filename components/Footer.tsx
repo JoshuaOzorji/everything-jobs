@@ -21,7 +21,7 @@ const Footer = () => {
 	const currentYear = new Date().getFullYear();
 
 	return (
-		<footer className='mt-12 text-black bg-[#dadde3] font-openSans border-t '>
+		<footer className='mt-12 text-black bg-gray-300/70 font-openSans border-t'>
 			{/* Main Footer Content */}
 			<div className='w-[96%] mx-auto py-12 px-2 md:px-4 text-sm'>
 				<div className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-5'>
@@ -160,7 +160,7 @@ const Footer = () => {
 									id='email'
 									type='email'
 									placeholder='Your email address'
-									className='w-full px-4 py-2 text-white border border-gray-700 rounded bg-slate-200 focus:outline-none'
+									className='w-full px-4 py-2 text-myBlack border border-gray-700 rounded bg-white focus:outline-none'
 									{...register(
 										"email",
 										{

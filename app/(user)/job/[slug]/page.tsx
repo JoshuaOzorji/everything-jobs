@@ -28,17 +28,35 @@ import { getDisplayNameForJobField } from "@/sanity/lib/utility";
 const JobDetails = lazy(() => import("@/components/JobDetails"));
 
 type PageProps = {
-	params: {
+	params: Promise<{
 		slug: string;
-	};
+	}>;
 };
 
 export const revalidate = 3600;
 
-export async function generateMetadata(props: PageProps): Promise<Metadata> {
-	// In generateMetadata, params might be a Promise in some cases
-	const params = await Promise.resolve(props.params);
-	const slug = params.slug;
+// export async function generateMetadata(props: PageProps): Promise<Metadata> {
+// 	// In generateMetadata, params might be a Promise in some cases
+// 	const params = await Promise.resolve(props.params);
+// 	const slug = params.slug;
+// 	const job: Job | null = await client.fetch(jobQuery, { slug });
+
+// 	return {
+// 		title: job
+// 			? `${job.title} at ${job.company.name} | Everything Jobs`
+// 			: "Job Details | Everything Jobs",
+// 		description:
+// 			"Find your next career opportunity with detailed job listings across Nigeria",
+// 		keywords: "jobs in Nigeria, career opportunities, employment, job search, job listings, Nigerian jobs, job vacancies",
+// 	};
+// }
+
+export async function generateMetadata({
+	params,
+}: PageProps): Promise<Metadata> {
+	const resolvedParams = await params;
+	const slug = resolvedParams.slug;
+
 	const job: Job | null = await client.fetch(jobQuery, { slug });
 
 	return {
@@ -60,7 +78,8 @@ export async function generateStaticParams() {
 }
 
 export default async function JobPage({ params }: PageProps) {
-	const { slug } = await params;
+	const resolvedParams = await params;
+	const { slug } = resolvedParams;
 	const job: Job | null = await client.fetch(jobQuery, { slug });
 
 	if (!job) {
