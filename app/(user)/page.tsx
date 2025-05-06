@@ -6,13 +6,15 @@ import { LoadingComponent } from "@/components/Loading";
 
 // Type for the Homepage props
 type HomepageProps = {
-	searchParams?: {
+	searchParams: Promise<{
 		page?: string;
-	};
+	}>;
 };
 
 async function Homepage({ searchParams }: HomepageProps) {
-	const pageParam = (await searchParams)?.page;
+	// const pageParam = (await searchParams)?.page;
+	const params = await searchParams;
+	const pageParam = params?.page;
 	const page = pageParam ? parseInt(pageParam) : 1;
 
 	return (
