@@ -10,6 +10,7 @@ import { jobFieldSchema } from "./jobFieldsSchema";
 import { jobLevelSchema } from "./jobLevelSchema";
 import { industrySchema } from "./industrySchema";
 import { citySchema } from "./citySchema";
+import { pendingJobSchema } from "./pendingJobSchema";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
 	types: [
@@ -23,5 +24,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
 		educationSchema,
 		industrySchema,
 		citySchema,
+		pendingJobSchema,
 	],
 };

@@ -3,7 +3,7 @@ import { DocumentTextIcon } from "@sanity/icons";
 
 export const pendingJobSchema = defineType({
 	name: "pendingJob",
-	title: "Pending Job",
+	title: "Pending Jobs",
 	type: "document",
 	icon: DocumentTextIcon,
 	fields: [
@@ -14,6 +14,12 @@ export const pendingJobSchema = defineType({
 			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
+			name: "companyName",
+			type: "string",
+			title: "Company Name",
+			validation: (Rule) => Rule.required(),
+		}),
+		defineField({
 			name: "summary",
 			type: "array",
 			title: "Job Summary Details",
@@ -21,38 +27,33 @@ export const pendingJobSchema = defineType({
 			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
-			name: "company",
-			type: "reference",
-			title: "Company",
-			to: [{ type: "company" }],
-			validation: (Rule) => Rule.required(),
-		}),
-		defineField({
-			name: "location",
-			type: "reference",
+			name: "locationName",
+			type: "string",
 			title: "Location",
-			to: [{ type: "state" }],
 			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
-			name: "jobType",
-			type: "reference",
+			name: "jobTypeName",
+			type: "string",
 			title: "Job Type",
-			to: [{ type: "jobType" }],
 			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
-			name: "education",
-			type: "reference",
+			name: "educationLevel",
+			type: "string",
 			title: "Education",
-			to: [{ type: "education" }],
 			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
-			name: "jobField",
-			type: "reference",
+			name: "jobFieldName",
+			type: "string",
 			title: "Job Field",
-			to: [{ type: "jobField" }],
+			validation: (Rule) => Rule.required(),
+		}),
+		defineField({
+			name: "experienceLevel",
+			type: "string",
+			title: "Experience Level",
 			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
@@ -83,18 +84,10 @@ export const pendingJobSchema = defineType({
 						range.max == null
 					)
 						return true;
-
 					return range.max < range.min
 						? "Maximum salary must be greater than or equal to the minimum salary"
 						: true;
 				}),
-		}),
-		defineField({
-			name: "level",
-			title: "Experience Level",
-			type: "reference",
-			to: [{ type: "jobLevel" }],
-			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
 			name: "experienceRange",
@@ -106,22 +99,14 @@ export const pendingJobSchema = defineType({
 					title: "Minimum Years",
 					type: "number",
 					validation: (Rule) =>
-						Rule.required()
-							.min(0)
-							.error(
-								"Minimum years must be 0 or greater",
-							),
+						Rule.required().min(0),
 				}),
 				defineField({
 					name: "max",
 					title: "Maximum Years",
 					type: "number",
 					validation: (Rule) =>
-						Rule.required()
-							.min(0)
-							.error(
-								"Maximum years must be 0 or greater",
-							),
+						Rule.required().min(0),
 				}),
 			],
 			validation: (Rule) =>
@@ -132,7 +117,6 @@ export const pendingJobSchema = defineType({
 						range.max == null
 					)
 						return true;
-
 					return range.max < range.min
 						? "Maximum years must be greater than or equal to minimum years"
 						: true;
@@ -143,12 +127,7 @@ export const pendingJobSchema = defineType({
 			title: "Requirements",
 			type: "array",
 			of: [{ type: "string" }],
-			validation: (Rule) =>
-				Rule.required()
-					.min(1)
-					.error(
-						"Please add at least one requirement",
-					),
+			validation: (Rule) => Rule.required().min(1),
 		}),
 		defineField({
 			name: "responsibilities",
@@ -161,24 +140,6 @@ export const pendingJobSchema = defineType({
 			title: "Recruitment Process",
 			type: "array",
 			of: [{ type: "string" }],
-			validation: (Rule) =>
-				Rule.min(1).error(
-					"Please describe the recruitment process",
-				),
-		}),
-		defineField({
-			name: "apply",
-			type: "array",
-			title: "Method of Application",
-			of: [{ type: "block" }],
-			validation: (Rule) => Rule.required(),
-		}),
-		// Additional fields specific to pending jobs
-		defineField({
-			name: "submittedAt",
-			type: "datetime",
-			title: "Submitted At",
-			readOnly: true,
 		}),
 		defineField({
 			name: "status",
@@ -200,16 +161,29 @@ export const pendingJobSchema = defineType({
 			initialValue: "pending",
 		}),
 		defineField({
-			name: "submitterEmail",
-			type: "string",
-			title: "Submitter Email",
-			validation: (Rule) => Rule.required().email(),
-		}),
-		defineField({
-			name: "submitterName",
-			type: "string",
-			title: "Submitter Name",
-			validation: (Rule) => Rule.required(),
+			name: "submitterInfo",
+			title: "Submitter Information",
+			type: "object",
+			fields: [
+				defineField({
+					name: "name",
+					type: "string",
+					title: "Name",
+					validation: (Rule) => Rule.required(),
+				}),
+				defineField({
+					name: "email",
+					type: "string",
+					title: "Email",
+					validation: (Rule) =>
+						Rule.required().email(),
+				}),
+				defineField({
+					name: "phoneNumber",
+					type: "string",
+					title: "Phone Number",
+				}),
+			],
 		}),
 		defineField({
 			name: "adminNotes",
@@ -217,19 +191,24 @@ export const pendingJobSchema = defineType({
 			title: "Admin Notes",
 			description: "Private notes for admin review",
 		}),
+		defineField({
+			name: "submittedAt",
+			type: "datetime",
+			title: "Submitted At",
+			readOnly: true,
+		}),
 	],
 	preview: {
 		select: {
 			title: "title",
-			company: "company.name",
-			jobType: "jobType.name",
+			companyName: "companyName",
 			status: "status",
+			email: "submitterInfo.email",
 		},
-		prepare(selection) {
-			const { title, company, jobType, status } = selection;
+		prepare({ title, companyName, status, email }) {
 			return {
-				title,
-				subtitle: `${company || "Unknown Company"} - ${jobType || "Unknown Type"} [${status || "pending"}]`,
+				title: `${title} - ${companyName || "Unknown Company"}`,
+				subtitle: `Status: ${status} | Submitted by: ${email}`,
 			};
 		},
 	},

@@ -179,17 +179,15 @@ export interface FilterOptions {
 	jobFields: Filter[];
 	locations: { _id: string; name: string }[];
 }
-
-// types/job.ts
 export interface JobSubmission {
 	title: string;
-	summary: any[]; // For Portable Text format
-	company: string; // Reference ID
-	location: string; // Reference ID
-	jobType: string; // Reference ID
-	education: string; // Reference ID
-	jobField: string; // Reference ID
-	level: string; // Reference ID
+	companyName: string;
+	summary: any[];
+	locationName: string;
+	jobTypeName: string;
+	educationLevel: string;
+	jobFieldName: string;
+	experienceLevel: string;
 	salaryRange: {
 		min: number;
 		max: number;
@@ -200,40 +198,10 @@ export interface JobSubmission {
 	};
 	requirements: string[];
 	responsibilities: string[];
-	recruitmentProcess: string[];
-	apply: any[]; // For Portable Text format
+	recruitmentProcess?: string[];
 	submitterInfo: {
 		name: string;
 		email: string;
-		phone: string;
+		phoneNumber?: string;
 	};
-}
-
-export interface ReferenceItem {
-	_id: string;
-	name: string;
-}
-
-export interface Company extends ReferenceItem {
-	// Additional company-specific fields if needed
-}
-
-export interface JobType extends ReferenceItem {
-	// Additional job type-specific fields if needed
-}
-
-export interface JobField extends ReferenceItem {
-	// Additional job field-specific fields if needed
-}
-
-export interface JobLevel extends ReferenceItem {
-	// Additional job level-specific fields if needed
-}
-
-export interface Education extends ReferenceItem {
-	// Additional education-specific fields if needed
-}
-
-export interface State extends ReferenceItem {
-	// Additional state-specific fields if needed
 }

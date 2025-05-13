@@ -1,28 +1,47 @@
-"use client";
-
-/**
- * This configuration is used to for the Sanity Studio that’s mounted on the `\app\studio\[[...tool]]\page.tsx` route
- */
-
-import { visionTool } from "@sanity/vision";
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
-
-// Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
-import { apiVersion, dataset, projectId } from "./sanity/env";
+import { visionTool } from "@sanity/vision";
 import { schema } from "./sanity/schemaTypes";
 import { structure } from "./sanity/structure";
+import { jobApprovalPlugin } from "./sanity/plugins/jobApprovalPlugin";
 
 export default defineConfig({
 	basePath: "/studio",
-	projectId,
-	dataset,
-	// Add and edit the content schema in the './sanity/schemaTypes' folder
+	projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
+	dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
 	schema,
 	plugins: [
-		structureTool({ structure }),
-		// Vision is for querying with GROQ from inside the Studio
-		// https://www.sanity.io/docs/the-vision-plugin
-		visionTool({ defaultApiVersion: apiVersion }),
+		structureTool({
+			structure,
+			defaultDocumentNode: (S) =>
+				S.document().views([S.view.form()]),
+		}),
+		jobApprovalPlugin(),
+		visionTool(),
 	],
+	document: {
+		// Prevent the creation of new documents directly from the studio
+		newDocumentOptions: (prev, { creationContext }) => {
+			if (creationContext.type === "global") {
+				return prev.filter(
+					(template) =>
+						template.templateId !==
+						"pendingJob",
+				);
+			}
+			return prev;
+		},
+		// Prevent document duplication
+		actions: (prev, { schemaType }) => {
+			if (schemaType === "pendingJob") {
+				return prev.filter(
+					({ action }) =>
+						!["duplicate"].includes(
+							action || "",
+						),
+				);
+			}
+			return prev;
+		},
+	},
 });

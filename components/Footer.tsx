@@ -25,7 +25,7 @@ const Footer = () => {
 	const currentYear = new Date().getFullYear();
 
 	return (
-		<footer className='mt-12 text-black bg-gray-300/70 font-openSans border-t'>
+		<footer className='mt-12 text-black border-t bg-gray-300/70 font-openSans'>
 			{/* Main Footer Content */}
 			<div className='w-[96%] mx-auto py-12 px-2 md:px-4 text-sm'>
 				<div className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-5'>
@@ -53,7 +53,7 @@ const Footer = () => {
 						<div className='flex space-x-4'>
 							<a
 								href='#'
-								className='text-myBlack transition hover:text-pry'>
+								className='transition text-myBlack hover:text-pry'>
 								<span className='sr-only'>
 									Facebook
 								</span>
@@ -61,7 +61,7 @@ const Footer = () => {
 							</a>
 							<a
 								href='#'
-								className='text-myBlack transition hover:text-pry'>
+								className='transition text-myBlack hover:text-pry'>
 								<span className='sr-only'>
 									Twitter
 								</span>
@@ -69,7 +69,7 @@ const Footer = () => {
 							</a>
 							<a
 								href='#'
-								className='text-myBlack transition hover:text-pry'>
+								className='transition text-myBlack hover:text-pry'>
 								<span className='sr-only'>
 									LinkedIn
 								</span>
@@ -97,7 +97,7 @@ const Footer = () => {
 											href={
 												link.href
 											}
-											className='text-myBlack transition hover:text-pry'>
+											className='transition text-myBlack hover:text-pry'>
 											{
 												link.label
 											}
@@ -126,7 +126,7 @@ const Footer = () => {
 											href={
 												link.href
 											}
-											className='text-myBlack transition hover:text-pry'>
+											className='transition text-myBlack hover:text-pry'>
 											{
 												link.label
 											}
@@ -164,7 +164,7 @@ const Footer = () => {
 									id='email'
 									type='email'
 									placeholder='Your email address'
-									className='w-full px-4 py-2 text-myBlack border border-gray-700 rounded bg-white focus:outline-none'
+									className='w-full px-4 py-2 bg-white border border-gray-700 rounded text-myBlack focus:outline-none'
 									{...register(
 										"email",
 										{
@@ -199,10 +199,10 @@ const Footer = () => {
 			</div>
 
 			{/* Bottom Footer - Copyright & Legal */}
-			<div className='py-3 text-xs bg-gray-950 md:px-2'>
+			<div className='py-3 text-xs border-t border-[#adadad] md:px-2 text-myBlack'>
 				<div className='w-[96%] mx-auto'>
 					<div className='flex flex-col items-center justify-between md:flex-row'>
-						<p className='text-gray-400 '>
+						<p className=''>
 							© {currentYear} Your
 							Job Search Company. All
 							rights reserved.
@@ -218,7 +218,7 @@ const Footer = () => {
 										href={
 											link.href
 										}
-										className='text-gray-400 transition hover:text-white'>
+										className='transition hover:text-white'>
 										{
 											link.label
 										}

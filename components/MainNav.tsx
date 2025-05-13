@@ -48,7 +48,7 @@ const MainNav = ({
 						<IoSearchOutline className='w-6 h-6' />
 					</button>
 
-					<Link href='/auth/signup'>
+					<Link href='/post-job'>
 						<button className='flex flex-col items-center px-2 py-1 text-white rounded-md bg-pry '>
 							<p>Post Job</p>
 						</button>
