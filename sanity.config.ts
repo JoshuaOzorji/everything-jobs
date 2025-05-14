@@ -1,3 +1,4 @@
+"use client";
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
@@ -5,10 +6,11 @@ import { schema } from "./sanity/schemaTypes";
 import { structure } from "./sanity/structure";
 import { jobApprovalPlugin } from "./sanity/plugins/jobApprovalPlugin";
 
-export default defineConfig({
+const config = defineConfig({
 	basePath: "/studio",
 	projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
 	dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
+	title: "Everything Jobs",
 	schema,
 	plugins: [
 		structureTool({
@@ -20,7 +22,6 @@ export default defineConfig({
 		visionTool(),
 	],
 	document: {
-		// Prevent the creation of new documents directly from the studio
 		newDocumentOptions: (prev, { creationContext }) => {
 			if (creationContext.type === "global") {
 				return prev.filter(
@@ -31,7 +32,6 @@ export default defineConfig({
 			}
 			return prev;
 		},
-		// Prevent document duplication
 		actions: (prev, { schemaType }) => {
 			if (schemaType === "pendingJob") {
 				return prev.filter(
@@ -45,3 +45,5 @@ export default defineConfig({
 		},
 	},
 });
+
+export default config;

@@ -207,7 +207,7 @@ export const pendingJobSchema = defineType({
 		},
 		prepare({ title, companyName, status, email }) {
 			return {
-				title: `${title} - ${companyName || "Unknown Company"}`,
+				title: `${title} - ${companyName || "Reputable Company"}`,
 				subtitle: `Status: ${status} | Submitted by: ${email}`,
 			};
 		},

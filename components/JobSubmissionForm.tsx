@@ -1,12 +1,72 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type { JobSubmission } from "@/types";
+import { client } from "@/sanity/lib/client";
 
+interface FormDataOptions {
+	locations: { name: string }[];
+	jobTypes: { name: string }[];
+	educationLevels: { name: string }[];
+	jobFields: { name: string }[];
+	experienceLevels: { name: string }[];
+}
 export default function JobSubmissionForm() {
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [formOptions, setFormOptions] = useState<FormDataOptions>({
+		locations: [],
+		jobTypes: [],
+		educationLevels: [],
+		jobFields: [],
+		experienceLevels: [],
+	});
+
+	useEffect(() => {
+		async function fetchFormOptions() {
+			try {
+				const [
+					locations,
+					jobTypes,
+					educationLevels,
+					jobFields,
+					experienceLevels,
+				] = await Promise.all([
+					client.fetch(
+						`*[_type == "state"]{name}`,
+					),
+					client.fetch(
+						`*[_type == "jobType"]{name}`,
+					),
+					client.fetch(
+						`*[_type == "educationLevel"]{name}`,
+					),
+					client.fetch(
+						`*[_type == "jobField"]{name}`,
+					),
+					client.fetch(
+						`*[_type == "experienceLevel"]{name}`,
+					),
+				]);
+				setFormOptions({
+					locations,
+					jobTypes,
+					educationLevels,
+					jobFields,
+					experienceLevels,
+				});
+			} catch (error) {
+				console.error(
+					"Error fetching form options:",
+					error,
+				);
+				toast.error("Error fetching form options");
+			}
+		}
+		fetchFormOptions();
+	}, []);
+
 	const {
 		register,
 		handleSubmit,
@@ -237,16 +297,33 @@ export default function JobSubmissionForm() {
 						<label className='block text-sm font-medium mb-2'>
 							Location *
 						</label>
-						<input
-							type='text'
+						<select
 							{...register(
 								"locationName",
 								{
 									required: "Location is required",
 								},
 							)}
-							className='w-full px-3 py-2 border rounded-md'
-						/>
+							className='w-full px-3 py-2 border rounded-md'>
+							<option value=''>
+								Select Location
+							</option>
+							{formOptions.locations.map(
+								(location) => (
+									<option
+										key={
+											location.name
+										}
+										value={
+											location.name
+										}>
+										{
+											location.name
+										}
+									</option>
+								),
+							)}
+						</select>
 						{errors.locationName && (
 							<p className='text-red-500 text-sm mt-1'>
 								{
@@ -262,16 +339,33 @@ export default function JobSubmissionForm() {
 						<label className='block text-sm font-medium mb-2'>
 							Job Type *
 						</label>
-						<input
-							type='text'
+						<select
 							{...register(
 								"jobTypeName",
 								{
 									required: "Job type is required",
 								},
 							)}
-							className='w-full px-3 py-2 border rounded-md'
-						/>
+							className='w-full px-3 py-2 border rounded-md'>
+							<option value=''>
+								Select Job Type
+							</option>
+							{formOptions.jobTypes.map(
+								(type) => (
+									<option
+										key={
+											type.name
+										}
+										value={
+											type.name
+										}>
+										{
+											type.name
+										}
+									</option>
+								),
+							)}
+						</select>
 						{errors.jobTypeName && (
 							<p className='text-red-500 text-sm mt-1'>
 								{
@@ -289,16 +383,34 @@ export default function JobSubmissionForm() {
 						<label className='block text-sm font-medium mb-2'>
 							Education Level *
 						</label>
-						<input
-							type='text'
+						<select
 							{...register(
 								"educationLevel",
 								{
 									required: "Education level is required",
 								},
 							)}
-							className='w-full px-3 py-2 border rounded-md'
-						/>
+							className='w-full px-3 py-2 border rounded-md'>
+							<option value=''>
+								Select Education
+								Level
+							</option>
+							{formOptions.educationLevels.map(
+								(education) => (
+									<option
+										key={
+											education.name
+										}
+										value={
+											education.name
+										}>
+										{
+											education.name
+										}
+									</option>
+								),
+							)}
+						</select>
 						{errors.educationLevel && (
 							<p className='text-red-500 text-sm mt-1'>
 								{
@@ -314,16 +426,33 @@ export default function JobSubmissionForm() {
 						<label className='block text-sm font-medium mb-2'>
 							Job Field *
 						</label>
-						<input
-							type='text'
+						<select
 							{...register(
 								"jobFieldName",
 								{
 									required: "Job field is required",
 								},
 							)}
-							className='w-full px-3 py-2 border rounded-md'
-						/>
+							className='w-full px-3 py-2 border rounded-md'>
+							<option value=''>
+								Select Job Field
+							</option>
+							{formOptions.jobFields.map(
+								(field) => (
+									<option
+										key={
+											field.name
+										}
+										value={
+											field.name
+										}>
+										{
+											field.name
+										}
+									</option>
+								),
+							)}
+						</select>
 						{errors.jobFieldName && (
 							<p className='text-red-500 text-sm mt-1'>
 								{
@@ -340,16 +469,33 @@ export default function JobSubmissionForm() {
 					<label className='block text-sm font-medium mb-2'>
 						Experience Level *
 					</label>
-					<input
-						type='text'
+					<select
 						{...register(
 							"experienceLevel",
 							{
 								required: "Experience level is required",
 							},
 						)}
-						className='w-full px-3 py-2 border rounded-md'
-					/>
+						className='w-full px-3 py-2 border rounded-md'>
+						<option value=''>
+							Select Experience Level
+						</option>
+						{formOptions.experienceLevels.map(
+							(level) => (
+								<option
+									key={
+										level.name
+									}
+									value={
+										level.name
+									}>
+									{
+										level.name
+									}
+								</option>
+							),
+						)}
+					</select>
 					{errors.experienceLevel && (
 						<p className='text-red-500 text-sm mt-1'>
 							{

@@ -1,127 +1,3 @@
-// import { definePlugin } from "sanity";
-// import type { DocumentActionComponent, DocumentActionProps } from "sanity";
-
-// export const jobApprovalPlugin = definePlugin({
-// 	name: "job-approval",
-// 	document: {
-// 		actions: (prev, context) => {
-// 			if (context.schemaType !== "pendingJob") {
-// 				return prev;
-// 			}
-
-// 			const approveAction: DocumentActionComponent = (
-// 				props: DocumentActionProps,
-// 			) => ({
-// 				label: "Approve Job",
-// 				type: "action",
-// 				color: "success",
-// 				onHandle: async () => {
-// 					const { draft, published, client } =
-// 						props;
-// 					const doc = draft || published;
-
-// 					if (!doc) return;
-
-// 					try {
-// 						// Create approved job
-// 						await client.create({
-// 							_type: "job",
-// 							title: doc.title,
-// 							companyName:
-// 								doc.companyName,
-// 							locationName:
-// 								doc.locationName,
-// 							jobTypeName:
-// 								doc.jobTypeName,
-// 							educationLevel:
-// 								doc.educationLevel,
-// 							jobFieldName:
-// 								doc.jobFieldName,
-// 							experienceLevel:
-// 								doc.experienceLevel,
-// 							summary: doc.summary,
-// 							salaryRange:
-// 								doc.salaryRange,
-// 							experienceRange:
-// 								doc.experienceRange,
-// 							requirements:
-// 								doc.requirements,
-// 							responsibilities:
-// 								doc.responsibilities,
-// 							recruitmentProcess:
-// 								doc.recruitmentProcess,
-// 							submitterInfo:
-// 								doc.submitterInfo,
-// 							publishedAt:
-// 								new Date().toISOString(),
-// 						});
-
-// 						// Update pending job status
-// 						await client
-// 							.patch(doc._id)
-// 							.set({
-// 								status: "approved",
-// 							})
-// 							.commit();
-
-// 						props.onComplete();
-// 					} catch (error) {
-// 						console.error(
-// 							"Error approving job:",
-// 							error,
-// 						);
-// 						props.onError();
-// 					}
-// 				},
-// 			});
-
-// 			const rejectAction: DocumentActionComponent = (
-// 				props: DocumentActionProps,
-// 			) => ({
-// 				label: "Reject Job",
-// 				type: "action",
-// 				color: "danger",
-// 				onHandle: async () => {
-// 					const { draft, published, client } =
-// 						props;
-// 					const doc = draft || published;
-
-// 					if (!doc) return;
-
-// 					try {
-// 						await client
-// 							.patch(doc._id)
-// 							.set({
-// 								status: "rejected",
-// 							})
-// 							.commit();
-
-// 						props.onComplete();
-// 					} catch (error) {
-// 						console.error(
-// 							"Error rejecting job:",
-// 							error,
-// 						);
-// 						props.onError();
-// 					}
-// 				},
-// 			});
-
-// 			return [
-// 				...prev.filter(
-// 					({ action }) =>
-// 						![
-// 							"publish",
-// 							"unpublish",
-// 							"delete",
-// 						].includes(action || ""),
-// 				),
-// 				approveAction,
-// 				rejectAction,
-// 			];
-// 		},
-// 	},
-// });
 import { definePlugin } from "sanity";
 import type {
 	DocumentActionComponent,
@@ -130,7 +6,6 @@ import type {
 } from "sanity";
 import { client } from "../lib/client";
 
-// Define a more specific type that extends SanityDocument
 interface PendingJobDocument extends SanityDocument {
 	title: string;
 	companyName: string;
@@ -159,6 +34,40 @@ interface PendingJobDocument extends SanityDocument {
 	status: "pending" | "approved" | "rejected";
 }
 
+// Helper function to get or create company reference
+async function getOrCreateCompany(companyName: string) {
+	const existingCompany = await client.fetch(
+		`*[_type == "company" && name == $name][0]._id`,
+		{ name: companyName },
+	);
+
+	if (existingCompany) return existingCompany;
+
+	const newCompany = await client.create({
+		_type: "company",
+		name: companyName,
+	});
+
+	return newCompany._id;
+}
+
+// Helper function to get or create references for other document types
+async function getOrCreateReference(type: string, name: string) {
+	const existing = await client.fetch(
+		`*[_type == $type && name == $name][0]._id`,
+		{ type, name },
+	);
+
+	if (existing) return existing;
+
+	const newRef = await client.create({
+		_type: type,
+		name: name,
+	});
+
+	return newRef._id;
+}
+
 export const jobApprovalPlugin = definePlugin({
 	name: "job-approval",
 	document: {
@@ -170,7 +79,6 @@ export const jobApprovalPlugin = definePlugin({
 			const approveAction: DocumentActionComponent = (
 				props: DocumentActionProps,
 			) => {
-				// Using the imported client instead of props.getClient
 				return {
 					label: "Approve Job",
 					type: "action",
@@ -185,26 +93,55 @@ export const jobApprovalPlugin = definePlugin({
 								message: "No document found",
 							};
 
-						// Use type assertion carefully with unknown first
 						const doc =
 							pendingDoc as unknown as PendingJobDocument;
 
 						try {
+							// Create job with proper references
 							await client.create({
 								_type: "job",
 								title: doc.title,
-								companyName:
-									doc.companyName,
-								locationName:
-									doc.locationName,
-								jobTypeName:
-									doc.jobTypeName,
-								educationLevel:
-									doc.educationLevel,
-								jobFieldName:
-									doc.jobFieldName,
-								experienceLevel:
-									doc.experienceLevel,
+								company: {
+									_type: "reference",
+									_ref: await getOrCreateCompany(
+										doc.companyName,
+									),
+								},
+								location: {
+									_type: "reference",
+									_ref: await getOrCreateReference(
+										"state",
+										doc.locationName,
+									),
+								},
+								jobType: {
+									_type: "reference",
+									_ref: await getOrCreateReference(
+										"jobType",
+										doc.jobTypeName,
+									),
+								},
+								education: {
+									_type: "reference",
+									_ref: await getOrCreateReference(
+										"education",
+										doc.educationLevel,
+									),
+								},
+								jobField: {
+									_type: "reference",
+									_ref: await getOrCreateReference(
+										"jobField",
+										doc.jobFieldName,
+									),
+								},
+								level: {
+									_type: "reference",
+									_ref: await getOrCreateReference(
+										"jobLevel",
+										doc.experienceLevel,
+									),
+								},
 								summary: doc.summary,
 								salaryRange:
 									doc.salaryRange,
@@ -216,12 +153,11 @@ export const jobApprovalPlugin = definePlugin({
 									doc.responsibilities,
 								recruitmentProcess:
 									doc.recruitmentProcess,
-								submitterInfo:
-									doc.submitterInfo,
 								publishedAt:
 									new Date().toISOString(),
 							});
 
+							// Update pending job status
 							await client
 								.patch(doc._id)
 								.set({
@@ -249,7 +185,6 @@ export const jobApprovalPlugin = definePlugin({
 			const rejectAction: DocumentActionComponent = (
 				props: DocumentActionProps,
 			) => {
-				// Using the imported client instead of props.getClient
 				return {
 					label: "Reject Job",
 					type: "action",
@@ -264,7 +199,6 @@ export const jobApprovalPlugin = definePlugin({
 								message: "No document found",
 							};
 
-						// Use type assertion carefully
 						const doc =
 							pendingDoc as unknown as PendingJobDocument;
 
