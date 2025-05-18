@@ -53,16 +53,16 @@ export default function JobSubmissionForm() {
 						`*[_type == "state"]{name}`,
 					),
 					client.fetch(
-						`*[_type == "jobType"]{name}`,
+						`*[_type == "jobType"]{name} | order(name asc)`,
 					),
 					client.fetch(
-						`*[_type == "education"]{name}`,
+						`*[_type == "education"]{name} | order(name asc)`,
 					),
 					client.fetch(
-						`*[_type == "jobField"]{name}`,
+						`*[_type == "jobField"]{name} | order(name asc)`,
 					),
 					client.fetch(
-						`*[_type == "jobLevel"]{name}`,
+						`*[_type == "jobLevel"]{name} | order(name asc)`,
 					),
 				]);
 

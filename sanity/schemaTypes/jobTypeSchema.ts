@@ -9,134 +9,91 @@ export const jobTypeSchema = defineType({
 	fields: [
 		defineField({
 			name: "name",
-			title: "Name",
 			type: "string",
+			title: "Job Type Name",
 			validation: (Rule) =>
 				Rule.required().custom(
-					async (value, context) => {
-						if (!value) return true;
-						const docId =
-							context.document?._id ||
-							"";
+					async (name, context) => {
+						if (!name) return true;
 
 						const existing = await context
 							.getClient({
-								apiVersion: "2025-02-02",
+								apiVersion: "2023-01-01",
 							})
 							.fetch(
-								`*[_type == "jobType" && name == $name && !_id == $id][0]`,
+								`*[_type == "jobType" && name == $name && !(_id in [$docId, 'drafts.' + $docId])][0]`,
 								{
-									name: value,
-									id: docId,
+									name,
+									docId: context.document
+										? context.document._id.replace(
+												/^drafts\./,
+												"",
+											)
+										: "",
 								},
 							);
 
 						return existing
-							? "A job type with this name already exists."
+							? "A job type with this name already exists"
 							: true;
 					},
 				),
-
-			options: {
-				list: [
-					{
-						title: "Full-time",
-						value: "full-time",
-					},
-					{
-						title: "Part-time",
-						value: "part-time",
-					},
-					{
-						title: "Contract",
-						value: "contract",
-					},
-					{
-						title: "Temporary",
-						value: "temporary",
-					},
-					{
-						title: "Internship",
-						value: "internship",
-					},
-					{
-						title: "Apprenticeship",
-						value: "apprenticeship",
-					},
-					{
-						title: "Freelance",
-						value: "freelance",
-					},
-					{ title: "Remote", value: "remote" },
-					{ title: "Hybrid", value: "hybrid" },
-					{ title: "On-site", value: "on-site" },
-					{
-						title: "Volunteer",
-						value: "volunteer",
-					},
-					{
-						title: "Per Diem",
-						value: "per-diem",
-					},
-					{
-						title: "Seasonal",
-						value: "seasonal",
-					},
-					{ title: "Others", value: "others" },
-				],
-			},
 		}),
-
 		defineField({
 			name: "slug",
-			title: "Slug",
 			type: "slug",
+			title: "Slug",
 			options: {
 				source: "name",
+				maxLength: 96,
 				slugify: (input) =>
 					input
 						.toLowerCase()
 						.replace(/\s+/g, "-")
 						.replace(/[^\w-]+/g, ""),
 			},
+			description:
+				"Slug will only be generated once. Be sure of the Job Type name before generating",
+			readOnly: ({ value }) => {
+				return Boolean(value?.current);
+			},
 			validation: (Rule) =>
 				Rule.required().custom(
 					async (slug, context) => {
-						if (!slug) return true;
+						if (!slug?.current)
+							return "Slug is required.";
 
 						const doc = context.document;
 						if (!doc) return true;
 
 						const docId = doc._id ?? "";
-						const existing = await context
-							.getClient({
-								apiVersion: "2025-02-02",
-							})
-							.fetch(
-								`*[_type == "jobType" && slug.current == $slug && _id != $id][0]`,
-								{
-									slug: slug.current,
-									id: docId,
-								},
-							);
+						const existingSlug =
+							await context
+								.getClient({
+									apiVersion: "2023-01-01",
+								})
+								.fetch(
+									`*[_type == "jobType" && slug.current == $slug && _id != $id][0]`,
+									{
+										slug: slug.current,
+										id: docId,
+									},
+								);
 
-						return existing
-							? "A job type with this slug already exists."
+						if (
+							existingSlug &&
+							existingSlug.slug
+								.current ===
+								slug.current
+						) {
+							return true;
+						}
+
+						return existingSlug
+							? "This slug is already in use."
 							: true;
 					},
 				),
 		}),
-
-		defineField({
-			name: "order",
-			title: "Order",
-			type: "number",
-			hidden: true,
-		}),
 	],
-	preview: {
-		select: {
-			title: "name",
-		},
-	},
 });

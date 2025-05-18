@@ -1,9 +1,11 @@
-import { defineType, defineField } from "sanity";
+import { defineField, defineType } from "sanity";
+import { DocumentTextIcon } from "@sanity/icons";
 
 export const jobLevelSchema = defineType({
 	name: "jobLevel",
 	title: "Job Level",
 	type: "document",
+	icon: DocumentTextIcon,
 	fields: [
 		defineField({
 			name: "name",
@@ -12,52 +14,30 @@ export const jobLevelSchema = defineType({
 			validation: (Rule) =>
 				Rule.required().custom(
 					async (name, context) => {
-						if (!name) return true; // Skip validation if empty
+						if (!name) return true;
 
-						const { document, getClient } =
-							context;
-						const client = getClient({
-							apiVersion: "2023-01-01",
-						});
-
-						const existing =
-							await client.fetch(
-								`*[_type == "jobLevel" && name == $name && _id != $id][0]`,
+						const existing = await context
+							.getClient({
+								apiVersion: "2023-01-01",
+							})
+							.fetch(
+								`*[_type == "jobLevel" && name == $name && !(_id in [$docId, 'drafts.' + $docId])][0]`,
 								{
 									name,
-									id: document?._id,
+									docId: context.document
+										? context.document._id.replace(
+												/^drafts\./,
+												"",
+											)
+										: "",
 								},
 							);
 
 						return existing
-							? "A job level with this name already exists."
+							? "A job level with this name already exists"
 							: true;
 					},
 				),
-			options: {
-				list: [
-					{
-						title: "Entry Level",
-						value: "entry-level",
-					},
-					{
-						title: "Mid Level",
-						value: "mid-level",
-					},
-					{
-						title: "Senior Level",
-						value: "senior-level",
-					},
-					{
-						title: "Director",
-						value: "director",
-					},
-					{
-						title: "Executive",
-						value: "executive",
-					},
-				],
-			},
 		}),
 		defineField({
 			name: "slug",
@@ -65,33 +45,55 @@ export const jobLevelSchema = defineType({
 			type: "slug",
 			options: {
 				source: "name",
+				maxLength: 96,
 				slugify: (input) =>
 					input
 						.toLowerCase()
 						.replace(/\s+/g, "-")
 						.replace(/[^\w-]+/g, ""),
 			},
+			description:
+				"Slug will only be generated once. Be sure of the Job Level name before generating",
+			readOnly: ({ value }) => {
+				return Boolean(value?.current);
+			},
 			validation: (Rule) =>
-				Rule.custom(async (slug, context) => {
-					if (!slug) return true; // Skip validation if empty
+				Rule.required().custom(
+					async (slug, context) => {
+						if (!slug?.current)
+							return "Slug is required.";
 
-					const { document, getClient } = context;
-					const client = getClient({
-						apiVersion: "2023-01-01",
-					});
+						const doc = context.document;
+						if (!doc) return true;
 
-					const existing = await client.fetch(
-						`*[_type == "jobLevel" && slug.current == $slug && _id != $id][0]`,
-						{
-							slug: slug.current,
-							id: document?._id,
-						},
-					);
+						const docId = doc._id ?? "";
+						const existingSlug =
+							await context
+								.getClient({
+									apiVersion: "2023-01-01",
+								})
+								.fetch(
+									`*[_type == "jobLevel" && slug.current == $slug && _id != $id][0]`,
+									{
+										slug: slug.current,
+										id: docId,
+									},
+								);
 
-					return existing
-						? "A job level with this slug already exists."
-						: true;
-				}),
+						if (
+							existingSlug &&
+							existingSlug.slug
+								.current ===
+								slug.current
+						) {
+							return true;
+						}
+
+						return existingSlug
+							? "This slug is already in use."
+							: true;
+					},
+				),
 		}),
 	],
 });

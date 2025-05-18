@@ -9,7 +9,15 @@
 		"start": "next start",
 		"lint": "next lint",
 		"migrate:states:create": "tsx scripts/migrateStates.ts create",
-		"migrate:states:update": "tsx scripts/migrateStates.ts update"
+		"migrate:states:update": "tsx scripts/migrateStates.ts update",
+		"migrate:jobtypes:create": "tsx scripts/migrateJobTypes.ts create",
+		"migrate:jobtypes:update": "tsx scripts/migrateJobTypes.ts update",
+		"migrate:education:create": "tsx scripts/migrateEducationLevels.ts create",
+		"migrate:education:update": "tsx scripts/migrateEducationLevels.ts update",
+		"migrate:jobfields:create": "tsx scripts/migrateJobFields.ts create",
+		"migrate:jobfields:update": "tsx scripts/migrateJobFields.ts update",
+		"migrate:joblevels:create": "tsx scripts/migrateJobLevels.ts create",
+		"migrate:joblevels:update": "tsx scripts/migrateJobLevels.ts update"
 	},
 	"dependencies": {
 		"@auth/mongodb-adapter": "^3.7.4",

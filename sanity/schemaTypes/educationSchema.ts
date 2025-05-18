@@ -6,101 +6,91 @@ export const educationSchema = defineType({
 	title: "Education",
 	type: "document",
 	icon: DocumentTextIcon,
-
 	fields: [
 		defineField({
 			name: "name",
-			title: "Name",
 			type: "string",
+			title: "Education Level",
 			validation: (Rule) =>
 				Rule.required().custom(
 					async (name, context) => {
-						if (!name)
-							return "Education name is required.";
+						if (!name) return true;
 
-						const { document, getClient } =
-							context;
-						const client = getClient({
-							apiVersion: "2023-01-01",
-						});
-
-						const existingEducation =
-							await client.fetch(
-								`*[_type == "education" && name == $name && _id != $id][0]`,
+						const existing = await context
+							.getClient({
+								apiVersion: "2023-01-01",
+							})
+							.fetch(
+								`*[_type == "education" && name == $name && !(_id in [$docId, 'drafts.' + $docId])][0]`,
 								{
 									name,
-									id:
-										document?._id ||
-										"",
+									docId: context.document
+										? context.document._id.replace(
+												/^drafts\./,
+												"",
+											)
+										: "",
 								},
 							);
 
-						return existingEducation
-							? "A education with this name already exists."
+						return existing
+							? "An education level with this name already exists"
 							: true;
 					},
 				),
-			options: {
-				list: [
-					{ title: "SSCE", value: "ssce" },
-					{
-						title: "NCE",
-						value: "nce",
-					},
-					{
-						title: "ND",
-						value: "nd",
-					},
-					{
-						title: "BSC/BA/HND",
-						value: "bsc-ba-hnd",
-					},
-					{
-						title: "MSC/MA/MBA",
-						value: "masters",
-					},
-					{
-						title: "PhD/Fellowship",
-						value: "phd",
-					},
-					{ title: "Others", value: "others" },
-				],
-			},
 		}),
-
 		defineField({
 			name: "slug",
-			title: "Slug",
 			type: "slug",
+			title: "Slug",
 			options: {
 				source: "name",
+				maxLength: 96,
 				slugify: (input) =>
 					input
 						.toLowerCase()
 						.replace(/\s+/g, "-")
 						.replace(/[^\w-]+/g, ""),
 			},
+			description:
+				"Slug will only be generated once. Be sure of the Education Level name before generating",
+			readOnly: ({ value }) => {
+				return Boolean(value?.current);
+			},
 			validation: (Rule) =>
 				Rule.required().custom(
 					async (slug, context) => {
-						const { document, getClient } =
-							context;
-						const client = getClient({
-							apiVersion: "2023-01-01",
-						});
+						if (!slug?.current)
+							return "Slug is required.";
+
+						const doc = context.document;
+						if (!doc) return true;
+
+						const docId = doc._id ?? "";
 						const existingSlug =
-							await client.fetch(
-								`*[_type == "education" && slug.current == $slug && _id != $id][0]`,
-								{
-									slug: slug?.current,
-									id:
-										document?._id ||
-										"",
-								},
-							);
+							await context
+								.getClient({
+									apiVersion: "2023-01-01",
+								})
+								.fetch(
+									`*[_type == "education" && slug.current == $slug && _id != $id][0]`,
+									{
+										slug: slug.current,
+										id: docId,
+									},
+								);
+
+						if (
+							existingSlug &&
+							existingSlug.slug
+								.current ===
+								slug.current
+						) {
+							return true;
+						}
 
 						return existingSlug
-							? "A education with this slug already exists."
+							? "This slug is already in use."
 							: true;
 					},
 				),
