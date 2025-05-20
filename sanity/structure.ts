@@ -19,7 +19,9 @@ export const structure: StructureResolver = (S) =>
 				.child(
 					S.documentList()
 						.title("Pending Jobs")
-						.filter('_type == "pendingJob"')
+						.filter(
+							'_type == "pendingJob" && status == "pending"',
+						)
 						.defaultOrdering([
 							{
 								field: "submittedAt",
@@ -39,6 +41,24 @@ export const structure: StructureResolver = (S) =>
 						.defaultOrdering([
 							{
 								field: "publishedAt",
+								direction: "desc",
+							},
+						]),
+				),
+
+			// Rejected Jobs
+			S.listItem()
+				.title("Rejected Jobs")
+				.schemaType("pendingJob")
+				.child(
+					S.documentList()
+						.title("Rejected Jobs")
+						.filter(
+							'_type == "pendingJob" && status == "rejected"',
+						)
+						.defaultOrdering([
+							{
+								field: "submittedAt",
 								direction: "desc",
 							},
 						]),

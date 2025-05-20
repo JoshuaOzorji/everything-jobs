@@ -23,7 +23,35 @@ export const pendingJobSchema = defineType({
 			name: "summary",
 			type: "array",
 			title: "Job Summary Details",
-			of: [{ type: "block" }],
+			of: [
+				{
+					type: "block",
+					// Add styles and formatting options
+					styles: [
+						{
+							title: "Normal",
+							value: "normal",
+						},
+						{
+							title: "Heading",
+							value: "h4",
+						},
+					],
+					// Limit marks to basic formatting
+					marks: {
+						decorators: [
+							{
+								title: "Strong",
+								value: "strong",
+							},
+							{
+								title: "Emphasis",
+								value: "em",
+							},
+						],
+					},
+				},
+			],
 			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
@@ -126,14 +154,47 @@ export const pendingJobSchema = defineType({
 			name: "requirements",
 			title: "Requirements",
 			type: "array",
-			of: [{ type: "string" }],
-			validation: (Rule) => Rule.required().min(1),
+			of: [
+				{
+					type: "string",
+					validation: (Rule) =>
+						Rule.custom((text) => {
+							if (!text) return true;
+							if (
+								typeof text !==
+								"string"
+							)
+								return true;
+							return true;
+						}),
+				},
+			],
+			validation: (Rule) =>
+				Rule.required()
+					.min(1)
+					.error(
+						"Please add at least one requirement",
+					),
 		}),
 		defineField({
 			name: "responsibilities",
 			title: "Responsibilities",
 			type: "array",
-			of: [{ type: "string" }],
+			of: [
+				{
+					type: "string",
+					validation: (Rule) =>
+						Rule.custom((text) => {
+							if (!text) return true;
+							if (
+								typeof text !==
+								"string"
+							)
+								return true;
+							return true;
+						}),
+				},
+			],
 		}),
 		defineField({
 			name: "recruitmentProcess",
@@ -159,6 +220,18 @@ export const pendingJobSchema = defineType({
 				],
 			},
 			initialValue: "pending",
+		}),
+		defineField({
+			name: "rejectionReason",
+			type: "text",
+			title: "Rejection Reason",
+			hidden: ({ document }) => document?.status !== "rejected",
+			validation: (Rule) => Rule.custom((reason, context) => {
+				if (context.document?.status === "rejected" && !reason) {
+					return "Please provide a reason for rejection";
+				}
+				return true;
+			}),
 		}),
 		defineField({
 			name: "submitterInfo",

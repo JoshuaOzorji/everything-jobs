@@ -179,26 +179,54 @@ export interface FilterOptions {
 	jobFields: Filter[];
 	locations: { _id: string; name: string }[];
 }
+
+// export interface JobSubmission {
+// 	title: string;
+// 	companyName: string;
+// 	summary: any[];
+// 	locationName: string;
+// 	jobTypeName: string;
+// 	educationLevel: string;
+// 	jobFieldName: string;
+// 	experienceLevel: string;
+// 	salaryRange: {
+// 		min: number;
+// 		max: number;
+// 	};
+// 	experienceRange: {
+// 		min: number;
+// 		max: number;
+// 	};
+// 	requirements: string[];
+// 	responsibilities: string[];
+// 	recruitmentProcess?: string[];
+// 	submitterInfo: {
+// 		name: string;
+// 		email: string;
+// 		phoneNumber?: string;
+// 	};
+// }
+
 export interface JobSubmission {
 	title: string;
 	companyName: string;
-	summary: any[];
+	summary: any[] | string; // Allow both array and string
 	locationName: string;
 	jobTypeName: string;
 	educationLevel: string;
 	jobFieldName: string;
 	experienceLevel: string;
 	salaryRange: {
-		min: number;
-		max: number;
+		min: number | string; // Allow both number and string
+		max: number | string; // Allow both number and string
 	};
 	experienceRange: {
-		min: number;
-		max: number;
+		min: number | string; // Allow both number and string
+		max: number | string; // Allow both number and string
 	};
-	requirements: string[];
-	responsibilities: string[];
-	recruitmentProcess?: string[];
+	requirements: string[] | string; // Allow both array and string
+	responsibilities: string[] | string; // Allow both array and string
+	recruitmentProcess?: string[] | string; // Allow both array and string
 	submitterInfo: {
 		name: string;
 		email: string;

@@ -1,12 +1,8 @@
 import { definePlugin } from "sanity";
-import type {
-	DocumentActionComponent,
-	DocumentActionProps,
-	SanityDocument,
-} from "sanity";
-import { client } from "../lib/client";
+import type { DocumentActionComponent, DocumentActionProps } from "sanity";
 
-interface PendingJobDocument extends SanityDocument {
+interface PendingJobDocument {
+	_id: string;
 	title: string;
 	companyName: string;
 	locationName: string;
@@ -23,9 +19,9 @@ interface PendingJobDocument extends SanityDocument {
 		min: number;
 		max: number;
 	};
-	requirements: any[];
-	responsibilities: any[];
-	recruitmentProcess: any[];
+	requirements: string[];
+	responsibilities: string[];
+	recruitmentProcess: string[];
 	submitterInfo: {
 		name: string;
 		email: string;
@@ -34,38 +30,20 @@ interface PendingJobDocument extends SanityDocument {
 	status: "pending" | "approved" | "rejected";
 }
 
-// Helper function to get or create company reference
-async function getOrCreateCompany(companyName: string) {
-	const existingCompany = await client.fetch(
-		`*[_type == "company" && name == $name][0]._id`,
-		{ name: companyName },
-	);
-
-	if (existingCompany) return existingCompany;
-
-	const newCompany = await client.create({
-		_type: "company",
-		name: companyName,
-	});
-
-	return newCompany._id;
-}
-
-// Helper function to get or create references for other document types
-async function getOrCreateReference(type: string, name: string) {
-	const existing = await client.fetch(
+async function getOrCreateReference(type: string, name: string, client: any) {
+	const existingDoc = await client.fetch(
 		`*[_type == $type && name == $name][0]._id`,
 		{ type, name },
 	);
 
-	if (existing) return existing;
+	if (existingDoc) return existingDoc;
 
-	const newRef = await client.create({
+	const newDoc = await client.create({
 		_type: type,
 		name: name,
 	});
 
-	return newRef._id;
+	return newDoc._id;
 }
 
 export const jobApprovalPlugin = definePlugin({
@@ -76,156 +54,160 @@ export const jobApprovalPlugin = definePlugin({
 				return prev;
 			}
 
-			const approveAction: DocumentActionComponent = (
-				props: DocumentActionProps,
-			) => {
-				return {
-					label: "Approve Job",
-					type: "action",
-					color: "success",
-					onHandle: async () => {
-						const pendingDoc =
-							props.draft ||
-							props.published;
-						if (!pendingDoc)
-							return {
-								type: "error",
-								message: "No document found",
-							};
-
-						const doc =
-							pendingDoc as unknown as PendingJobDocument;
-
-						try {
-							// Create job with proper references
-							await client.create({
-								_type: "job",
-								title: doc.title,
-								company: {
-									_type: "reference",
-									_ref: await getOrCreateCompany(
-										doc.companyName,
-									),
-								},
-								location: {
-									_type: "reference",
-									_ref: await getOrCreateReference(
-										"state",
-										doc.locationName,
-									),
-								},
-								jobType: {
-									_type: "reference",
-									_ref: await getOrCreateReference(
-										"jobType",
-										doc.jobTypeName,
-									),
-								},
-								education: {
-									_type: "reference",
-									_ref: await getOrCreateReference(
-										"education",
-										doc.educationLevel,
-									),
-								},
-								jobField: {
-									_type: "reference",
-									_ref: await getOrCreateReference(
-										"jobField",
-										doc.jobFieldName,
-									),
-								},
-								level: {
-									_type: "reference",
-									_ref: await getOrCreateReference(
-										"jobLevel",
-										doc.experienceLevel,
-									),
-								},
-								summary: doc.summary,
-								salaryRange:
-									doc.salaryRange,
-								experienceRange:
-									doc.experienceRange,
-								requirements:
-									doc.requirements,
-								responsibilities:
-									doc.responsibilities,
-								recruitmentProcess:
-									doc.recruitmentProcess,
-								publishedAt:
-									new Date().toISOString(),
-							});
-
-							// Update pending job status
-							await client
-								.patch(doc._id)
-								.set({
-									status: "approved",
-								})
-								.commit();
-
-							return {
-								type: "success",
-							};
-						} catch (error) {
-							console.error(
-								"Error approving job:",
-								error,
-							);
-							return {
-								type: "error",
-								message: "Failed to approve job",
-							};
-						}
-					},
-				};
-			};
-
 			const rejectAction: DocumentActionComponent = (
 				props: DocumentActionProps,
-			) => {
-				return {
-					label: "Reject Job",
-					type: "action",
-					color: "danger",
-					onHandle: async () => {
-						const pendingDoc =
-							props.draft ||
-							props.published;
-						if (!pendingDoc)
-							return {
-								type: "error",
-								message: "No document found",
-							};
+			) => ({
+				label: "Reject Job",
+				tone: "critical",
+				onHandle: async () => {
+					const client = context.getClient({
+						apiVersion: "2023-01-01",
+					});
 
-						const doc =
-							pendingDoc as unknown as PendingJobDocument;
+					try {
+						await client
+							.patch(props.id)
+							.set({
+								status: "rejected",
+								rejectedAt: new Date().toISOString(),
+							})
+							.commit();
 
-						try {
-							await client
-								.patch(doc._id)
-								.set({
-									status: "rejected",
-								})
-								.commit();
+						return {
+							type: "success",
+							message: "Job rejected successfully",
+						};
+					} catch (error) {
+						console.error(
+							"Error rejecting job:",
+							error,
+						);
+						return {
+							type: "error",
+							message: "Failed to reject job",
+						};
+					}
+				},
+			});
 
-							return {
-								type: "success",
-							};
-						} catch (error) {
-							console.error(
-								"Error rejecting job:",
-								error,
+			const approveAction: DocumentActionComponent = (
+				props: DocumentActionProps,
+			) => ({
+				label: "Approve Job",
+				tone: "positive",
+				onHandle: async () => {
+					const pendingJob =
+						props.draft || props.published;
+					if (!pendingJob)
+						return { type: "error" };
+
+					const doc =
+						pendingJob as unknown as PendingJobDocument;
+					const client = context.getClient({
+						apiVersion: "2023-01-01",
+					});
+
+					try {
+						// 1. Create references
+						const companyRef =
+							await getOrCreateReference(
+								"company",
+								doc.companyName,
+								client,
 							);
-							return {
-								type: "error",
-								message: "Failed to reject job",
-							};
-						}
-					},
-				};
-			};
+						const locationRef =
+							await getOrCreateReference(
+								"state",
+								doc.locationName,
+								client,
+							);
+						const jobTypeRef =
+							await getOrCreateReference(
+								"jobType",
+								doc.jobTypeName,
+								client,
+							);
+						const educationRef =
+							await getOrCreateReference(
+								"education",
+								doc.educationLevel,
+								client,
+							);
+						const jobFieldRef =
+							await getOrCreateReference(
+								"jobField",
+								doc.jobFieldName,
+								client,
+							);
+						const levelRef =
+							await getOrCreateReference(
+								"jobLevel",
+								doc.experienceLevel,
+								client,
+							);
+
+						// 2. Create published job
+						await client.create({
+							_type: "job",
+							title: doc.title,
+							company: {
+								_type: "reference",
+								_ref: companyRef,
+							},
+							location: {
+								_type: "reference",
+								_ref: locationRef,
+							},
+							jobType: {
+								_type: "reference",
+								_ref: jobTypeRef,
+							},
+							education: {
+								_type: "reference",
+								_ref: educationRef,
+							},
+							jobField: {
+								_type: "reference",
+								_ref: jobFieldRef,
+							},
+							level: {
+								_type: "reference",
+								_ref: levelRef,
+							},
+							summary: doc.summary,
+							salaryRange:
+								doc.salaryRange,
+							experienceRange:
+								doc.experienceRange,
+							requirements:
+								doc.requirements,
+							responsibilities:
+								doc.responsibilities,
+							recruitmentProcess:
+								doc.recruitmentProcess,
+							publishedAt:
+								new Date().toISOString(),
+						});
+
+						// 3. Delete the pending job document
+						await client.delete(props.id);
+
+						return {
+							type: "success",
+							message: "Job approved and published successfully",
+						};
+					} catch (error) {
+						console.error(
+							"Error publishing job:",
+							error,
+						);
+						return {
+							type: "error",
+							message: "Failed to publish job",
+						};
+					}
+				},
+			});
 
 			return [
 				...prev.filter(

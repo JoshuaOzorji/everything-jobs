@@ -2,10 +2,34 @@ import { client } from "@/sanity/lib/client";
 import { NextResponse } from "next/server";
 import { JobSubmission } from "@/types";
 
+interface PortableTextSpan {
+	_type: "span";
+	_key?: string;
+	text: string;
+}
+
+interface PortableTextBlock {
+	_type: "block";
+	_key?: string;
+	children?: PortableTextSpan[];
+}
+
+//generate unique keys
+function generateKey(length: number = 12): string {
+	return Math.random()
+		.toString(36)
+		.substring(2, 2 + length);
+}
+
+function ensureArray(value: any): any[] {
+	if (!value) return [];
+	if (Array.isArray(value)) return value;
+	if (typeof value === "string") return [value];
+	return [];
+}
 export async function POST(request: Request) {
 	try {
 		const job: JobSubmission = await request.json();
-		console.log("Received job data:", job); // Debug incoming data
 
 		// Validate required fields
 		if (
@@ -18,16 +42,6 @@ export async function POST(request: Request) {
 			!job.experienceLevel ||
 			!job.submitterInfo?.email
 		) {
-			console.log("Validation failed:", {
-				title: job.title,
-				companyName: job.companyName,
-				location: job.locationName,
-				jobType: job.jobTypeName,
-				education: job.educationLevel,
-				jobField: job.jobFieldName,
-				experienceLevel: job.experienceLevel,
-				email: job.submitterInfo?.email,
-			});
 			return NextResponse.json(
 				{ error: "Missing required fields" },
 				{ status: 400 },
@@ -39,23 +53,88 @@ export async function POST(request: Request) {
 			_type: "pendingJob",
 			title: job.title,
 			companyName: job.companyName,
-			summary: job.summary || [],
+			// Convert summary to proper Portable Text format if it's a string
+			summary:
+				typeof job.summary === "string"
+					? [
+							{
+								_type: "block",
+								_key: generateKey(),
+								children: [
+									{
+										_type: "span",
+										_key: generateKey(),
+										text: job.summary,
+									} as PortableTextSpan,
+								],
+							} as PortableTextBlock,
+						]
+					: Array.isArray(job.summary)
+						? job.summary.map(
+								(
+									block: PortableTextBlock,
+								) => ({
+									...block,
+									_key:
+										block._key ||
+										generateKey(),
+									children: block.children?.map(
+										(
+											child: PortableTextSpan,
+										) => ({
+											...child,
+											_key:
+												child._key ||
+												generateKey(),
+										}),
+									),
+								}),
+							)
+						: [],
+
 			locationName: job.locationName,
 			jobTypeName: job.jobTypeName,
 			educationLevel: job.educationLevel,
 			jobFieldName: job.jobFieldName,
 			experienceLevel: job.experienceLevel,
 			salaryRange: {
-				min: job.salaryRange?.min || 0,
-				max: job.salaryRange?.max || 0,
+				min: Number(job.salaryRange?.min) || 0,
+				max: Number(job.salaryRange?.max) || 0,
 			},
 			experienceRange: {
-				min: job.experienceRange?.min || 0,
-				max: job.experienceRange?.max || 0,
+				min: Number(job.experienceRange?.min) || 0,
+				max: Number(job.experienceRange?.max) || 0,
 			},
-			requirements: job.requirements || [],
-			responsibilities: job.responsibilities || [],
-			recruitmentProcess: job.recruitmentProcess || [],
+			// Ensure arrays and clean up strings
+			requirements: ensureArray(job.requirements).map(
+				(req) =>
+					typeof req === "string"
+						? req
+								.replace(
+									/[\r\n]+/g,
+									" ",
+								)
+								.trim()
+						: req,
+			),
+			responsibilities: ensureArray(job.responsibilities).map(
+				(resp) =>
+					typeof resp === "string"
+						? resp
+								.replace(
+									/[\r\n]+/g,
+									" ",
+								)
+								.trim()
+						: resp,
+			),
+			recruitmentProcess: ensureArray(
+				job.recruitmentProcess,
+			).map((proc) =>
+				typeof proc === "string"
+					? proc.replace(/[\r\n]+/g, " ").trim()
+					: proc,
+			),
 			status: "pending",
 			submitterInfo: {
 				name: job.submitterInfo.name,
@@ -64,8 +143,6 @@ export async function POST(request: Request) {
 			},
 			submittedAt: new Date().toISOString(),
 		});
-
-		console.log("Created pending job:", result); // Debug successful creation
 
 		return NextResponse.json({
 			success: true,
