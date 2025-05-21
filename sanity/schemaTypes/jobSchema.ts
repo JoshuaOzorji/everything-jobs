@@ -322,10 +322,10 @@ export const jobSchema = defineType({
 			title: "Recruitment Process",
 			type: "array",
 			of: [{ type: "string" }],
-			validation: (Rule) =>
-				Rule.min(1).error(
-					"Please describe the recruitment process",
-				),
+			// validation: (Rule) =>
+			// 	Rule.min(1).error(
+			// 		"Please describe the recruitment process",
+			// 	),
 		}),
 		defineField({
 			name: "mainImage",

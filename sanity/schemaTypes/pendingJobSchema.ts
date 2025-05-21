@@ -85,6 +85,19 @@ export const pendingJobSchema = defineType({
 			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
+			name: "deadline",
+			type: "datetime",
+			title: "Deadline",
+			validation: (Rule) =>
+				Rule.custom((deadline) => {
+					if (!deadline) return true; // Allow empty deadline
+					const now = new Date().toISOString();
+					if (deadline < now)
+						return "Deadline must be in the future";
+					return true;
+				}),
+		}),
+		defineField({
 			name: "salaryRange",
 			title: "Salary Range",
 			type: "object",
@@ -203,6 +216,35 @@ export const pendingJobSchema = defineType({
 			of: [{ type: "string" }],
 		}),
 		defineField({
+			name: "apply",
+			type: "array",
+			title: "Method of Application",
+			of: [
+				{
+					type: "block",
+					styles: [
+						{
+							title: "Normal",
+							value: "normal",
+						},
+					],
+					marks: {
+						decorators: [
+							{
+								title: "Strong",
+								value: "strong",
+							},
+							{
+								title: "Emphasis",
+								value: "em",
+							},
+						],
+					},
+				},
+			],
+			validation: (Rule) => Rule.required(),
+		}),
+		defineField({
 			name: "status",
 			type: "string",
 			title: "Status",
@@ -225,13 +267,19 @@ export const pendingJobSchema = defineType({
 			name: "rejectionReason",
 			type: "text",
 			title: "Rejection Reason",
-			hidden: ({ document }) => document?.status !== "rejected",
-			validation: (Rule) => Rule.custom((reason, context) => {
-				if (context.document?.status === "rejected" && !reason) {
-					return "Please provide a reason for rejection";
-				}
-				return true;
-			}),
+			hidden: ({ document }) =>
+				document?.status !== "rejected",
+			validation: (Rule) =>
+				Rule.custom((reason, context) => {
+					if (
+						context.document?.status ===
+							"rejected" &&
+						!reason
+					) {
+						return "Please provide a reason for rejection";
+					}
+					return true;
+				}),
 		}),
 		defineField({
 			name: "submitterInfo",

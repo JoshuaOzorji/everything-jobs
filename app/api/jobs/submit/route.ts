@@ -6,12 +6,15 @@ interface PortableTextSpan {
 	_type: "span";
 	_key?: string;
 	text: string;
+	marks?: string[];
 }
 
 interface PortableTextBlock {
 	_type: "block";
 	_key?: string;
+	style?: string;
 	children?: PortableTextSpan[];
+	markDefs?: Array<{ _key: string; _type: string }>;
 }
 
 //generate unique keys
@@ -53,6 +56,8 @@ export async function POST(request: Request) {
 			_type: "pendingJob",
 			title: job.title,
 			companyName: job.companyName,
+			deadline: job.deadline || null,
+			apply: typeof job.apply === "string",
 			// Convert summary to proper Portable Text format if it's a string
 			summary:
 				typeof job.summary === "string"
@@ -60,14 +65,17 @@ export async function POST(request: Request) {
 							{
 								_type: "block",
 								_key: generateKey(),
+								style: "normal",
 								children: [
 									{
 										_type: "span",
 										_key: generateKey(),
 										text: job.summary,
-									} as PortableTextSpan,
+										marks: [],
+									},
 								],
-							} as PortableTextBlock,
+								markDefs: [],
+							},
 						]
 					: Array.isArray(job.summary)
 						? job.summary.map(
@@ -78,7 +86,10 @@ export async function POST(request: Request) {
 									_key:
 										block._key ||
 										generateKey(),
-									children: block.children?.map(
+									children: (
+										block.children ||
+										[]
+									).map(
 										(
 											child: PortableTextSpan,
 										) => ({
@@ -88,6 +99,9 @@ export async function POST(request: Request) {
 												generateKey(),
 										}),
 									),
+									markDefs:
+										block.markDefs ||
+										[],
 								}),
 							)
 						: [],

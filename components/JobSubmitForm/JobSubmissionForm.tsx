@@ -13,6 +13,7 @@ import RequirementsSection from "./RequirementsSection";
 import JobClassification from "./JobClassification";
 import ContactInformation from "./ContactInformation";
 import SubmitButton from "./SubmitButton";
+import ApplicationDetails from "./ApplicationDetails";
 
 interface FormDataOptions {
 	locations: { name: string }[];
@@ -96,18 +97,32 @@ export default function JobSubmissionForm() {
 
 			const result = await response.json();
 
-			if (result.success) {
-				toast.success(
-					"Job submitted successfully! Pending admin approval.",
-				);
-				reset();
-			} else {
-				toast.error(
+			if (!response.ok) {
+				throw new Error(
 					result.error || "Failed to submit job",
 				);
 			}
+
+			toast.success("Job Submission Successful", {
+				description:
+					"Your job posting is now pending admin approval",
+				action: {
+					label: "Close",
+					onClick: () => toast.dismiss(),
+				},
+			});
+			reset();
 		} catch (error) {
-			toast.error("Error submitting job");
+			toast.error("Submission Failed", {
+				description:
+					error instanceof Error
+						? error.message
+						: "Please try again later",
+				action: {
+					label: "Retry",
+					onClick: () => handleSubmit(onSubmit)(),
+				},
+			});
 			console.error("Submission error:", error);
 		} finally {
 			setIsSubmitting(false);
@@ -131,6 +146,11 @@ export default function JobSubmissionForm() {
 				register={register}
 				errors={errors}
 				formOptions={formOptions}
+			/>
+
+			<ApplicationDetails
+				register={register}
+				errors={errors}
 			/>
 
 			<ContactInformation

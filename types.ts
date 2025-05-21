@@ -180,33 +180,6 @@ export interface FilterOptions {
 	locations: { _id: string; name: string }[];
 }
 
-// export interface JobSubmission {
-// 	title: string;
-// 	companyName: string;
-// 	summary: any[];
-// 	locationName: string;
-// 	jobTypeName: string;
-// 	educationLevel: string;
-// 	jobFieldName: string;
-// 	experienceLevel: string;
-// 	salaryRange: {
-// 		min: number;
-// 		max: number;
-// 	};
-// 	experienceRange: {
-// 		min: number;
-// 		max: number;
-// 	};
-// 	requirements: string[];
-// 	responsibilities: string[];
-// 	recruitmentProcess?: string[];
-// 	submitterInfo: {
-// 		name: string;
-// 		email: string;
-// 		phoneNumber?: string;
-// 	};
-// }
-
 export interface JobSubmission {
 	title: string;
 	companyName: string;
@@ -216,6 +189,8 @@ export interface JobSubmission {
 	educationLevel: string;
 	jobFieldName: string;
 	experienceLevel: string;
+	deadline?: string | Date;
+	apply: any[] | string;
 	salaryRange: {
 		min: number | string; // Allow both number and string
 		max: number | string; // Allow both number and string
