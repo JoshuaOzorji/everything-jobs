@@ -69,14 +69,18 @@ const JobCard2: React.FC<JobCardProps2> = ({ job }) => {
 					<div className='flex flex-wrap gap-3 mt-2 font-openSans'>
 						{job.location && (
 							<span className='px-2 py-0.5 text-[12.5px] text-blue-800 bg-blue-100 rounded first-letter:uppercase'>
-								{job.location}
+								{
+									job
+										.location
+										.name
+								}
 							</span>
 						)}
 						<span className='px-2 py-0.5 text-[12.5px] text-green-800 bg-green-100 rounded first-letter:uppercase'>
-							{job.jobType}
+							{job.jobType.name}
 						</span>
 						<span className='px-2 py-0.5 text-[12.5px]  text-purple-800 bg-purple-100 rounded first-letter:uppercase'>
-							{job.level}
+							{job.level.name}
 						</span>
 					</div>
 				</div>

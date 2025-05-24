@@ -1,5 +1,3 @@
-// app/jobs/by-level/[level]/page.tsx
-
 import { Metadata } from "next";
 import { getJobLevels, getJobsByLevelPaginated } from "@/sanity/lib/queries";
 import Pagination from "@/components/PaginationComponent";
