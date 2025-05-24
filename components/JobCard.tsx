@@ -85,7 +85,7 @@ const JobCard = ({ job }: JobCardProps) => {
 						</Link>
 						<Link
 							href={`/jobs/by-level/${job.level?.name}`}>
-							<button className='bg-purple-100 text-purple-800 font-medium px-2.5 py-0.5 rounded first-letter:uppercase'>
+							<button className='bg-purple-100 text-purple-800 font-medium px-2.5 py-0.5 rounded first-letter:uppercase hover:underline'>
 								{
 									job
 										.level

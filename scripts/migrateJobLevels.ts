@@ -11,8 +11,6 @@ const jobLevels = [
 	{ name: "Manager", slug: "manager" },
 	{ name: "Director", slug: "director" },
 	{ name: "Executive", slug: "executive" },
-	{ name: "C-Level", slug: "c-level" },
-	{ name: "Others", slug: "others" },
 ];
 
 async function createJobLevels() {

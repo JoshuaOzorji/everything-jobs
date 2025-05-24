@@ -92,13 +92,6 @@ export const companySchema = defineType({
 				storeOriginalFilename: true,
 			},
 
-			// fields: [
-			// 	defineField({
-			// 		name: "alt",
-			// 		type: "string",
-			// 		title: "Alternative Text",
-			// 	}),
-			// ],
 			fields: [
 				defineField({
 					name: "alt",

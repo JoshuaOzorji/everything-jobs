@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Lato, Poppins, Open_Sans, IBM_Plex_Serif } from "next/font/google";
 import "./../globals.css";
 import AuthProvider from "@/components/AuthProvider";
-import { Toaster } from "react-hot-toast";
+import { Toaster } from "sonner";
 import BaseLayout from "@/components/BaseLayout";
 import { Suspense } from "react";
 import ProgressBar from "@/components/ProgressBar";
@@ -46,8 +46,8 @@ export default function RootLayout({
 				<BaseLayout>
 					<AuthProvider>{children}</AuthProvider>
 					<Toaster
+						richColors
 						position='bottom-center'
-						reverseOrder={false}
 					/>
 				</BaseLayout>
 			</body>

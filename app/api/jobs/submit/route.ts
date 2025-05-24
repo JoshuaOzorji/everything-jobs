@@ -57,7 +57,6 @@ export async function POST(request: Request) {
 			title: job.title,
 			companyName: job.companyName,
 			deadline: job.deadline || null,
-			apply: typeof job.apply === "string",
 			// Convert summary to proper Portable Text format if it's a string
 			summary:
 				typeof job.summary === "string"
@@ -79,6 +78,53 @@ export async function POST(request: Request) {
 						]
 					: Array.isArray(job.summary)
 						? job.summary.map(
+								(
+									block: PortableTextBlock,
+								) => ({
+									...block,
+									_key:
+										block._key ||
+										generateKey(),
+									children: (
+										block.children ||
+										[]
+									).map(
+										(
+											child: PortableTextSpan,
+										) => ({
+											...child,
+											_key:
+												child._key ||
+												generateKey(),
+										}),
+									),
+									markDefs:
+										block.markDefs ||
+										[],
+								}),
+							)
+						: [],
+
+			apply:
+				typeof job.apply === "string"
+					? [
+							{
+								_type: "block",
+								_key: generateKey(),
+								style: "normal",
+								children: [
+									{
+										_type: "span",
+										_key: generateKey(),
+										text: job.apply,
+										marks: [],
+									},
+								],
+								markDefs: [],
+							},
+						]
+					: Array.isArray(job.apply)
+						? job.apply.map(
 								(
 									block: PortableTextBlock,
 								) => ({

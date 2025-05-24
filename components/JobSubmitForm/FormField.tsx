@@ -26,7 +26,7 @@ export default function FormField({
 	const errorMessage = getErrorMessage(error);
 
 	return (
-		<div>
+		<div className='form-field-wrapper'>
 			<label className='block text-sm font-medium mb-2'>
 				{label} {required && "*"}
 			</label>

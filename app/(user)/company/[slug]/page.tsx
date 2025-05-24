@@ -21,7 +21,12 @@ export const revalidate = 3600; // Revalidate every hour
 export async function generateStaticParams() {
 	const query = groq`*[_type == "company"][0...50].slug.current`;
 	const slugs = await client.fetch<string[]>(query);
-	return slugs.map((slug) => ({ slug }));
+	// Ensure we only return valid string slugs
+	return slugs
+		.filter((slug): slug is string => typeof slug === "string")
+		.map((slug) => ({
+			slug: slug,
+		}));
 }
 
 // Company base query

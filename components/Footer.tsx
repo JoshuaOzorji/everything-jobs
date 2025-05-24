@@ -164,7 +164,7 @@ const Footer = () => {
 									id='email'
 									type='email'
 									placeholder='Your email address'
-									className='w-full px-4 py-2 bg-white border border-gray-700 rounded text-myBlack focus:outline-none'
+									className='w-full p-2 bg-white border border-gray-700 rounded text-myBlack focus:outline-none'
 									{...register(
 										"email",
 										{
@@ -218,7 +218,7 @@ const Footer = () => {
 										href={
 											link.href
 										}
-										className='transition hover:text-white'>
+										className='transition hover:text-pry2'>
 										{
 											link.label
 										}

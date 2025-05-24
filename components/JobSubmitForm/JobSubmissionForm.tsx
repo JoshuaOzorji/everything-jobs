@@ -8,7 +8,7 @@ import { client } from "@/sanity/lib/client";
 
 // Component Imports
 import BasicInformation from "./BasicInformation";
-import JobDetails from "./JobDetails";
+import JobDetailsSection from "./JobDetailsSection";
 import RequirementsSection from "./RequirementsSection";
 import JobClassification from "./JobClassification";
 import ContactInformation from "./ContactInformation";
@@ -132,10 +132,13 @@ export default function JobSubmissionForm() {
 	return (
 		<form
 			onSubmit={handleSubmit(onSubmit)}
-			className='max-w-2xl mx-auto p-6 space-y-6 font-poppins'>
+			className='mx-auto p-2 md:p-6 space-y-6 font-poppins'>
 			<BasicInformation register={register} errors={errors} />
 
-			<JobDetails register={register} errors={errors} />
+			<JobDetailsSection
+				register={register}
+				errors={errors}
+			/>
 
 			<RequirementsSection
 				register={register}

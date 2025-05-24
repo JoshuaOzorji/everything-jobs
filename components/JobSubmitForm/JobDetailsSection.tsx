@@ -10,20 +10,22 @@ interface JobDetailsProps {
 	errors: FieldErrors<JobSubmission>;
 }
 
-export default function JobDetails({ register, errors }: JobDetailsProps) {
+export default function JobDetailsSection({
+	register,
+	errors,
+}: JobDetailsProps) {
 	return (
 		<FormSection title='Job Details'>
-			<div className='grid grid-cols-2 gap-4'>
+			<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
 				<FormField
-					label='Minimum Salary'
-					error={errors.salaryRange?.min}
-					required>
+					label='Minimum Salary (₦)'
+					error={errors.salaryRange?.min}>
 					<input
 						type='number'
 						{...register(
 							"salaryRange.min",
 							{
-								required: "Minimum salary is required",
+								// required: "Minimum salary is required",
 								min: {
 									value: 0,
 									message: "Salary cannot be negative",
@@ -35,15 +37,14 @@ export default function JobDetails({ register, errors }: JobDetailsProps) {
 				</FormField>
 
 				<FormField
-					label='Maximum Salary'
-					error={errors.salaryRange?.max}
-					required>
+					label='Maximum Salary (₦)'
+					error={errors.salaryRange?.max}>
 					<input
 						type='number'
 						{...register(
 							"salaryRange.max",
 							{
-								required: "Maximum salary is required",
+								// required: "Maximum salary is required",
 								min: {
 									value: 0,
 									message: "Salary cannot be negative",
@@ -55,7 +56,7 @@ export default function JobDetails({ register, errors }: JobDetailsProps) {
 				</FormField>
 			</div>
 
-			<div className='grid grid-cols-2 gap-4'>
+			<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
 				<FormField
 					label='Minimum Experience (Years)'
 					error={errors.experienceRange?.min}>

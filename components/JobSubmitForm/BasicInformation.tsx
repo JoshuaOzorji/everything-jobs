@@ -24,7 +24,7 @@ export default function BasicInformation({
 					{...register("title", {
 						required: "Job title is required",
 					})}
-					className='w-full px-3 py-2 border rounded-md'
+					className='w-full px-3 py-2 rounded-md'
 				/>
 			</FormField>
 
@@ -37,7 +37,7 @@ export default function BasicInformation({
 						required: "Summary is required",
 					})}
 					rows={4}
-					className='w-full px-3 py-2 border rounded-md'
+					className='w-full px-3 py-2 rounded-md'
 				/>
 			</FormField>
 
@@ -50,7 +50,7 @@ export default function BasicInformation({
 					{...register("companyName", {
 						required: "Company name is required",
 					})}
-					className='w-full px-3 py-2 border rounded-md'
+					className='w-full px-3 py-2 rounded-md'
 				/>
 			</FormField>
 		</FormSection>

@@ -1,5 +1,6 @@
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
 import type { JobSubmission } from "@/types";
+import FormField from "./FormField";
 
 interface ApplicationDetailsProps {
 	register: UseFormRegister<JobSubmission>;
@@ -16,10 +17,9 @@ export default function ApplicationDetails({
 				Application Details
 			</h2>
 
-			<div className='space-y-2'>
-				<label className='block text-sm font-medium'>
-					Application Deadline
-				</label>
+			<FormField
+				label='Application Deadline'
+				error={errors.deadline}>
 				<input
 					type='date'
 					{...register("deadline", {
@@ -31,7 +31,7 @@ export default function ApplicationDetails({
 								0,
 								0,
 								0,
-							); // Reset time to start of day
+							);
 							const selected =
 								new Date(value);
 							return (
@@ -41,33 +41,23 @@ export default function ApplicationDetails({
 							);
 						},
 					})}
-					className='w-full rounded-md border p-2'
+					className='w-full rounded-md p-2'
 				/>
-				{errors.deadline && (
-					<p className='text-red-500 text-sm'>
-						{errors.deadline.message}
-					</p>
-				)}
-			</div>
+			</FormField>
 
-			<div className='space-y-2'>
-				<label className='block text-sm font-medium'>
-					Method of Application*
-				</label>
+			<FormField
+				label='Method of Application'
+				error={errors.apply}
+				required>
 				<textarea
 					{...register("apply", {
 						required: "Method of application is required",
 					})}
 					placeholder='Explain how candidates should apply (e.g., email, website, or specific instructions)'
 					rows={4}
-					className='w-full rounded-md border p-2'
+					className='w-full rounded-md p-2'
 				/>
-				{errors.apply && (
-					<p className='text-red-500 text-sm'>
-						{errors.apply.message}
-					</p>
-				)}
-			</div>
+			</FormField>
 		</div>
 	);
 }

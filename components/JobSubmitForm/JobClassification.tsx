@@ -26,7 +26,7 @@ export default function JobClassification({
 }: JobClassificationProps) {
 	return (
 		<FormSection title='Job Classification'>
-			<div className='grid grid-cols-2 gap-4'>
+			<div className='text-base grid grid-cols-1 sm:grid-cols-2 gap-4'>
 				<FormField
 					label='Location'
 					error={errors.locationName}
@@ -88,7 +88,7 @@ export default function JobClassification({
 				</FormField>
 			</div>
 
-			<div className='grid grid-cols-2 gap-4'>
+			<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
 				<FormField
 					label='Education Level'
 					error={errors.educationLevel}

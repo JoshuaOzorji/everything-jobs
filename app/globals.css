@@ -79,6 +79,12 @@ body {
 	@apply text-base font-semibold mb-2 font-poppins;
 }
 
+.form-field-wrapper input,
+.form-field-wrapper select,
+.form-field-wrapper textarea {
+	@apply text-sm focus:outline-none focus:ring-pry2 focus:ring-1 delay-100;
+}
+
 .progress-bar-indicator::after {
 	content: "";
 	position: absolute;
