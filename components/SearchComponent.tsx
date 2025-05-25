@@ -6,9 +6,7 @@ import { IoSearchOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 
 const fetchLocationsQuery = `
-  *[_type == "state" && 
-    count(*[_type == "job" && references(^._id)]) > 0 && 
-    name != "Remote"] { 
+  *[_type == "state" && name != "Remote"] { 
     _id, 
     name 
   }

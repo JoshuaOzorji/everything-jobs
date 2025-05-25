@@ -8,7 +8,6 @@ import { JOBS_PER_PAGE } from "@/sanity/lib/constants";
 // Define the job type based on JobCardProps
 type Job = JobCardProps["job"];
 
-// Optimized query that maintains compatibility with JobCard and supports pagination
 export async function fetchJobsPaginated(page = 1, perPage = JOBS_PER_PAGE) {
 	const start = (page - 1) * perPage;
 	const end = start + perPage;

@@ -140,9 +140,15 @@ export interface JobCardProps {
 		};
 		jobType?: {
 			name: string;
+			slug?: {
+				current: string;
+			};
 		};
 		level?: {
 			name: string;
+			slug?: {
+				current: string;
+			};
 		};
 		publishedAt: string;
 		summary?: any[];

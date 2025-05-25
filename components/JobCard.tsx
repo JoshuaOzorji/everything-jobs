@@ -26,9 +26,9 @@ const JobCard = ({ job }: JobCardProps) => {
 						height={45}
 					/>
 				</div>
-				<div className='w-full font-openSans text-myBlack '>
-					<span className='flex items-center justify-between '>
-						<h2 className='text-[13px] md:text-base font-bold flex items-center font-poppins hover:text-pry animate'>
+				<div className='w-full font-openSans text-myBlack'>
+					<div className='flex items-start justify-between'>
+						<h2 className='text-[13px] md:text-base font-bold font-poppins hover:text-pry animate max-w-[75%]'>
 							<Link
 								href={`/job/${job.slug}`}>
 								{job.title} at{" "}
@@ -39,7 +39,7 @@ const JobCard = ({ job }: JobCardProps) => {
 								}
 							</Link>
 						</h2>
-						<p className='text-sm flex items-center gap-1 text-[11px] md:text-sm'>
+						<p className='text-sm flex items-center gap-1 text-[11px] md:text-sm whitespace-nowrap flex-shrink-0'>
 							<span className='text-base text-pry'>
 								&bull;
 							</span>
@@ -51,7 +51,7 @@ const JobCard = ({ job }: JobCardProps) => {
 								)}
 							</span>
 						</p>
-					</span>
+					</div>
 
 					{/* Summary */}
 					<div className='text-[12px] md:text-sm font-openSans line-clamp-2 mb-1'>
@@ -74,7 +74,7 @@ const JobCard = ({ job }: JobCardProps) => {
 						</Link>
 
 						<Link
-							href={`jobs/by-type/${job.jobType?.name}`}>
+							href={`jobs/by-type/${job.jobType?.slug}`}>
 							<button className='bg-green-100 text-green-800 font-medium px-2.5 py-0.5 rounded first-letter:uppercase hover:underline'>
 								{
 									job
@@ -84,7 +84,7 @@ const JobCard = ({ job }: JobCardProps) => {
 							</button>
 						</Link>
 						<Link
-							href={`/jobs/by-level/${job.level?.name}`}>
+							href={`/jobs/by-level/${job.level?.slug}`}>
 							<button className='bg-purple-100 text-purple-800 font-medium px-2.5 py-0.5 rounded first-letter:uppercase hover:underline'>
 								{
 									job
