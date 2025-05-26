@@ -74,6 +74,7 @@ export const getDisplayNameForJobLevel = (value: string): string => {
 		"entry-level": "Entry level",
 		"mid-level": "Mid level",
 		"senior-level": "Senior level",
+		manager: "Manager",
 		director: "Director",
 		executive: "Executive",
 	};

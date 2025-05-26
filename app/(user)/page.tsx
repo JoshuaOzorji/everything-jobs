@@ -4,7 +4,6 @@ import LatestJobs from "@/components/LatestJobs";
 import AsideMain from "@/components/sidebar/AsideMain";
 import { LoadingComponent } from "@/components/Loading";
 
-// Type for the Homepage props
 type HomepageProps = {
 	searchParams: Promise<{
 		page?: string;
@@ -12,7 +11,6 @@ type HomepageProps = {
 };
 
 async function Homepage({ searchParams }: HomepageProps) {
-	// const pageParam = (await searchParams)?.page;
 	const params = await searchParams;
 	const pageParam = params?.page;
 	const page = pageParam ? parseInt(pageParam) : 1;

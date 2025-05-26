@@ -83,15 +83,18 @@ export async function getJobsByLocation(
       },
       "jobType": jobType->{
           _id,
-          name
+          name,
+          "slug": slug.current 
       },
       "jobField": jobField->{
           _id,
-          name
+          name,
+          "slug": slug.current
       },
       "level": level->{
           _id,
-          name
+          name,
+          "slug": slug.current
       },
       publishedAt,
       description,
@@ -157,22 +160,25 @@ export async function getJobsByField(
         } 
       },
       salaryRange,
-      "location": location->{
+       "location": location->{
           _id,
           name,
           slug
       },
       "jobType": jobType->{
           _id,
-          name
+          name,
+          "slug": slug.current 
       },
       "jobField": jobField->{
           _id,
-          name
+          name,
+          "slug": slug.current
       },
       "level": level->{
           _id,
-          name
+          name,
+          "slug": slug.current
       },
       publishedAt,
       description,
@@ -258,23 +264,27 @@ export async function getJobsByEducation(
         name
       },
       salaryRange,
-      "location": location->{
+       "location": location->{
           _id,
           name,
           slug
       },
       "jobType": jobType->{
           _id,
-          name
+          name,
+          "slug": slug.current 
       },
       "jobField": jobField->{
           _id,
-          name
+          name,
+          "slug": slug.current
       },
-      "education": education->{
+      "level": level->{
           _id,
-          name
+          name,
+          "slug": slug.current
       },
+      
       publishedAt,
       description,
       summary
@@ -315,26 +325,27 @@ export async function getRemoteJobs(
             }
           },
           salaryRange,
-          "location": location->{
-              _id,
-              name,
-              slug
-          },
-          "jobType": jobType->{
-              _id,
-              name
-          },
-          level->{
-            name
-          },
-          "jobField": jobField->{
-              _id,
-              name
-          },
-          "education": education->{
-              _id,
-              name
-          },
+          
+        "location": location->{
+            _id,
+            name,
+            slug
+        },
+        "jobType": jobType->{
+            _id,
+            name,
+            "slug": slug.current 
+        },
+        "jobField": jobField->{
+            _id,
+            name,
+            "slug": slug.current
+        },
+        "level": level->{
+            _id,
+            name,
+            "slug": slug.current
+        },
           publishedAt,
           description,
           summary
@@ -386,21 +397,25 @@ export async function getJobsByTypePaginated(
       },
       salaryRange,
       "location": location->{
-        _id,
-        name,
-        slug
-      },
-      "jobType": jobType->{
-        _id,
-        name
-      },
-      "level": level->{
-        name
-      },
-      "jobField": jobField->{
-        _id,
-        name
-      },
+            _id,
+            name,
+            slug
+        },
+        "jobType": jobType->{
+            _id,
+            name,
+            "slug": slug.current 
+        },
+        "jobField": jobField->{
+            _id,
+            name,
+            "slug": slug.current
+        },
+        "level": level->{
+            _id,
+            name,
+            "slug": slug.current
+        },
       publishedAt,
       description,
       summary
@@ -453,22 +468,25 @@ export async function getJobsByLevelPaginated(
         }
       },
       salaryRange,
-      "location": location->{
-        _id,
-        name,
-        slug
+       "location": location->{
+          _id,
+          name,
+          slug
       },
       "jobType": jobType->{
-        _id,
-        name
-      },
-      "level": level->{
-        _id,
-        name
+          _id,
+          name,
+          "slug": slug.current 
       },
       "jobField": jobField->{
-        _id,
-        name
+          _id,
+          name,
+          "slug": slug.current
+      },
+      "level": level->{
+          _id,
+          name,
+          "slug": slug.current
       },
       publishedAt,
       description,
@@ -534,10 +552,14 @@ export const jobQuery = defineQuery(groq`
   }
 `);
 
-type JobReference = {
+export interface JobReference {
 	_id: string;
 	name: string;
-};
+	value?: string;
+	slug: {
+		current: string;
+	};
+}
 
 type CurrentJob = {
 	_id: string;

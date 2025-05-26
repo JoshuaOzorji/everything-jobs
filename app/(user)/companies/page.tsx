@@ -35,7 +35,7 @@ async function getCompanies(page = 1, perPage = 10) {
         alt
       },
       description,
-      slug,
+      "slug": slug.current,
       website
     }`,
 	);

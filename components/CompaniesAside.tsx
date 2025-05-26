@@ -7,7 +7,7 @@ import placeholder from "@/public/placeholderCompany.png";
 type CompanyWithJobCount = {
 	_id: string;
 	name: string;
-	slug: { current: string };
+	slug: string;
 	logo?: {
 		asset: {
 			url: string;
@@ -21,7 +21,7 @@ const topCompaniesQuery = groq`
   *[_type == "company"] {
     _id,
     name,
-    slug,
+    "slug": slug.current,
     logo {
       asset->{url},
       alt
@@ -97,19 +97,14 @@ const CompaniesAside = async () => {
 							</div>
 
 							<Link
-								href={`/company/${company.slug.current}`}
-								className='flex-grow text-sm font-medium transition-colors hover:text-blue-600'>
+								href={`/company/${company?.slug}`}
+								className='flex-grow min-w-0 truncate text-sm font-medium transition-colors hover:text-blue-600'>
 								{company.name}
 							</Link>
 
-							<span className='px-2 py-1 text-xs text-center bg-gray-100 rounded-md'>
-								{
-									company.jobCount
-								}{" "}
-								{company.jobCount ===
-								1
-									? "job"
-									: "jobs"}
+							<span className='flex-shrink-0 px-2 py-1 text-xs text-center bg-gray-100 rounded-md'>
+								{company.jobCount}{" "}
+								{company.jobCount === 1 ? "job" : "jobs"}
 							</span>
 						</li>
 					))}

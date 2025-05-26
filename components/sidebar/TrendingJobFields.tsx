@@ -54,7 +54,7 @@ const TrendingJobFields: React.FC<TrendingJobFieldsProps> = ({
 					{jobFields.map((jobField) => (
 						<li key={jobField._id}>
 							<Link
-								href={`/jobs/by-fields/${jobField.slug}`}
+								href={`/jobs/by-field/${jobField.slug}`}
 								className='flex items-center justify-between px-2 py-1 text-sm rounded hover:text-pry2 text-myBlack group md:text-base'>
 								<span className='flex items-center gap-1'>
 									<HiOutlineBriefcase />

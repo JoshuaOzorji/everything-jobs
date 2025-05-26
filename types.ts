@@ -8,9 +8,7 @@ export interface Company {
 		alt?: string;
 	};
 	description?: string;
-	slug: {
-		current: string;
-	};
+	slug: string;
 	website?: string;
 	industry?: {
 		name: string;

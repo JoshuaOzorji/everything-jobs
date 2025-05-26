@@ -41,7 +41,7 @@ const SmallScreenCompanyCard = ({ company }: CompanyCardProps) => {
 					)}
 				</div>
 
-				<Link href={`/company/${company.slug.current}`}>
+				<Link href={`/company/${company?.slug}`}>
 					<h3 className='flex-1 text-[0.9rem] hover:underline'>
 						{company.name}
 					</h3>
@@ -85,7 +85,7 @@ const LargeScreenCompanyCard = ({ company }: CompanyCardProps) => {
 			<div className='relative group'>
 				<div className='mb-2 text-sm text-center truncate hover:underline'>
 					<Link
-						href={`/company/${company.slug.current}`}>
+						href={`/company/${company?.slug}`}>
 						{company.name}
 					</Link>
 				</div>

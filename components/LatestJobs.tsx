@@ -5,7 +5,6 @@ import { groq } from "next-sanity";
 import Pagination from "./PaginationComponent";
 import { JOBS_PER_PAGE } from "@/sanity/lib/constants";
 
-// Define the job type based on JobCardProps
 type Job = JobCardProps["job"];
 
 export async function fetchJobsPaginated(page = 1, perPage = JOBS_PER_PAGE) {
@@ -25,10 +24,12 @@ export async function fetchJobsPaginated(page = 1, perPage = JOBS_PER_PAGE) {
       "slug": location->slug.current
     },
     "jobType": {
-      "name": jobType->name
+      "name": jobType->name,
+      "slug": jobType->slug.current
     },
     "level": {
-      "name": level->name
+      "name": level->name,
+      "slug": level->slug.current
     },
     publishedAt,
     summary

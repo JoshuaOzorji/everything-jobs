@@ -16,6 +16,10 @@ interface JobLevelsProps {
 	jobLevels?: JobLevel[];
 }
 
+interface SortableJobLevel extends JobLevel {
+	sortOrder: number;
+}
+
 export const getJobLevels = async function () {
 	const jobLevels = await client.fetch(`
     *[_type == "jobLevel"] {
@@ -23,20 +27,45 @@ export const getJobLevels = async function () {
       name,
       "slug": slug.current,
       "jobCount": count(*[_type == "job" && jobLevel._ref == ^._id])
-    } | order(jobCount desc)
+    }
   `);
 
-	return jobLevels.map(
-		(level: {
-			_id: string;
-			name: string;
-			slug: string;
-			jobCount: number;
-		}) => ({
-			...level,
-			displayName: getDisplayNameForJobLevel(level.slug),
-		}),
-	);
+	// Define preferred order matching your utility mapping
+	const preferredOrder = [
+		"entry-level",
+		"mid-level",
+		"senior-level",
+		"manager",
+		"director",
+		"executive",
+	];
+
+	return jobLevels
+		.map(
+			(level: {
+				_id: string;
+				name: string;
+				slug: string;
+				jobCount: number;
+			}) => ({
+				...level,
+				displayName: getDisplayNameForJobLevel(
+					level.slug,
+				),
+				sortOrder: preferredOrder.indexOf(level.slug),
+			}),
+		)
+		.sort((a: SortableJobLevel, b: SortableJobLevel) => {
+			// If both have valid sort orders, use them
+			if (a.sortOrder !== -1 && b.sortOrder !== -1) {
+				return a.sortOrder - b.sortOrder;
+			}
+			// If only one has a valid sort order, prioritize it
+			if (a.sortOrder !== -1) return -1;
+			if (b.sortOrder !== -1) return 1;
+			// For items not in preferredOrder, sort by job count
+			return b.jobCount - a.jobCount;
+		});
 };
 
 const JobLevels: React.FC<JobLevelsProps> = ({ jobLevels = [] }) => {
