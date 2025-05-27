@@ -583,22 +583,26 @@ export const relatedJobsQuery = groq`
     publishedAt,
     "company": company->name,
     "companySlug": company->slug.current,
-    "jobType": jobType-> { 
-      _id,
-      name 
-    },
-    "location": location-> { 
-      _id,
-      name 
-    },
-    "jobField": jobField-> { 
-      _id,
-      name 
-    },
-    "level": level-> { 
-      _id,
-      name 
-    },
+    "location": location->{
+          _id,
+          name,
+          slug
+      },
+      "jobType": jobType->{
+          _id,
+          name,
+          "slug": slug.current 
+      },
+      "jobField": jobField->{
+          _id,
+          name,
+          "slug": slug.current
+      },
+      "level": level->{
+          _id,
+          name,
+          "slug": slug.current
+      },
     "score": 
       (jobField->_id == $jobFieldId) * 5 +
       (jobType->_id == $jobTypeId) * 3 +

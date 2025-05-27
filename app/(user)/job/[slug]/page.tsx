@@ -190,7 +190,12 @@ export default async function JobPage({ params }: PageProps) {
 	}
 
 	return (
-		<SubLayout aside={<AsideMain />}>
+		<SubLayout
+			aside={
+				<div className='hidden md:block'>
+					<AsideMain />
+				</div>
+			}>
 			<div className='p-4 bg-white rounded-md font-openSans text-myBlack md:p-8'>
 				<section className='pb-4 mb-4 border-b border-zinc-300'>
 					{/* Company header - kept in main bundle */}
@@ -203,7 +208,7 @@ export default async function JobPage({ params }: PageProps) {
 										.company
 										.name
 								}
-								className='h-[7vh] w-[7vh] rounded-sm'
+								className='h-[5vh] w-[5vh] md:h-[6vh] md:w-[6vh] rounded-sm'
 								width={50}
 								height={50}
 								priority

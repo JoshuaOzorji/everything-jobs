@@ -18,9 +18,10 @@ const JobCard2: React.FC<JobCardProps2> = ({ job }) => {
 						<Image
 							src={job.companyLogo}
 							alt={job.company}
-							width={48}
-							height={48}
-							className='w-full h-full rounded-sm'
+							className='h-[5vh] w-[5vh] md:h-[6vh] md:w-[6vh] rounded-sm'
+							width={50}
+							height={50}
+							priority
 						/>
 					</div>
 				)}

@@ -19,9 +19,10 @@ const JobCardCategories = ({ job }: JobCardProps) => {
 					<Image
 						src={imageUrl}
 						alt={job.company.name}
-						className='h-[8vh] w-full rounded-sm'
-						width={45}
-						height={45}
+						className='h-[5vh] w-[5vh] md:h-[6vh] md:w-[6vh] rounded-sm'
+						width={50}
+						height={50}
+						priority
 					/>
 				</div>
 				<div className='w-full font-openSans text-myBlack'>
