@@ -31,25 +31,29 @@ const JobCard2: React.FC<JobCard2Props> = ({ job }) => {
 				)}
 
 				<div className='flex flex-col flex-1'>
-					<div className='flex justify-between w-full'>
-						<Link
-							href={`/job/${job.slug}`}
-							className='text-[13px] md:text-base font-bold flex items-center font-poppins hover:text-pry animate'>
-							{job.title}
-						</Link>
+					<div className='flex w-full'>
+						<div className='flex-1 min-w-0'>
+							<Link
+								href={`/job/${job.slug}`}
+								className='text-[13px] md:text-base font-bold flex items-center font-poppins hover:text-pry animate'>
+								{job.title}
+							</Link>
+						</div>
 
-						<p className='text-sm flex items-center gap-1 text-[11px] md:text-sm'>
-							<span className='text-base text-pry'>
-								&bull;
-							</span>
-							<span className='text-xs md:text-sm font-poppins'>
-								{formatDate(
-									new Date(
-										job.publishedAt,
-									),
-								)}
-							</span>
-						</p>
+						<div className='flex-shrink-0 ml-2'>
+							<p className='text-sm flex items-center gap-1 text-[11px] md:text-sm whitespace-nowrap'>
+								<span className='text-base text-pry'>
+									&bull;
+								</span>
+								<span className='text-xs md:text-sm font-poppins'>
+									{formatDate(
+										new Date(
+											job.publishedAt,
+										),
+									)}
+								</span>
+							</p>
+						</div>
 					</div>
 					<div>
 						<p className='text-sm text-myBlack font-poppins'>
