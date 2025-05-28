@@ -89,7 +89,12 @@ export default async function LocationJobsPage({
 	);
 
 	return (
-		<SubLayout aside={<AsideMain />}>
+		<SubLayout
+			aside={
+				<div className='hidden md:block'>
+					<AsideMain />
+				</div>
+			}>
 			<div className='page-container'>
 				<h1 className='page-h1'>
 					Jobs in {locationData.name}, Nigeria

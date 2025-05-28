@@ -38,7 +38,12 @@ export default async function RemoteJobsPage({
 	const { jobs, totalCount } = await getRemoteJobs(currentPage, perPage);
 
 	return (
-		<SubLayout aside={<AsideMain />}>
+		<SubLayout
+			aside={
+				<div className='hidden md:block'>
+					<AsideMain />
+				</div>
+			}>
 			<div className='page-container'>
 				<h1 className='page-h1'>
 					Remote Jobs in Nigeria

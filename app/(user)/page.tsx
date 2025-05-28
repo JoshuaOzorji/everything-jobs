@@ -1,6 +1,6 @@
 import SubLayout from "@/components/SubLayout";
 import { Suspense } from "react";
-import LatestJobs from "@/components/LatestJobs";
+import JobsList from "@/components/JobsList";
 import AsideMain from "@/components/sidebar/AsideMain";
 import { LoadingComponent } from "@/components/Loading";
 
@@ -17,9 +17,14 @@ async function Homepage({ searchParams }: HomepageProps) {
 
 	return (
 		<main>
-			<SubLayout aside={<AsideMain />}>
+			<SubLayout
+				aside={
+					<div className='hidden md:block'>
+						<AsideMain />
+					</div>
+				}>
 				<Suspense fallback={<LoadingComponent />}>
-					<LatestJobs page={page} />
+					<JobsList page={page} />
 				</Suspense>
 			</SubLayout>
 		</main>

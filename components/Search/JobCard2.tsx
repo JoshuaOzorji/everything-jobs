@@ -1,20 +1,24 @@
 import Image from "next/image";
-import Link from "next/link";
-import { JobQuery } from "@/types";
+import { SearchJobResult } from "@/types";
 import { formatDate } from "@/lib/formatDate";
 import { PortableText } from "next-sanity";
 import { customSerializers } from "@/lib/customSerializers";
+import Link from "next/link";
 
-interface JobCardProps2 {
-	job: JobQuery;
+interface JobCard2Props {
+	job: SearchJobResult;
 }
 
-const JobCard2: React.FC<JobCardProps2> = ({ job }) => {
+const JobCard2: React.FC<JobCard2Props> = ({ job }) => {
+	const locationName = job.location;
+	const jobTypeName = job.jobType;
+	const levelName = job.level;
+
 	return (
 		<div className='px-4 py-3 transition bg-white rounded shadow md:p-4 hover:shadow-sm'>
 			<div className='flex gap-3'>
 				{job.companyLogo && (
-					<div className='w-12 h-12 overflow-hidden rounded'>
+					<div className='overflow-hidden rounded'>
 						<Image
 							src={job.companyLogo}
 							alt={job.company}
@@ -68,20 +72,16 @@ const JobCard2: React.FC<JobCardProps2> = ({ job }) => {
 					</div>
 
 					<div className='flex flex-wrap gap-3 mt-2 font-openSans'>
-						{job.location && (
+						{locationName && (
 							<span className='px-2 py-0.5 text-[12.5px] text-blue-800 bg-blue-100 rounded first-letter:uppercase'>
-								{
-									job
-										.location
-										.name
-								}
+								{locationName}
 							</span>
 						)}
 						<span className='px-2 py-0.5 text-[12.5px] text-green-800 bg-green-100 rounded first-letter:uppercase'>
-							{job.jobType.name}
+							{jobTypeName}
 						</span>
-						<span className='px-2 py-0.5 text-[12.5px]  text-purple-800 bg-purple-100 rounded first-letter:uppercase'>
-							{job.level.name}
+						<span className='px-2 py-0.5 text-[12.5px] text-purple-800 bg-purple-100 rounded first-letter:uppercase'>
+							{levelName}
 						</span>
 					</div>
 				</div>

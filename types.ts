@@ -171,6 +171,23 @@ export interface JobQuery {
 	deadline: string;
 }
 
+// Add this new interface
+export interface SearchJobResult {
+	_id: string;
+	title: string;
+	slug: string;
+	company: string;
+	companyLogo?: string;
+	summary?: any[];
+	location: string;
+	jobType: string;
+	level: string;
+	education: string;
+	jobField: string;
+	salaryRange: { min: number; max: number };
+	publishedAt: string;
+	deadline: string;
+}
 export interface Filter {
 	_id: string;
 	name: string;

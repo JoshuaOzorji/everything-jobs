@@ -2,19 +2,17 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FilterOptions, JobQuery } from "@/types";
+import { FilterOptions, SearchJobResult } from "@/types";
 import SearchHeader from "@/components/Search/SearchHeader";
 import FilterToggle from "@/components/Search/FilterToggle";
 import ActiveFilters from "@/components/Search/ActiveFilters";
 import FilterSidebar from "@/components/Search/FilterSidebar";
-
 import SearchResults from "@/components/Search/SearchResults";
-import { LoadingComponent } from "@/components/Loading";
 
 const SearchPage = () => {
 	const searchParams = useSearchParams();
 	const router = useRouter();
-	const [jobs, setJobs] = useState<JobQuery[]>([]);
+	const [jobs, setJobs] = useState<SearchJobResult[]>([]);
 	const [filters, setFilters] = useState<FilterOptions | null>(null);
 	const [showFilters, setShowFilters] = useState(false);
 	const [hasSearched, setHasSearched] = useState(false);

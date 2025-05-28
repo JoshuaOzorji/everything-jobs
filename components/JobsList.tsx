@@ -61,11 +61,11 @@ export const dynamic = "force-static";
 export const revalidate = 600;
 
 // Accept page as a prop instead of trying to read from headers
-type LatestJobsProps = {
+type JobsListProps = {
 	page?: number;
 };
 
-async function LatestJobs({ page = 1 }: LatestJobsProps) {
+async function JobsList({ page = 1 }: JobsListProps) {
 	const { jobs, totalCount } = await fetchJobsPaginated(page);
 
 	return (
@@ -95,4 +95,4 @@ async function LatestJobs({ page = 1 }: LatestJobsProps) {
 	);
 }
 
-export default LatestJobs;
+export default JobsList;

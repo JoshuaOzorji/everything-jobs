@@ -16,7 +16,7 @@ interface JobTypesProps {
 
 export const getJobTypes = async function () {
 	return client.fetch(`
-    *[_type == "jobType"] {
+    *[_type == "jobType" && lower(name) != "others"] {
       _id,
       name,
       "slug": slug.current,

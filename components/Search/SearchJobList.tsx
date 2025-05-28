@@ -1,9 +1,9 @@
 import React from "react";
-import { JobQuery } from "@/types";
+import { SearchJobResult } from "@/types";
 import JobCard2 from "./JobCard2";
 
 interface JobListProps {
-	jobs: JobQuery[];
+	jobs: SearchJobResult[];
 }
 
 const JobList: React.FC<JobListProps> = ({ jobs }) => {

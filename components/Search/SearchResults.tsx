@@ -1,10 +1,10 @@
-import { JobQuery } from "@/types";
-import JobList from "./JobList";
+import { SearchJobResult } from "@/types";
+import SearchJobList from "./SearchJobList";
 import NoResultsMessage from "./NoResultsMessage";
 import { LoadingComponent } from "../Loading";
 
 interface SearchResultsProps {
-	jobs: JobQuery[];
+	jobs: SearchJobResult[];
 	isLoading: boolean;
 	hasSearched?: boolean;
 	query?: string;
@@ -24,7 +24,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
 						<LoadingComponent />
 					</div>
 				) : jobs.length > 0 ? (
-					<JobList jobs={jobs} />
+					<SearchJobList jobs={jobs} />
 				) : (
 					<NoResultsMessage
 						hasSearched={hasSearched}

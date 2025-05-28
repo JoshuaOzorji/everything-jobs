@@ -81,7 +81,12 @@ export default async function JobTypeJobsPage({ params, searchParams }: Props) {
 	);
 
 	return (
-		<SubLayout aside={<AsideMain />}>
+		<SubLayout
+			aside={
+				<div className='hidden md:block'>
+					<AsideMain />
+				</div>
+			}>
 			<div className='page-container'>
 				<h1 className='page-h1'>
 					{jobTypeData.name} Jobs in Nigeria
