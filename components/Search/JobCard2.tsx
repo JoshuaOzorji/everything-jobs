@@ -4,6 +4,7 @@ import { formatDate } from "@/lib/formatDate";
 import { PortableText } from "next-sanity";
 import { customSerializers } from "@/lib/customSerializers";
 import Link from "next/link";
+import placeholder from "@/public/placeholderCompany.png";
 
 interface JobCard2Props {
 	job: SearchJobResult;
@@ -17,18 +18,19 @@ const JobCard2: React.FC<JobCard2Props> = ({ job }) => {
 	return (
 		<div className='px-4 py-3 transition bg-white rounded shadow md:p-4 hover:shadow-sm'>
 			<div className='flex gap-3'>
-				{job.companyLogo && (
-					<div className='overflow-hidden rounded'>
-						<Image
-							src={job.companyLogo}
-							alt={job.company}
-							className='h-[5vh] w-[5vh] md:h-[6vh] md:w-[6vh] rounded-sm'
-							width={50}
-							height={50}
-							priority
-						/>
-					</div>
-				)}
+				<div className='overflow-hidden rounded'>
+					<Image
+						src={
+							job.companyLogo ||
+							placeholder
+						}
+						alt={job.company}
+						className='h-[5vh] w-[5vh] md:h-[6vh] md:w-[6vh] rounded-sm'
+						width={50}
+						height={50}
+						priority
+					/>
+				</div>
 
 				<div className='flex flex-col flex-1'>
 					<div className='flex w-full'>

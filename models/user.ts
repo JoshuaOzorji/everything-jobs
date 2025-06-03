@@ -6,6 +6,11 @@ export interface IUser extends Document {
 	username: string;
 	email: string;
 	password: string;
+	role: "employer";
+	companyId?: string;
+	provider?: string;
+	image?: string;
+	emailVerified?: Date;
 }
 
 const UserSchema = new Schema<IUser>(
@@ -14,7 +19,12 @@ const UserSchema = new Schema<IUser>(
 		lastName: { type: String, required: true },
 		username: { type: String, required: true, unique: true },
 		email: { type: String, required: true, unique: true },
-		password: { type: String, required: true },
+		password: { type: String }, // Optional for social login
+		role: { type: String, default: "employer", required: true },
+		companyId: { type: String }, // Reference to Sanity company document
+		provider: { type: String }, // 'credentials', 'google', 'linkedin'
+		image: { type: String },
+		emailVerified: { type: Date },
 	},
 	{
 		timestamps: true,

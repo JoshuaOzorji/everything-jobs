@@ -85,10 +85,10 @@ const SearchComponent = ({
 					? "duration-500 ease-in transition-all max-h-[300px] py-1 md:py-1.5"
 					: "duration-300 ease-out transition-all max-h-0"
 			} bg-acc shadow-md font-poppins`}>
-			<div className='mx-4 my-2 md:my-3 md:mx-8 '>
+			<div className='mx-4 my-2 md:my-3 md:mx-8'>
 				{/* inputs divider */}
 				<form onSubmit={handleSubmit}>
-					<div className='flex flex-wrap items-center justify-between w-full mx-auto border border-pry2 md:flex-row md:w-3/5'>
+					<div className='flex flex-wrap items-center justify-between w-full mx-auto border rounded-md shadow-sm border-pry2 md:flex-row md:w-3/5'>
 						<input
 							type='search'
 							placeholder='Search Jobs or Company'
@@ -128,7 +128,7 @@ const SearchComponent = ({
 
 						<button
 							type='submit'
-							className='p-1.5 text-white border md:p-[0.38rem] bg-pry2 hover:bg-pry animate hover:text-acc border-pry2'>
+							className='p-[0.30rem] text-white border md:p-[0.38rem] bg-pry2 hover:bg-pry animate hover:text-acc border-pry2'>
 							<IoSearchOutline className='w-6 h-6' />
 						</button>
 					</div>
