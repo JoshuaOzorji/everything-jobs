@@ -1,86 +1,16 @@
-"use client";
+import LoginForm from "@/components/LoginForm";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
-import { signInSchema } from "@/validations/signInValidator";
-
-export default function SignInPage() {
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-	const [errors, setErrors] = useState<{
-		email?: string;
-		password?: string;
-		general?: string;
-	}>({});
-
-	const router = useRouter();
-
-	const handleSignIn = async (e: React.FormEvent) => {
-		e.preventDefault();
-		setErrors({});
-
-		try {
-			signInSchema.parse({ email, password });
-
-			const res = await signIn("credentials", {
-				email,
-				password,
-				redirect: false,
-			});
-
-			if (!res?.error) {
-				router.push("/dashboard");
-			} else {
-				setErrors({
-					general: "Invalid email or password",
-				});
-			}
-		} catch (validationError) {
-			if (validationError instanceof Error) {
-				const zodError = validationError as any;
-				const errorMap: any = {};
-
-				zodError.errors.forEach((err: any) => {
-					errorMap[err.path[0]] = err.message;
-				});
-
-				setErrors(errorMap);
-			}
-		}
-	};
-
+export default function LoginPage() {
 	return (
-		<form onSubmit={handleSignIn}>
-			<div>
-				<input
-					type='email'
-					placeholder='Email'
-					value={email}
-					onChange={(e) =>
-						setEmail(e.target.value)
-					}
-					required
-				/>
-				{errors.email && <p>{errors.email}</p>}
+		<div className='min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8'>
+			<div className='max-w-md w-full space-y-8'>
+				<div>
+					<h2 className='mt-6 text-center text-3xl font-extrabold text-gray-900'>
+						Sign in to your account
+					</h2>
+				</div>
+				<LoginForm />
 			</div>
-
-			<div>
-				<input
-					type='password'
-					placeholder='Password'
-					value={password}
-					onChange={(e) =>
-						setPassword(e.target.value)
-					}
-					required
-				/>
-				{errors.password && <p>{errors.password}</p>}
-			</div>
-
-			{errors.general && <p>{errors.general}</p>}
-
-			<button type='submit'>Sign In</button>
-		</form>
+		</div>
 	);
 }
