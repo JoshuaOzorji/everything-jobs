@@ -2,7 +2,7 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FilterOptions, SearchJobResult } from "@/types";
+import { FilterOptions, SearchJobResult } from "@/types/types";
 import SearchHeader from "@/components/Search/SearchHeader";
 import FilterToggle from "@/components/Search/FilterToggle";
 import ActiveFilters from "@/components/Search/ActiveFilters";

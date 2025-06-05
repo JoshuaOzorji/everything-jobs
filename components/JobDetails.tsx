@@ -1,5 +1,5 @@
 import { PortableText } from "@portabletext/react";
-import { Job } from "@/types";
+import { Job } from "@/types/types";
 
 export default function JobDetails({ job }: { job: Job }) {
 	return (

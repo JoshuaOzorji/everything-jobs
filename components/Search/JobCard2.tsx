@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { SearchJobResult } from "@/types";
+import { SearchJobResult } from "@/types/types";
 import { formatDate } from "@/lib/formatDate";
 import { PortableText } from "next-sanity";
 import { customSerializers } from "@/lib/customSerializers";

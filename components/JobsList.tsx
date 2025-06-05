@@ -1,4 +1,4 @@
-import { JobCardProps } from "@/types";
+import { JobCardProps } from "@/types/types";
 import JobCard from "./JobCard";
 import { client } from "@/sanity/lib/client";
 import { groq } from "next-sanity";

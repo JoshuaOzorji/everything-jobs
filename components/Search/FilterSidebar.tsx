@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { FilterOptions } from "@/types";
+import { FilterOptions } from "@/types/types";
 import FilterSelect from "./FilterSelect";
 
 interface FilterSidebarProps {

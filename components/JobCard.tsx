@@ -1,4 +1,4 @@
-import { JobCardProps } from "@/types";
+import { JobCardProps } from "@/types/types";
 import Image from "next/image";
 import { formatDate } from "@/lib/formatDate";
 import { urlForImage } from "../sanity/lib/image";

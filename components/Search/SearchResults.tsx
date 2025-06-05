@@ -1,4 +1,4 @@
-import { SearchJobResult } from "@/types";
+import { SearchJobResult } from "@/types/types";
 import SearchJobList from "./SearchJobList";
 import NoResultsMessage from "./NoResultsMessage";
 import { LoadingComponent } from "../Loading";

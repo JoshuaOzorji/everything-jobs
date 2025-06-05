@@ -3,7 +3,7 @@ import { lazy, Suspense } from "react";
 import Link from "next/link";
 import { client } from "@/sanity/lib/client";
 import Image from "next/image";
-import { Job } from "@/types";
+import { Job } from "@/types/types";
 import SubLayout from "@/components/SubLayout";
 import AsideMain from "@/components/sidebar/AsideMain";
 import placeholder from "@/public/placeholderCompany.png";

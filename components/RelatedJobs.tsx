@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { JobReference } from "@/types";
+import { JobReference } from "@/types/types";
 
 type RelatedJob = {
 	_id: string;

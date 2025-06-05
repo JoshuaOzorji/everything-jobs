@@ -5,7 +5,11 @@ export default withAuth(
 	function middleware(req) {
 		const token = req.nextauth.token;
 		const isAuth = !!token;
-		const isAuthPage = req.nextUrl.pathname.startsWith("/auth");
+
+		const isAuthPage =
+			req.nextUrl.pathname === "/auth/login" ||
+			req.nextUrl.pathname === "/auth/signup" ||
+			req.nextUrl.pathname === "/auth/error";
 
 		if (isAuthPage) {
 			if (isAuth) {
@@ -13,7 +17,8 @@ export default withAuth(
 					new URL("/dashboard", req.url),
 				);
 			}
-			return null;
+
+			return NextResponse.next();
 		}
 
 		if (!isAuth) {
@@ -30,5 +35,5 @@ export default withAuth(
 );
 
 export const config = {
-	matcher: ["/dashboard/:path*", "/post-job/:path*", "/auth/:path*"],
+	matcher: ["/dashboard/:path*", "/post-job/:path*"],
 };

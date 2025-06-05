@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { urlForImage } from "@/sanity/lib/image";
-import { Company } from "@/types";
+import { Company } from "@/types/types";
 import placeholder from "@/public/placeholderCompany.png";
 
 type CompanyCardProps = {

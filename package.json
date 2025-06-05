@@ -20,7 +20,7 @@
 		"migrate:joblevels:update": "tsx scripts/migrateJobLevels.ts update"
 	},
 	"dependencies": {
-		"@auth/mongodb-adapter": "^3.7.4",
+		"@auth/mongodb-adapter": "^3.9.1",
 		"@heroicons/react": "^2.2.0",
 		"@portabletext/react": "^3.2.1",
 		"@radix-ui/react-dialog": "^1.1.6",

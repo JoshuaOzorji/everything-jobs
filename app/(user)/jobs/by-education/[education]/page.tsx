@@ -4,7 +4,7 @@ import Pagination from "@/components/PaginationComponent";
 import { notFound } from "next/navigation";
 import AsideMain from "@/components/sidebar/AsideMain";
 import SubLayout from "@/components/SubLayout";
-import { Job } from "@/types";
+import { Job } from "@/types/types";
 import JobCardCategories from "@/components/JobCardCategories";
 import Link from "next/link";
 

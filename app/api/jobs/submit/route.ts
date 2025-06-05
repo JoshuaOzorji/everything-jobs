@@ -1,6 +1,6 @@
 import { client } from "@/sanity/lib/client";
 import { NextResponse } from "next/server";
-import { JobSubmission } from "@/types";
+import { JobSubmission } from "@/types/types";
 
 interface PortableTextSpan {
 	_type: "span";

@@ -1,7 +1,7 @@
 "use client";
 
 import { FieldErrors, UseFormRegister } from "react-hook-form";
-import { JobSubmission } from "@/types";
+import { JobSubmission } from "@/types/types";
 import FormSection from "./FormSection";
 import FormField from "./FormField";
 

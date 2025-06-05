@@ -28,7 +28,8 @@
 		"**/*.tsx",
 		".next/types/**/*.ts",
 		"sanity/schemaTypes/jobSchemats",
-		"scripts/migrateStates.js"
+		"scripts/migrateStates.js",
+		"types/**/*.d.ts"
 	],
 	"exclude": ["node_modules"]
 }

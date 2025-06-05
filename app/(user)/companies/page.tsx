@@ -1,7 +1,7 @@
 import { groq } from "next-sanity";
 import { client } from "@/sanity/lib/client";
 import CompanyCard from "@/components/CompanyCard";
-import { Company } from "@/types";
+import { Company } from "@/types/types";
 import SubLayout from "@/components/SubLayout";
 import { Suspense } from "react";
 import { LoadingComponent } from "@/components/Loading";

@@ -1,5 +1,5 @@
 import React from "react";
-import { SearchJobResult } from "@/types";
+import { SearchJobResult } from "@/types/types";
 import JobCard2 from "./JobCard2";
 
 interface JobListProps {

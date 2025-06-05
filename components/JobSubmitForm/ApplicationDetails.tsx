@@ -1,5 +1,5 @@
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
-import type { JobSubmission } from "@/types";
+import type { JobSubmission } from "@/types/types";
 import FormField from "./FormField";
 
 interface ApplicationDetailsProps {

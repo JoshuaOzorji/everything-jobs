@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Company, Job } from "@/types";
+import { Company, Job } from "@/types/types";
 import {
 	CalendarIcon,
 	BriefcaseIcon,

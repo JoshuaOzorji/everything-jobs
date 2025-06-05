@@ -4,7 +4,7 @@ import {
 	getDisplayNameForEducation,
 	getDisplayNameForJobField,
 } from "./utility";
-import { Job } from "@/types";
+import { Job } from "@/types/types";
 
 export const searchJobsQuery = groq`
   *[_type == "job" &&

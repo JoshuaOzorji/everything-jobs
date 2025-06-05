@@ -9,37 +9,48 @@ import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import clientPromise from "@/lib/mongoClient";
 
 export const authOptions: AuthOptions = {
-	adapter: MongoDBAdapter(clientPromise),
-	
+	adapter: MongoDBAdapter(clientPromise) as any,
+
 	providers: [
 		GoogleProvider({
 			clientId: process.env.GOOGLE_CLIENT_ID!,
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
 		}),
-		
+
 		LinkedInProvider({
 			clientId: process.env.LINKEDIN_CLIENT_ID!,
 			clientSecret: process.env.LINKEDIN_CLIENT_SECRET!,
 		}),
-		
+
 		CredentialsProvider({
 			name: "Credentials",
 			credentials: {
 				email: { label: "Email", type: "email" },
-				password: { label: "Password", type: "password" },
+				password: {
+					label: "Password",
+					type: "password",
+				},
 			},
 			async authorize(credentials) {
 				await dbConnect();
-				
-				const user = await User.findOne({ email: credentials?.email });
+
+				const user = await User.findOne({
+					email: credentials?.email,
+				});
 				if (!user) throw new Error("No user found");
-				
+
 				if (!user.password) {
-					throw new Error("Please login with your social provider");
+					throw new Error(
+						"Please login with your social provider",
+					);
 				}
 
-				const isValid = await bcrypt.compare(credentials!.password, user.password);
-				if (!isValid) throw new Error("Invalid credentials");
+				const isValid = await bcrypt.compare(
+					credentials!.password,
+					user.password,
+				);
+				if (!isValid)
+					throw new Error("Invalid credentials");
 
 				return user;
 			},
@@ -52,21 +63,27 @@ export const authOptions: AuthOptions = {
 				return true;
 			}
 
-			// Handle social login
 			await dbConnect();
-			
-			const existingUser = await User.findOne({ email: user.email });
-			
+
+			const existingUser = await User.findOne({
+				email: user.email,
+			});
+
 			if (!existingUser) {
-				// Create new user from social login
 				const newUser = await User.create({
 					email: user.email,
-					firstName: user.name?.split(' ')[0] || '',
-					lastName: user.name?.split(' ').slice(1).join(' ') || '',
-					username: user.email?.split('@')[0] || '',
+					firstName:
+						user.name?.split(" ")[0] || "",
+					lastName:
+						user.name
+							?.split(" ")
+							.slice(1)
+							.join(" ") || "",
+					username:
+						user.email?.split("@")[0] || "",
 					provider: account?.provider,
 					image: user.image,
-					role: 'employer'
+					role: "employer",
 				});
 				return true;
 			}
@@ -75,8 +92,8 @@ export const authOptions: AuthOptions = {
 		},
 
 		async session({ session, token }) {
-			if (token) {
-				session.user.id = token.sub;
+			if (token && session.user) {
+				session.user.id = token.sub as string;
 				session.user.role = token.role;
 				session.user.companyId = token.companyId;
 			}
@@ -85,11 +102,11 @@ export const authOptions: AuthOptions = {
 
 		async jwt({ token, user }) {
 			if (user) {
-				token.role = user.role;
-				token.companyId = user.companyId;
+				token.role = (user as any).role;
+				token.companyId = (user as any).companyId;
 			}
 			return token;
-		}
+		},
 	},
 
 	session: {

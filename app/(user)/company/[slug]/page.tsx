@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { urlForImage } from "@/sanity/lib/image";
 import { notFound } from "next/navigation";
-import { Company, Job, PaginatedCompanyData } from "@/types";
+import { Company, Job, PaginatedCompanyData } from "@/types/types";
 import SubLayout from "@/components/SubLayout";
 import CompanyDetailsAside from "@/components/CompanyDetailsAside";
 import { FaArrowLeft } from "react-icons/fa6";

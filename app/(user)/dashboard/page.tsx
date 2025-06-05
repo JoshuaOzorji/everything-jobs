@@ -8,7 +8,7 @@ export default function Dashboard() {
 	const router = useRouter();
 
 	if (!session) {
-		router.push("/auth/sign-in");
+		router.push("/auth/login");
 		return null;
 	}
 

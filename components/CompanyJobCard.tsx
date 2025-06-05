@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { formatDate2 } from "@/lib/formatDate2";
-import { Job } from "@/types";
+import { Job } from "@/types/types";
 
 interface CompanyJobCardProps {
 	job: Job;

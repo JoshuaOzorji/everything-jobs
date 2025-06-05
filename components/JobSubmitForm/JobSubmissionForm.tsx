@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import type { JobSubmission } from "@/types";
+import type { JobSubmission } from "@/types/types";
 import { client } from "@/sanity/lib/client";
 
 // Component Imports
