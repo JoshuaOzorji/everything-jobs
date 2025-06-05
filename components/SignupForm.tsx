@@ -4,6 +4,8 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { FcGoogle } from "react-icons/fc";
+import { IoLogoLinkedin } from "react-icons/io";
 
 export default function SignupForm() {
 	const router = useRouter();
@@ -62,21 +64,23 @@ export default function SignupForm() {
 	}
 
 	return (
-		<form onSubmit={handleSubmit} className='mt-8 space-y-6'>
+		<form
+			onSubmit={handleSubmit}
+			className='mt-8 space-y-6 font-openSans'>
 			{error && (
-				<div className='p-3 text-sm text-red-500 bg-red-50 rounded'>
+				<div className='p-3 text-sm text-red-500 rounded bg-red-50'>
 					{error}
 				</div>
 			)}
 
-			<div className='rounded-md shadow-sm -space-y-px'>
+			<div className='space-y-3 rounded-md shadow-sm'>
 				<div>
 					<input
 						id='firstName'
 						name='firstName'
 						type='text'
 						required
-						className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-pry focus:border-pry focus:z-10 sm:text-sm'
+						className='relative block w-full p-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none rounded-t-md focus:outline-none focus:ring-pry focus:border-pry focus:z-10 sm:text-sm'
 						placeholder='First Name'
 					/>
 				</div>
@@ -86,7 +90,7 @@ export default function SignupForm() {
 						name='lastName'
 						type='text'
 						required
-						className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-pry focus:border-pry focus:z-10 sm:text-sm'
+						className='relative block w-full p-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none focus:outline-none focus:ring-pry focus:border-pry focus:z-10 sm:text-sm'
 						placeholder='Last Name'
 					/>
 				</div>
@@ -96,7 +100,7 @@ export default function SignupForm() {
 						name='email'
 						type='email'
 						required
-						className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-pry focus:border-pry focus:z-10 sm:text-sm'
+						className='relative block w-full p-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none focus:outline-none focus:ring-pry focus:border-pry focus:z-10 sm:text-sm'
 						placeholder='Email address'
 					/>
 				</div>
@@ -106,7 +110,7 @@ export default function SignupForm() {
 						name='password'
 						type='password'
 						required
-						className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-pry focus:border-pry focus:z-10 sm:text-sm'
+						className='relative block w-full p-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none rounded-b-md focus:outline-none focus:ring-pry focus:border-pry focus:z-10 sm:text-sm'
 						placeholder='Password'
 					/>
 				</div>
@@ -116,7 +120,7 @@ export default function SignupForm() {
 				<button
 					type='submit'
 					disabled={loading}
-					className='group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-pry hover:bg-pry2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pry disabled:opacity-50'>
+					className='relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md group bg-pry hover:bg-pry2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pry disabled:opacity-50'>
 					{loading
 						? "Creating account..."
 						: "Sign up"}
@@ -139,13 +143,13 @@ export default function SignupForm() {
 						<div className='w-full border-t border-gray-300' />
 					</div>
 					<div className='relative flex justify-center text-sm'>
-						<span className='px-2 bg-gray-50 text-gray-500'>
+						<span className='px-2 text-gray-500 bg-gray-50'>
 							Or continue with
 						</span>
 					</div>
 				</div>
 
-				<div className='mt-6 grid grid-cols-2 gap-3'>
+				<div className='grid grid-cols-2 gap-3 mt-6'>
 					<button
 						onClick={() =>
 							signIn("google", {
@@ -154,9 +158,11 @@ export default function SignupForm() {
 							})
 						}
 						type='button'
-						className='w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50'>
-						Google
+						className='social-icon'>
+						<FcGoogle className='w-5 h-5' />
+						<span>Google</span>
 					</button>
+
 					<button
 						onClick={() =>
 							signIn("linkedin", {
@@ -165,8 +171,9 @@ export default function SignupForm() {
 							})
 						}
 						type='button'
-						className='w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50'>
-						LinkedIn
+						className='social-icon'>
+						<IoLogoLinkedin className='text-[#0077B5] w-5 h-5' />
+						<span>LinkedIn</span>
 					</button>
 				</div>
 			</div>
