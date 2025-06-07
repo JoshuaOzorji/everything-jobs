@@ -4,6 +4,8 @@ import React from "react";
 import logo from "@/public/logo.png";
 import { IoSearchOutline } from "react-icons/io5";
 import FindJobsDropdown from "./FindJobsDropdown";
+import { useSession } from "next-auth/react";
+import PostJobDropdown from "./PostJobDropdown";
 
 const MainNav = ({
 	toggleSearch,
@@ -12,6 +14,9 @@ const MainNav = ({
 	toggleSearch: () => void;
 	isSearchOpen: boolean;
 }) => {
+	const { status } = useSession();
+	const isAuthenticated = status === "authenticated";
+
 	return (
 		<nav className='border-b font-poppins border-white'>
 			<div className='flex items-center justify-between w-[96%] mx-auto py-4 px-2 text-base'>
@@ -48,17 +53,15 @@ const MainNav = ({
 						<IoSearchOutline className='w-6 h-6' />
 					</button>
 
-					<Link href='/post-job'>
-						<button className='flex flex-col items-center px-2 py-1 text-white rounded-md bg-pry '>
-							<p>Post Job</p>
-						</button>
-					</Link>
-
-					{/* <Link href='/auth/login'>
-						<button className='flex flex-col items-center'>
-							<span>Login</span>
-						</button>
-					</Link> */}
+					{isAuthenticated ? (
+						<PostJobDropdown />
+					) : (
+						<Link href='/post-job'>
+							<button className='flex flex-col items-center px-2 py-1 text-white rounded-md bg-pry'>
+								<p>Post Job</p>
+							</button>
+						</Link>
+					)}
 				</div>
 			</div>
 		</nav>

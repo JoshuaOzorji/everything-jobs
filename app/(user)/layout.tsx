@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Lato, Poppins, Open_Sans, IBM_Plex_Serif } from "next/font/google";
+import { Lato, Poppins, Open_Sans } from "next/font/google";
 import "./../globals.css";
 import AuthProvider from "@/components/AuthProvider";
 import { Toaster } from "sonner";
@@ -39,17 +39,19 @@ export default function RootLayout({
 		<html lang='en'>
 			<body
 				className={`${lato.variable} ${openSans.variable} ${poppins.variable}  antialiased`}>
-				<Suspense fallback={null}>
-					<ProgressBar />
-				</Suspense>
+				<AuthProvider>
+					<Suspense fallback={null}>
+						<ProgressBar />
+					</Suspense>
 
-				<BaseLayout>
-					<AuthProvider>{children}</AuthProvider>
-					<Toaster
-						richColors
-						position='bottom-center'
-					/>
-				</BaseLayout>
+					<BaseLayout>
+						{children}
+						<Toaster
+							richColors
+							position='bottom-center'
+						/>
+					</BaseLayout>
+				</AuthProvider>
 			</body>
 		</html>
 	);

@@ -153,26 +153,27 @@ export default function SignupForm() {
 					<button
 						onClick={() =>
 							signIn("google", {
+								redirect: true,
 								callbackUrl:
 									"/dashboard",
 							})
 						}
 						type='button'
 						className='social-icon'>
-						<FcGoogle className='w-5 h-5' />
+						<FcGoogle />
 						<span>Google</span>
 					</button>
-
 					<button
 						onClick={() =>
 							signIn("linkedin", {
+								redirect: true,
 								callbackUrl:
 									"/dashboard",
 							})
 						}
 						type='button'
 						className='social-icon'>
-						<IoLogoLinkedin className='text-[#0077B5] w-5 h-5' />
+						<IoLogoLinkedin className='text-[#0077B5]' />
 						<span>LinkedIn</span>
 					</button>
 				</div>

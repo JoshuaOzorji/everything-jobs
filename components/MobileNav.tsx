@@ -9,6 +9,8 @@ import { IoSearchOutline } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { findJobsDropdownItems } from "@/lib/data";
+import { useSession } from "next-auth/react";
+import MobilePostJobDropdown from "./MobilePostJobDropdown";
 
 const MobileNav = ({
 	toggleSearch,
@@ -22,6 +24,8 @@ const MobileNav = ({
 	toggleMenu: () => void;
 }) => {
 	const [isJobsDropdownOpen, setIsJobsDropdownOpen] = useState(false);
+	const { status } = useSession();
+	const isAuthenticated = status === "authenticated";
 
 	const toggleJobsDropdown = () => {
 		setIsJobsDropdownOpen((prev) => !prev);
@@ -50,7 +54,11 @@ const MobileNav = ({
 				</button>
 
 				<Link href='/'>
-					<Image src={logo} alt='logo' />
+					<Image
+						src={logo}
+						alt='logo'
+						className='w-auto h-8'
+					/>
 				</Link>
 
 				<div className='flex items-center gap-4'>
@@ -69,7 +77,7 @@ const MobileNav = ({
 			{/* Mobile menu dropdown */}
 			{isMenuOpen && (
 				<div className='absolute left-0 w-full bg-white shadow-lg rounded-b-lg transform transition-transform duration-200 z-40 mt-0.5 font-poppins'>
-					<div className='py-4 px-2 max-h-96 overflow-y-auto'>
+					<div className='py-4 px-2 max-h-[calc(100vh-80px)] overflow-y-auto'>
 						<ul className='space-y-2'>
 							{/* Find Jobs Dropdown */}
 							<li>
@@ -149,6 +157,23 @@ const MobileNav = ({
 									Find
 									Company
 								</Link>
+							</li>
+
+							{/* Post Job Button/Dropdown */}
+							<li className='border-t pt-2 mt-2'>
+								{isAuthenticated ? (
+									<MobilePostJobDropdown />
+								) : (
+									<Link
+										href='/post-job'
+										className='block py-2 px-4 text-center text-white rounded-md bg-pry hover:bg-pry/90 transition-colors'
+										onClick={
+											handleLinkClick
+										}>
+										Post
+										Job
+									</Link>
+								)}
 							</li>
 						</ul>
 					</div>

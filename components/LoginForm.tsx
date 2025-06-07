@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { useState, useEffect } from "react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
@@ -9,8 +9,15 @@ import { IoLogoLinkedin } from "react-icons/io";
 
 export default function LoginForm() {
 	const router = useRouter();
+	const { data: session, status } = useSession();
 	const [error, setError] = useState<string | null>(null);
 	const [loading, setLoading] = useState(false);
+
+	useEffect(() => {
+		if (status === "authenticated") {
+			router.replace("/dashboard");
+		}
+	}, [status, router]);
 
 	async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
@@ -30,16 +37,23 @@ export default function LoginForm() {
 
 			if (result?.error) {
 				setError(result.error);
-			} else {
-				router.push("/dashboard");
-				router.refresh();
 			}
+			// Remove router.replace here since useEffect will handle navigation
 		} catch (error) {
 			setError("An error occurred. Please try again.");
 		} finally {
 			setLoading(false);
 		}
 	}
+
+	// Handle social login clicks
+	const handleSocialLogin = (provider: "google" | "linkedin") => {
+		setLoading(true);
+		signIn(provider, {
+			redirect: false,
+			callbackUrl: "/dashboard",
+		});
+	};
 
 	return (
 		<form
@@ -118,24 +132,24 @@ export default function LoginForm() {
 				<div className='grid grid-cols-2 gap-3 mt-6'>
 					<button
 						onClick={() =>
-							signIn("google", {
-								callbackUrl:
-									"/dashboard",
-							})
+							handleSocialLogin(
+								"google",
+							)
 						}
 						type='button'
+						disabled={loading}
 						className='social-icon'>
 						<FcGoogle />
 						<span>Google</span>
 					</button>
 					<button
 						onClick={() =>
-							signIn("linkedin", {
-								callbackUrl:
-									"/dashboard",
-							})
+							handleSocialLogin(
+								"linkedin",
+							)
 						}
 						type='button'
+						disabled={loading}
 						className='social-icon'>
 						<IoLogoLinkedin className='text-[#0077B5]' />
 						<span>LinkedIn</span>
