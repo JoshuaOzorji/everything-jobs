@@ -1,7 +1,7 @@
 "use client";
 
 import Header from "./Header";
-import Footer from "./Footer";
+import FooterMain from "./Footer/FooterMain";
 
 const BaseLayout = ({ children }: { children: React.ReactNode }) => {
 	return (
@@ -12,7 +12,7 @@ const BaseLayout = ({ children }: { children: React.ReactNode }) => {
 				{children}
 			</main>
 
-			<Footer />
+			<FooterMain />
 		</div>
 	);
 };

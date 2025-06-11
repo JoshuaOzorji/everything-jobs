@@ -19,7 +19,6 @@ const Header = () => {
 
 	const toggleMenu = () => {
 		setIsMenuOpen((prev) => !prev);
-		// Close search when menu is opened
 		if (!isMenuOpen) {
 			setIsSearchOpen(false);
 		}
