@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -13,12 +13,6 @@ export default function LoginForm() {
 	const [error, setError] = useState<string | null>(null);
 	const [loading, setLoading] = useState(false);
 
-	useEffect(() => {
-		if (status === "authenticated") {
-			router.replace("/dashboard");
-		}
-	}, [status, router]);
-
 	async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 		setLoading(true);
@@ -30,15 +24,11 @@ export default function LoginForm() {
 
 		try {
 			const result = await signIn("credentials", {
-				redirect: false,
+				redirect: true,
+				callbackUrl: "/dashboard",
 				email,
 				password,
 			});
-
-			if (result?.error) {
-				setError(result.error);
-			}
-			// Remove router.replace here since useEffect will handle navigation
 		} catch (error) {
 			setError("An error occurred. Please try again.");
 		} finally {
@@ -46,11 +36,11 @@ export default function LoginForm() {
 		}
 	}
 
-	// Handle social login clicks
+	// Update social login handler
 	const handleSocialLogin = (provider: "google" | "linkedin") => {
 		setLoading(true);
 		signIn(provider, {
-			redirect: false,
+			redirect: true,
 			callbackUrl: "/dashboard",
 		});
 	};
