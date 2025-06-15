@@ -229,3 +229,13 @@ export interface JobSubmission {
 		phoneNumber?: string;
 	};
 }
+
+export interface DashboardLayoutProps {
+	children: React.ReactNode;
+}
+
+export interface SidebarLinkProps {
+	href: string;
+	label: string;
+	icon?: React.ReactNode;
+}

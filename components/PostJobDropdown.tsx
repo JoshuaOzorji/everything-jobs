@@ -64,7 +64,13 @@ const PostJobDropdown = () => {
 					</Link>
 					<Link href='/post-job'>
 						<div className='px-4 py-2 hover:bg-gray-100 cursor-pointer'>
-							Post Job
+							Post New Job
+						</div>
+					</Link>
+
+					<Link href='/edit-profile'>
+						<div className='px-4 py-2 hover:bg-gray-100 cursor-pointer'>
+							Edit Company Profile
 						</div>
 					</Link>
 					<button

@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
 				hostname: "via.placeholder.com",
 			},
 		],
+		domains: ["media.licdn.com", "lh3.googleusercontent.com"],
 	},
 };
 

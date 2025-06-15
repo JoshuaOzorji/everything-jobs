@@ -1,5 +1,6 @@
 "use client";
 
+import { LoadingComponent } from "@/components/Loading";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -15,7 +16,7 @@ export default function Dashboard() {
 	}, [status, router]);
 
 	if (status === "loading") {
-		return <div>Loading...</div>;
+		return <LoadingComponent />;
 	}
 
 	if (!session) {
@@ -23,7 +24,7 @@ export default function Dashboard() {
 	}
 
 	return (
-		<div>
+		<div className='min-h-screen'>
 			<h1>Welcome, {session.user?.name}</h1>
 			<button onClick={() => signOut()}>Sign Out</button>
 		</div>
