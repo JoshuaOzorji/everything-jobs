@@ -239,3 +239,30 @@ export interface SidebarLinkProps {
 	label: string;
 	icon?: React.ReactNode;
 }
+
+export interface CompanyProfileUpdate {
+	name: string;
+	website?: string;
+	industry: string;
+	description?: string;
+	logo?: FileList;
+}
+
+export interface Industry {
+	_id: string;
+	name: string;
+}
+
+export interface JobSubmissionItem {
+	_id: string;
+	title: string;
+	companyName: string;
+	status: "pending" | "approved" | "rejected";
+	submittedAt: string;
+	rejectionReason?: string;
+}
+
+export interface JobSubmissionsResponse {
+	submissions: JobSubmissionItem[];
+	total: number;
+}

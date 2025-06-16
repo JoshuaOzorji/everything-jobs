@@ -22,7 +22,7 @@ const Sidebar = () => {
 					label='Company Profile'
 				/>
 				<SidebarLink
-					href='/dashboard/jobs'
+					href='/dashboard/view-jobs'
 					label='Job Submissions'
 				/>
 				<SidebarLink

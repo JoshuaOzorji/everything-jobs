@@ -12,8 +12,15 @@ const nextConfig: NextConfig = {
 				protocol: "https",
 				hostname: "via.placeholder.com",
 			},
+			{
+				protocol: "https",
+				hostname: "media.licdn.com",
+			},
+			{
+				protocol: "https",
+				hostname: "lh3.googleusercontent.com",
+			},
 		],
-		domains: ["media.licdn.com", "lh3.googleusercontent.com"],
 	},
 };
 
