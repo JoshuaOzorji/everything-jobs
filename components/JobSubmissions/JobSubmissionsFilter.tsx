@@ -2,16 +2,11 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { CiCalendarDate } from "react-icons/ci";
+import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "@/components/ui/popover";
 import {
 	Select,
 	SelectContent,
@@ -19,6 +14,11 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
 
 export default function JobSubmissionsFilter() {
 	const router = useRouter();
@@ -36,7 +36,10 @@ export default function JobSubmissionsFilter() {
 		setDate(date);
 		const params = new URLSearchParams(searchParams);
 		if (date) {
-			params.set("startDate", date.toISOString());
+			params.set(
+				"startDate",
+				date.toISOString().split("T")[0],
+			);
 		} else {
 			params.delete("startDate");
 		}
@@ -44,13 +47,18 @@ export default function JobSubmissionsFilter() {
 		router.push(`?${params.toString()}`);
 	};
 
+	const clearFilters = () => {
+		setDate(undefined);
+		router.push("?");
+	};
+
 	return (
-		<div className='flex gap-4 mb-4'>
+		<div className='flex flex-wrap gap-4 p-4 bg-white rounded-lg shadow-sm'>
 			<Select
 				onValueChange={onStatusChange}
 				defaultValue='all'>
 				<SelectTrigger className='w-[180px]'>
-					<SelectValue placeholder='Select status' />
+					<SelectValue placeholder='Filter by status' />
 				</SelectTrigger>
 				<SelectContent>
 					<SelectItem value='all'>
@@ -71,13 +79,13 @@ export default function JobSubmissionsFilter() {
 			<Popover>
 				<PopoverTrigger asChild>
 					<Button
-						variant={"outline"}
+						variant='outline'
 						className={cn(
 							"w-[240px] justify-start text-left font-normal",
 							!date &&
 								"text-muted-foreground",
 						)}>
-						<CiCalendarDate className='mr-2 h-4 w-4' />
+						<CalendarIcon className='mr-2 h-4 w-4' />
 						{date ? (
 							format(date, "PPP")
 						) : (
@@ -98,6 +106,13 @@ export default function JobSubmissionsFilter() {
 					/>
 				</PopoverContent>
 			</Popover>
+
+			<Button
+				variant='outline'
+				onClick={clearFilters}
+				className='ml-auto'>
+				Clear Filters
+			</Button>
 		</div>
 	);
 }

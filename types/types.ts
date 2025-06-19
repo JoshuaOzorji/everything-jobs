@@ -256,10 +256,16 @@ export interface Industry {
 export interface JobSubmissionItem {
 	_id: string;
 	title: string;
-	companyName: string;
+	company: {
+		name: string;
+		logo?: any;
+	};
+	location: string;
+	jobType: string;
 	status: "pending" | "approved" | "rejected";
 	submittedAt: string;
-	rejectionReason?: string;
+	statusUpdatedAt: string;
+	deadline?: string;
 }
 
 export interface JobSubmissionsResponse {

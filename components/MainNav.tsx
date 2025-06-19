@@ -56,7 +56,7 @@ const MainNav = ({
 					{isAuthenticated ? (
 						<PostJobDropdown />
 					) : (
-						<Link href='/post-job'>
+						<Link href='/dashboard/post-job'>
 							<button className='flex flex-col items-center px-2 py-1 text-white rounded-md bg-pry'>
 								<p>Post Job</p>
 							</button>

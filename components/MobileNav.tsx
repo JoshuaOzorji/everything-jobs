@@ -165,7 +165,7 @@ const MobileNav = ({
 									<MobilePostJobDropdown />
 								) : (
 									<Link
-										href='/post-job'
+										href='/dashboard/post-job'
 										className='block py-2 px-4 text-center text-white rounded-md bg-pry hover:bg-pry/90 transition-colors'
 										onClick={
 											handleLinkClick

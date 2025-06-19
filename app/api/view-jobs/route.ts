@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
 	try {
 		const session = await getServerSession(authOptions);
 
-		if (!session) {
+		if (!session?.user?.id) {
 			return NextResponse.json(
 				{ error: "Unauthorized" },
 				{ status: 401 },
@@ -23,8 +23,8 @@ export async function GET(request: NextRequest) {
 		const start = (page - 1) * perPage;
 		const end = start + perPage;
 
-		// Build the base query
-		let baseQuery = '*[_type == "pendingJob"';
+		// Build the base query with user filter
+		let baseQuery = '*[_type == "pendingJob" && userId == $userId';
 
 		if (status !== "all") {
 			baseQuery += ` && status == "${status}"`;
@@ -38,28 +38,38 @@ export async function GET(request: NextRequest) {
 			baseQuery += ` && submittedAt <= "${endDate}"`;
 		}
 
-		baseQuery += "]";
+		baseQuery += "] | order(submittedAt desc)";
 
 		// Construct the full queries
-		const dataQuery = `${baseQuery} | order(submittedAt desc) [${start}...${end}] {
-            _id,
-            title,
-            companyName,
-            status,
-            submittedAt,
-            rejectionReason
-        }`;
+		// Update the dataQuery to include more reference fields
+		const dataQuery = `${baseQuery}[${start}...${end}] {
+			_id,
+			title,
+			"company": company->{
+				name,
+				logo
+			},
+			status,
+			submittedAt,
+			statusUpdatedAt,
+			"location": location->name,
+			"jobType": jobType->name,
+			deadline
+		}`;
 
-		const countQuery = `count(${baseQuery})`;
+		// Pass userId as a parameter object
+		const params = { userId: session.user.id };
 
-		const [submissions, totalResult] = await Promise.all([
-			client.fetch(dataQuery),
-			client.fetch(countQuery),
+		const [submissions, totalCount] = await Promise.all([
+			client.fetch(dataQuery, params),
+			client.fetch(`count(${baseQuery})`, params),
 		]);
 
 		return NextResponse.json({
 			submissions,
-			total: totalResult,
+			total: totalCount,
+			currentPage: page,
+			perPage,
 		});
 	} catch (error) {
 		console.error("Error fetching job submissions:", error);

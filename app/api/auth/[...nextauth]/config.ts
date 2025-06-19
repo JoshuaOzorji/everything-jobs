@@ -18,6 +18,23 @@ interface UserData {
 	username: string;
 }
 
+declare module "next-auth" {
+	interface Session {
+		user: {
+			id: string;
+			role: string;
+			companyId?: string;
+			name?: string | null;
+			email?: string | null;
+			image?: string | null;
+			submitterInfo?: {
+				name: string;
+				email: string;
+			};
+		};
+	}
+}
+
 export const authOptions: AuthOptions = {
 	adapter: MongoDBAdapter(clientPromise) as any,
 
@@ -95,91 +112,84 @@ export const authOptions: AuthOptions = {
 	],
 
 	callbacks: {
-		async signIn({ user, account }) {
+		async jwt({ token, user, account, profile }) {
+			if (user) {
+				token.id = user.id;
+				token.email = user.email;
+				token.role = (user as any).role;
+				token.companyId = (user as any).companyId;
+				// Add submitter info for job submissions
+				token.submitterInfo = {
+					name: `${(user as any).firstName} ${(user as any).lastName}`,
+					email: user.email,
+				};
+			}
+			return token;
+		},
+
+		async session({ session, token }) {
+			if (session.user) {
+				session.user.id = token.id as string;
+				session.user.email = token.email;
+				session.user.role = token.role as string;
+				session.user.companyId =
+					token.companyId as string;
+				// Add submitter info to session
+				session.user.submitterInfo =
+					token.submitterInfo as {
+						name: string;
+						email: string;
+					};
+			}
+			return session;
+		},
+
+		async signIn({ user, account, profile }) {
 			if (account?.provider === "credentials") {
 				return true;
 			}
 
 			await dbConnect();
-
 			const existingUser = await User.findOne({
 				email: user.email,
 			});
 
 			if (!existingUser) {
-				let userData: UserData = {
+				// Create new user with enhanced profile info
+				const userData = {
 					email: user.email,
 					provider: account?.provider,
 					image: user.image,
 					role: "employer",
-					firstName: "",
-					lastName: "",
-					username: "",
+					firstName:
+						account?.provider === "linkedin"
+							? (profile as any)
+									.firstName
+							: user.name?.split(
+									" ",
+								)[0] || "",
+					lastName:
+						account?.provider === "linkedin"
+							? (profile as any)
+									.lastName
+							: user.name
+									?.split(
+										" ",
+									)
+									.slice(
+										1,
+									)
+									.join(
+										" ",
+									) || "",
+					username:
+						user.email?.split("@")[0] || "",
 				};
 
-				if (account?.provider === "linkedin") {
-					userData = {
-						...userData,
-						firstName: (user as any)
-							.firstName,
-						lastName: (user as any)
-							.lastName,
-						username: (user as any)
-							.username,
-					};
-				} else {
-					userData = {
-						...userData,
-						firstName:
-							user.name?.split(
-								" ",
-							)[0] || "",
-						lastName:
-							user.name
-								?.split(" ")
-								.slice(1)
-								.join(" ") ||
-							"",
-						username:
-							user.email?.split(
-								"@",
-							)[0] || "",
-					};
-				}
-
-				const newUser = await User.create(userData);
-				return true;
+				await User.create(userData);
 			}
-
-			// Update existing user's provider info
-			await User.findOneAndUpdate(
-				{ email: user.email },
-				{
-					$set: {
-						provider: account?.provider,
-						image: user.image,
-					},
-				},
-			);
 
 			return true;
-		},
-
-		async session({ session, token }) {
-			if (token && session.user) {
-				session.user.id = token.sub as string;
-				session.user.role = token.role;
-				session.user.companyId = token.companyId;
-			}
-			return session;
-		},
-
-		async jwt({ token, user }) {
-			if (user) {
-				token.role = (user as any).role;
-				token.companyId = (user as any).companyId;
-			}
-			return token;
 		},
 	},
 
