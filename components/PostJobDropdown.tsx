@@ -62,13 +62,13 @@ const PostJobDropdown = () => {
 							Dashboard
 						</div>
 					</Link>
-					<Link href='/post-job'>
+					<Link href='/dashboard/post-job'>
 						<div className='px-4 py-2 hover:bg-gray-100 cursor-pointer'>
 							Post New Job
 						</div>
 					</Link>
 
-					<Link href='/edit-profile'>
+					<Link href='/dashboard/edit-profile'>
 						<div className='px-4 py-2 hover:bg-gray-100 cursor-pointer'>
 							Edit Company Profile
 						</div>
