@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { DashboardSidebar } from "@/components/Dashboard/DashboardSidebar";
-import { SiteHeader } from "@/components/site-header";
+import { SiteHeader } from "@/components/ui/site-header";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { DashboardLayoutProps } from "@/types/types";
 

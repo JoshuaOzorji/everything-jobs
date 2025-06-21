@@ -10,7 +10,7 @@ import { IoMdClose } from "react-icons/io";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { findJobsDropdownItems } from "@/lib/data";
 import { useSession } from "next-auth/react";
-import MobilePostJobDropdown from "./MobilePostJobDropdown";
+import MobilePostJobDropdown from "./ui/MobilePostJobDropdown";
 
 const MobileNav = ({
 	toggleSearch,

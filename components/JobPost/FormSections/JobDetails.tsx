@@ -73,85 +73,107 @@ export default function JobDetails({ register, errors }: JobDetailsProps) {
 			<h3 className='text-lg font-medium'>Job Details</h3>
 
 			<div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
-				<FormItem>
-					<FormLabel>Location</FormLabel>
-					<Select
-						onValueChange={(value) =>
-							register(
-								"location._ref",
-							).onChange(value)
-						}>
-						<SelectTrigger>
-							<SelectValue placeholder='Select location' />
-						</SelectTrigger>
-						<SelectContent>
-							{locations.map(
-								(location) => (
-									<SelectItem
-										key={
-											location._id
-										}
-										value={
-											location._id
-										}>
-										{
-											location.name
-										}
-									</SelectItem>
-								),
+				<FormField
+					name='location._ref'
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>
+								Location
+							</FormLabel>
+							<Select
+								onValueChange={
+									field.onChange
+								}
+								value={
+									field.value
+								}>
+								<SelectTrigger>
+									<SelectValue placeholder='Select location' />
+								</SelectTrigger>
+								<SelectContent>
+									{locations.map(
+										(
+											location,
+										) => (
+											<SelectItem
+												key={
+													location._id
+												}
+												value={
+													location._id
+												}>
+												{
+													location.name
+												}
+											</SelectItem>
+										),
+									)}
+								</SelectContent>
+							</Select>
+							{errors.location && (
+								<FormMessage>
+									{
+										errors
+											.location
+											._ref
+											?.message
+									}
+								</FormMessage>
 							)}
-						</SelectContent>
-					</Select>
-					{errors.location && (
-						<FormMessage>
-							{
-								errors.location
-									._ref
-									?.message
-							}
-						</FormMessage>
+						</FormItem>
 					)}
-				</FormItem>
+				/>
 
-				<FormItem>
-					<FormLabel>Job Type</FormLabel>
-					<Select
-						onValueChange={(value) =>
-							register(
-								"jobType._ref",
-							).onChange(value)
-						}>
-						<SelectTrigger>
-							<SelectValue placeholder='Select job type' />
-						</SelectTrigger>
-						<SelectContent>
-							{jobTypes.map(
-								(type) => (
-									<SelectItem
-										key={
-											type._id
-										}
-										value={
-											type._id
-										}>
-										{
-											type.name
-										}
-									</SelectItem>
-								),
+				<FormField
+					name='jobType._ref'
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>
+								Job Type
+							</FormLabel>
+							<Select
+								onValueChange={
+									field.onChange
+								}
+								value={
+									field.value
+								}>
+								<SelectTrigger>
+									<SelectValue placeholder='Select job type' />
+								</SelectTrigger>
+								<SelectContent>
+									{jobTypes.map(
+										(
+											type,
+										) => (
+											<SelectItem
+												key={
+													type._id
+												}
+												value={
+													type._id
+												}>
+												{
+													type.name
+												}
+											</SelectItem>
+										),
+									)}
+								</SelectContent>
+							</Select>
+							{errors.jobType && (
+								<FormMessage>
+									{
+										errors
+											.jobType
+											._ref
+											?.message
+									}
+								</FormMessage>
 							)}
-						</SelectContent>
-					</Select>
-					{errors.jobType && (
-						<FormMessage>
-							{
-								errors.jobType
-									._ref
-									?.message
-							}
-						</FormMessage>
+						</FormItem>
 					)}
-				</FormItem>
+				/>
 			</div>
 
 			<div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>

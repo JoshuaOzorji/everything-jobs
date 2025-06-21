@@ -24,7 +24,7 @@ export function SiteHeader({
 	const title = currentNav?.title || "Dashboard";
 
 	return (
-		<header className='sticky top-0 z-50 w-full border-b bg-white'>
+		<header className='sticky top-0 z-20 w-full border-b bg-white'>
 			<div className='flex h-[--header-height] w-full items-center gap-2 px-4'>
 				<Button
 					className='h-8 w-8'
@@ -46,7 +46,9 @@ export function SiteHeader({
 					<BreadcrumbList>
 						<BreadcrumbItem>
 							<BreadcrumbPage>
-								{title}
+								<p className='font-bold'>
+									{title}
+								</p>
 							</BreadcrumbPage>
 						</BreadcrumbItem>
 					</BreadcrumbList>
