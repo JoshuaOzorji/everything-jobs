@@ -7,7 +7,7 @@ const DashboardHeader = () => {
 	const { data: session } = useSession();
 
 	return (
-		<header className='bg-white border-b border-gray-200 px-6 py-4'>
+		<header className='px-6 py-4 bg-white border-b border-gray-200'>
 			<div className='flex items-center justify-between'>
 				<h2 className='text-xl font-semibold text-gray-800'>
 					Dashboard
@@ -33,7 +33,7 @@ const DashboardHeader = () => {
 									className='rounded-full'
 								/>
 							) : (
-								<div className='w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white'>
+								<div className='flex items-center justify-center w-8 h-8 text-white bg-blue-600 rounded-full'>
 									{session.user.email?.[0].toUpperCase()}
 								</div>
 							)}

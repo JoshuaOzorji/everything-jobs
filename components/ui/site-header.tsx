@@ -24,10 +24,10 @@ export function SiteHeader({
 	const title = currentNav?.title || "Dashboard";
 
 	return (
-		<header className='sticky top-0 z-20 w-full border-b bg-white'>
-			<div className='flex h-[--header-height] w-full items-center gap-2 px-4'>
+		<header className='sticky top-0 z-20 w-full bg-white border-b'>
+			<div className='flex h-[--header-height] w-full items-center gap-2 px-4 border-l'>
 				<Button
-					className='h-8 w-8'
+					className='w-8 h-8'
 					variant='ghost'
 					size='icon'
 					onClick={onSidebarToggle}
@@ -40,7 +40,7 @@ export function SiteHeader({
 				</Button>
 				<Separator
 					orientation='vertical'
-					className='mr-2 h-4'
+					className='h-4 mr-2'
 				/>
 				<Breadcrumb>
 					<BreadcrumbList>

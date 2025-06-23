@@ -1,29 +1,53 @@
 "use client";
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { DashboardSidebar } from "@/components/Dashboard/DashboardSidebar";
 import { SiteHeader } from "@/components/ui/site-header";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { DashboardLayoutProps } from "@/types/types";
 
+function useIsMobile() {
+	const [isMobile, setIsMobile] = useState(false);
+	useEffect(() => {
+		const check = () => setIsMobile(window.innerWidth < 768);
+		check();
+		window.addEventListener("resize", check);
+		return () => window.removeEventListener("resize", check);
+	}, []);
+	return isMobile;
+}
+
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
 	const [sidebarOpen, setSidebarOpen] = useState(true);
+	const isMobile = useIsMobile();
+	const [hasMounted, setHasMounted] = useState(false);
+
+	useEffect(() => {
+		setHasMounted(true);
+	}, []);
 
 	return (
 		<div className='[--header-height:calc(theme(spacing.14))]'>
-			<div className='relative flex flex-col md:flex-row gap-8 my-6 md:w-[84%] mx-4 md:mx-auto overflow-visible'>
-				{/* Wrap with SidebarProvider */}
+			<div className='relative flex flex-col md:flex-row gap-8 my-4 md:w-[84%] md:mx-auto overflow-visible'>
 				<SidebarProvider>
 					<div className='relative flex flex-1 bg-gray-100'>
-						{/* Sidebar: only render when open */}
-						{sidebarOpen && (
-							<div className='transition-all duration-300 w-[260px] min-w-[260px]'>
+						{/* Only render sidebar after mount to avoid hydration mismatch */}
+						{sidebarOpen && hasMounted && (
+							<div
+								className={`transition-all duration-200 ${
+									isMobile
+										? "w-12 min-w-12"
+										: "w-[240px] min-w-[240px]"
+								}`}>
 								<DashboardSidebar
 									variant='sidebar'
 									collapsible='none'
+									sidebarCollapsed={
+										isMobile
+									}
 								/>
 							</div>
 						)}
-						{/* Main content */}
 						<div
 							className={`flex-1 min-w-0 transition-all duration-300 ${
 								sidebarOpen

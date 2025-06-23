@@ -4,23 +4,20 @@ import { usePathname } from "next/navigation";
 import {
 	Sidebar,
 	SidebarContent,
-	SidebarFooter,
-	SidebarHeader,
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
-	useSidebar,
 } from "@/components/ui/sidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { dashboardNav } from "@/lib/dashboard-config";
-import { useSession, signOut } from "next-auth/react";
 
 export function DashboardSidebar({
 	variant = "sidebar",
 	collapsible = "none",
+	sidebarCollapsed = false, // NEW PROP
 }: {
 	variant?: "inset" | "sidebar" | "floating";
 	collapsible?: "offcanvas" | "icon" | "none";
+	sidebarCollapsed?: boolean; // NEW PROP
 }) {
 	const pathname = usePathname();
 
@@ -28,8 +25,14 @@ export function DashboardSidebar({
 		<Sidebar
 			variant={variant}
 			collapsible={collapsible}
-			style={{ width: "260px", minWidth: "260px" }}>
-			<SidebarContent>
+			style={{
+				width: sidebarCollapsed ? "48px" : "240px", // 48px for collapsed/mobile
+				minWidth: sidebarCollapsed ? "48px" : "240px",
+				transition: "width 0.2",
+			}}>
+			<SidebarContent
+				className='bg-white font-openSans'
+				style={{ paddingTop: "var(--header-height)" }}>
 				<SidebarMenu>
 					{dashboardNav.map((item) => (
 						<SidebarMenuItem
@@ -40,13 +43,19 @@ export function DashboardSidebar({
 									pathname ===
 									item.url
 								}
-								className='hover:bg-blue-600 hover:text-white'>
+								className='flex items-center gap-2 hover:border-pry2 hover:bg-white hover:text-black'>
 								<a
 									href={
 										item.url
-									}>
-									<item.icon className='h-4 w-4' />
-									<span>
+									}
+									className='flex items-center gap-3'>
+									<item.icon className='w-5 h-5 mx-auto md:mx-0' />
+									<span
+										className={`${
+											sidebarCollapsed
+												? "hidden"
+												: "inline"
+										} md:inline`}>
 										{
 											item.title
 										}

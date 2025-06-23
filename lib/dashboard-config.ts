@@ -20,9 +20,9 @@ export const dashboardNav: NavItem[] = [
 		icon: LayoutDashboard,
 	},
 	{
-		title: "Company Profile",
-		url: "/dashboard/company",
-		icon: Building2,
+		title: "Post New Job",
+		url: "/dashboard/post-job",
+		icon: FilePlus,
 	},
 	{
 		title: "Job Submissions",
@@ -30,8 +30,8 @@ export const dashboardNav: NavItem[] = [
 		icon: ClipboardList,
 	},
 	{
-		title: "Post New Job",
-		url: "/dashboard/post-job",
-		icon: FilePlus,
+		title: "Company Profile",
+		url: "/dashboard/company",
+		icon: Building2,
 	},
 ];
