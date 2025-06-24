@@ -25,7 +25,7 @@ export function SiteHeader({
 
 	return (
 		<header className='sticky top-0 z-20 w-full bg-white border-b'>
-			<div className='flex h-[--header-height] w-full items-center gap-2 px-4 border-l'>
+			<div className='flex h-[--header-height] w-full items-center gap-2 px-4 border-l font-poppins'>
 				<Button
 					className='w-8 h-8'
 					variant='ghost'

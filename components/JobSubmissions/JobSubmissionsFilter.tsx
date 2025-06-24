@@ -53,14 +53,14 @@ export default function JobSubmissionsFilter() {
 	};
 
 	return (
-		<div className='flex flex-wrap gap-4 p-4 bg-white rounded-lg shadow-sm'>
+		<div className='flex flex-wrap gap-4 p-2 bg-white rounded-lg shadow-sm font-openSans'>
 			<Select
 				onValueChange={onStatusChange}
 				defaultValue='all'>
-				<SelectTrigger className='w-[180px]'>
+				<SelectTrigger className='w-[180px] px-2 text-xs md:text-sm'>
 					<SelectValue placeholder='Filter by status' />
 				</SelectTrigger>
-				<SelectContent>
+				<SelectContent className=''>
 					<SelectItem value='all'>
 						All Status
 					</SelectItem>
@@ -77,7 +77,9 @@ export default function JobSubmissionsFilter() {
 			</Select>
 
 			<Popover>
-				<PopoverTrigger asChild>
+				<PopoverTrigger
+					asChild
+					className='px-2 text-xs md:text-sm'>
 					<Button
 						variant='outline'
 						className={cn(
@@ -95,6 +97,7 @@ export default function JobSubmissionsFilter() {
 						)}
 					</Button>
 				</PopoverTrigger>
+
 				<PopoverContent
 					className='w-auto p-0'
 					align='start'>
@@ -102,7 +105,7 @@ export default function JobSubmissionsFilter() {
 						mode='single'
 						selected={date}
 						onSelect={onDateSelect}
-						initialFocus
+						autoFocus={false}
 					/>
 				</PopoverContent>
 			</Popover>
@@ -110,7 +113,7 @@ export default function JobSubmissionsFilter() {
 			<Button
 				variant='outline'
 				onClick={clearFilters}
-				className='ml-auto'>
+				className='ml-auto px-2 text-xs md:text-sm'>
 				Clear Filters
 			</Button>
 		</div>

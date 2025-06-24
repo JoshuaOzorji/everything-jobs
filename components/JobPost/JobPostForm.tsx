@@ -78,7 +78,7 @@ export default function JobPostForm() {
 		<Form {...form}>
 			<form
 				onSubmit={handleSubmit(onSubmit)}
-				className='space-y-8'>
+				className='space-y-6'>
 				<BasicDetails
 					register={register}
 					errors={errors}
@@ -97,14 +97,14 @@ export default function JobPostForm() {
 				/>
 
 				<div className='flex justify-end gap-4'>
-					<Button
+					<button
 						type='submit'
 						disabled={isSubmitting}
-						className='bg-primary'>
+						className='inline-flex px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md group bg-pry hover:bg-pry2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pry disabled:opacity-50'>
 						{isSubmitting
 							? "Submitting..."
 							: "Submit Job"}
-					</Button>
+					</button>
 				</div>
 			</form>
 		</Form>

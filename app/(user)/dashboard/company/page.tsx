@@ -1,52 +1,29 @@
 import { Suspense } from "react";
-import { client } from "@/sanity/lib/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/config";
+import { redirect } from "next/navigation";
 import { LoadingComponent } from "@/components/Loading";
 import CompanyProfileForm from "@/components/Company/CompanyProfileForm";
-import { redirect } from "next/navigation";
 
-async function getCompanyData(companyId: string | undefined) {
-	if (!companyId) {
-		return null;
-	}
-
-	try {
-		return await client.fetch(
-			`*[_type == "company" && _id == $companyId][0]{
-        _id,
-        name,
-        website,
-        "industry": industry->_id,
-        description,
-        logo
-      }`,
-			{ companyId },
-		);
-	} catch (error) {
-		console.error("Error fetching company data:", error);
-		return null;
-	}
-}
-
-export default async function CompanyProfilePage() {
+export default async function CompanyCreatePage() {
 	const session = await getServerSession(authOptions);
 
 	if (!session?.user) {
 		redirect("/auth/login");
 	}
 
-	const companyData = await getCompanyData(session?.user?.companyId);
-
-	if (!companyData && session?.user?.role === "employer") {
-		// Redirect to company creation page if employer has no company
-		redirect("/dashboard/company/create");
+	// If user already has a company, redirect to profile
+	if (session.user.companyId) {
+		redirect("/dashboard/company-profile");
 	}
 
 	return (
-		<div className='max-w-3xl mx-auto p-6'>
+		<div className='dashboard-page-container'>
+			<h1 className='text-xl font-semibold mb-4'>
+				Create Company Profile
+			</h1>
 			<Suspense fallback={<LoadingComponent />}>
-				<CompanyProfileForm initialData={companyData} />
+				<CompanyProfileForm />
 			</Suspense>
 		</div>
 	);

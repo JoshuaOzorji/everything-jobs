@@ -18,8 +18,8 @@ interface RequirementsProps {
 
 export default function Requirements({ register, errors }: RequirementsProps) {
 	return (
-		<div className='space-y-6'>
-			<h3 className='text-lg font-medium'>
+		<div className='dashboard-post-job-heading'>
+			<h3 className='dashboard-form-heading'>
 				Requirements & Responsibilities
 			</h3>
 

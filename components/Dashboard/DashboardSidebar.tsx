@@ -31,9 +31,9 @@ export function DashboardSidebar({
 				transition: "width 0.2",
 			}}>
 			<SidebarContent
-				className='bg-white font-openSans'
+				className='bg-white font-poppins'
 				style={{ paddingTop: "var(--header-height)" }}>
-				<SidebarMenu>
+				<SidebarMenu className='flex flex-col gap-2'>
 					{dashboardNav.map((item) => (
 						<SidebarMenuItem
 							key={item.title}>
@@ -43,7 +43,7 @@ export function DashboardSidebar({
 									pathname ===
 									item.url
 								}
-								className='flex items-center gap-2 hover:border-pry2 hover:bg-white hover:text-black'>
+								className='flex items-center gap-2 hover:border hover:bg-white hover:text-black hover:border-pry2 md:px-4 '>
 								<a
 									href={
 										item.url

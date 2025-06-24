@@ -22,8 +22,8 @@ export default function ApplicationDetails({
 	errors,
 }: ApplicationDetailsProps) {
 	return (
-		<div className='space-y-6'>
-			<h3 className='text-lg font-medium'>
+		<div className='dashboard-post-job-heading'>
+			<h3 className='dashboard-form-heading'>
 				Application Details
 			</h3>
 

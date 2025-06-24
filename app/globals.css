@@ -92,6 +92,17 @@ body {
 .signup-input-style {
 	@apply relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none rounded-t-md focus:outline-none focus:ring-pry focus:border-pry focus:z-10 sm:text-sm;
 }
+.dashboard-page-container {
+	@apply max-w-3xl py-4 px-6 mx-auto font-openSans;
+}
+
+.dashboard-form-heading {
+	@apply font-bold text-sm;
+}
+
+.dashboard-post-job-heading {
+	@apply space-y-4 text-sm;
+}
 
 .dashboard-sidebar-portal {
 	position: absolute !important;

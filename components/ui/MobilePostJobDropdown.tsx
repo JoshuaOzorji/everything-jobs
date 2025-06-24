@@ -40,11 +40,26 @@ const MobilePostJobDropdown = () => {
 					</li>
 					<li>
 						<Link
-							href='/post-job'
+							href='/dashboard/post-job'
 							className='block py-2 px-4 hover:bg-gray-100 rounded transition-colors text-sm'>
 							Post Job
 						</Link>
 					</li>
+					<li>
+						<Link
+							href='/dashboard/view-jobs'
+							className='block py-2 px-4 hover:bg-gray-100 rounded transition-colors text-sm'>
+							Job Submissions
+						</Link>
+					</li>
+					<li>
+						<Link
+							href='/dashboard/company-profile'
+							className='block py-2 px-4 hover:bg-gray-100 rounded transition-colors text-sm'>
+							Company Profile
+						</Link>
+					</li>
+
 					<li>
 						<button
 							onClick={handleSignOut}

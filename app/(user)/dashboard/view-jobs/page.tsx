@@ -5,14 +5,11 @@ import { LoadingComponent } from "@/components/Loading";
 
 export default function JobSubmissionsPage() {
 	return (
-		<div className='space-y-6'>
+		<div className='dashboard-post-job-heading'>
 			<div className='flex flex-col gap-4'>
-				<h1 className='text-2xl font-semibold tracking-tight'>
-					Job Submissions
-				</h1>
-				<p className='text-sm text-muted-foreground'>
+				<p className='text-sm italic font-light text-muted-foreground'>
 					View and manage your job submissions
-					here.
+					here
 				</p>
 			</div>
 

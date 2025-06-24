@@ -107,7 +107,9 @@ export default function CompanyProfileForm({
 	};
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
+		<form
+			onSubmit={handleSubmit(onSubmit)}
+			className='space-y-6 text-sm'>
 			{/* Company Name */}
 			<div className='space-y-2'>
 				<label className='text-sm font-medium'>
@@ -234,14 +236,16 @@ export default function CompanyProfileForm({
 				)}
 			</div>
 
-			<button
-				type='submit'
-				disabled={isSubmitting}
-				className='w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-blue-300'>
-				{isSubmitting
-					? "Updating..."
-					: "Update Profile"}
-			</button>
+			<div className='flex justify-end'>
+				<button
+					type='submit'
+					disabled={isSubmitting}
+					className='px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-blue-300'>
+					{isSubmitting
+						? "Updating..."
+						: "Update Profile"}
+				</button>
+			</div>
 		</form>
 	);
 }

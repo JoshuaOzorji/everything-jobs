@@ -65,27 +65,20 @@ export default function JobSubmissionsTable() {
 	if (loading) return <LoadingComponent />;
 
 	return (
-		<div className='space-y-4'>
+		<div className='space-y-4 font-openSans'>
 			<div className='rounded-md border'>
 				<Table>
-					<TableHeader>
+					<TableHeader className='bg-white '>
 						<TableRow>
-							<TableHead>
+							<TableHead className='text-black px-2 text-xs md:text-sm'>
 								Job Title
 							</TableHead>
-							<TableHead>
-								Company
-							</TableHead>
-							<TableHead>
-								Location
-							</TableHead>
-							<TableHead>
-								Job Type
-							</TableHead>
-							<TableHead>
+
+							<TableHead className='text-black px-2 text-xs md:text-sm'>
 								Submitted Date
 							</TableHead>
-							<TableHead>
+
+							<TableHead className='text-black px-2 text-xs md:text-sm'>
 								Status
 							</TableHead>
 						</TableRow>
@@ -98,7 +91,7 @@ export default function JobSubmissionsTable() {
 										6
 									}
 									className='text-center py-8'>
-									No
+									No job
 									submissions
 									found
 								</TableCell>

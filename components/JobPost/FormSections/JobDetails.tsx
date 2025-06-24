@@ -69,8 +69,8 @@ export default function JobDetails({ register, errors }: JobDetailsProps) {
 	}, []);
 
 	return (
-		<div className='space-y-6'>
-			<h3 className='text-lg font-medium'>Job Details</h3>
+		<div className='dashboard-post-job-heading'>
+			<h3 className='dashboard-form-heading'>Job Details</h3>
 
 			<div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
 				<FormField
