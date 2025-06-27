@@ -19,9 +19,6 @@ export default async function CompanyCreatePage() {
 
 	return (
 		<div className='dashboard-page-container'>
-			<h1 className='text-xl font-semibold mb-4'>
-				Create Company Profile
-			</h1>
 			<Suspense fallback={<LoadingComponent />}>
 				<CompanyProfileForm />
 			</Suspense>

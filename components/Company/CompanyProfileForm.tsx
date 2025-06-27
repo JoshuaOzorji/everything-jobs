@@ -6,6 +6,8 @@ import { toast } from "sonner";
 import { CompanyProfileUpdate, Industry } from "@/types/types";
 import { uploadImageToSanity } from "@/lib/uploadImageToSanity";
 import { client } from "@/sanity/lib/client";
+import Image from "next/image";
+import { formatURL } from "@/lib/utils";
 
 interface CompanyProfileFormProps {
 	initialData?: {
@@ -23,12 +25,20 @@ export default function CompanyProfileForm({
 }: CompanyProfileFormProps) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [industries, setIndustries] = useState<Industry[]>([]);
+	const [logoPreview, setLogoPreview] = useState<string | null>(
+		initialData?.logo?.asset?.url || null,
+	);
+	const [logoFile, setLogoFile] = useState<File | null>(null);
+
+	const isUpdate = !!initialData;
 
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 		watch,
+		reset,
+		setValue,
 	} = useForm<CompanyProfileUpdate>({
 		defaultValues: {
 			name: initialData?.name,
@@ -56,51 +66,98 @@ export default function CompanyProfileForm({
 		fetchIndustries();
 	}, []);
 
+	// Update form values if initialData changes (e.g., after redirect)
+	useEffect(() => {
+		if (initialData) {
+			reset({
+				name: initialData.name,
+				website: initialData.website,
+				industry: initialData.industry?._id,
+				description: initialData.description,
+			});
+			setLogoPreview(initialData.logo?.asset?.url || null);
+		}
+	}, [initialData, reset]);
+
+	const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0];
+		if (file) {
+			setLogoFile(file);
+			setLogoPreview(URL.createObjectURL(file));
+		}
+	};
+
 	const onSubmit = async (data: CompanyProfileUpdate) => {
 		setIsSubmitting(true);
 		try {
 			let logoAsset = null;
-			if (data.logo?.[0]) {
-				logoAsset = await uploadImageToSanity(
-					data.logo[0],
-				);
+			if (logoFile) {
+				logoAsset = await uploadImageToSanity(logoFile);
 			}
 
 			const companyData = {
 				_id: initialData?._id,
 				name: data.name,
 				website: data.website,
-				industry: {
-					_type: "reference",
-					_ref: data.industry,
-				},
+				industry: data.industry,
 				description: data.description,
 				...(logoAsset && { logo: logoAsset }),
 			};
 
-			const response = await fetch("/api/company/update", {
-				method: "PATCH",
+			const endpoint = "/api/company-profile";
+			const method = isUpdate ? "PATCH" : "POST";
+
+			const response = await fetch(endpoint, {
+				method,
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(companyData),
 			});
 
 			if (!response.ok) {
+				const errorData = await response.json();
+				// Handle duplicate company error
+				if (
+					response.status === 400 &&
+					errorData.error ===
+						"User already has a company profile."
+				) {
+					toast.error(
+						"You already have a company profile. Redirecting...",
+					);
+					window.location.href =
+						"/dashboard/company-profile";
+					return;
+				}
 				throw new Error(
-					"Failed to update company profile",
+					errorData.error ||
+						`Failed to ${isUpdate ? "update" : "create"} company profile`,
 				);
 			}
 
-			toast.success("Profile Updated", {
-				description:
-					"Your company profile has been updated successfully",
-			});
+			if (isUpdate) {
+				toast.success("Profile Updated", {
+					description:
+						"Your company profile has been updated successfully",
+				});
+			} else {
+				toast.success("Company Created", {
+					description:
+						"Your company profile has been created successfully",
+				});
+				window.location.href =
+					"/dashboard/company-profile";
+				return;
+			}
 		} catch (error) {
-			toast.error("Update Failed", {
-				description:
-					error instanceof Error
-						? error.message
-						: "Please try again later",
-			});
+			toast.error(
+				isUpdate ? "Update Failed" : "Creation Failed",
+				{
+					description:
+						error instanceof Error
+							? error.message
+							: "Please try again later",
+				},
+			);
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -134,15 +191,21 @@ export default function CompanyProfileForm({
 					Website
 				</label>
 				<input
-					type='url'
+					type='text'
 					{...register("website", {
 						pattern: {
-							value: /^https?:\/\/.+\..+/,
+							value: /^(https?:\/\/)?(www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\S*)?$/,
 							message: "Please enter a valid URL",
 						},
 					})}
+					onBlur={(e) => {
+						e.target.value = formatURL(
+							e.target.value,
+						);
+					}}
 					className='w-full px-3 py-2 border rounded-md'
 				/>
+
 				{errors.website && (
 					<p className='text-sm text-red-500'>
 						{errors.website.message}
@@ -198,37 +261,20 @@ export default function CompanyProfileForm({
 				<input
 					type='file'
 					accept='image/*'
-					{...register("logo", {
-						validate: {
-							fileSize: (files) => {
-								if (!files?.[0])
-									return true;
-								return (
-									files[0]
-										.size <=
-										5000000 ||
-									"Image must be less than 5MB"
-								);
-							},
-							fileType: (files) => {
-								if (!files?.[0])
-									return true;
-								return (
-									[
-										"image/jpeg",
-										"image/png",
-										"image/gif",
-									].includes(
-										files[0]
-											.type,
-									) ||
-									"Unsupported file format"
-								);
-							},
-						},
-					})}
+					onChange={handleLogoChange}
 					className='w-full px-3 py-2 border rounded-md'
 				/>
+				{logoPreview && (
+					<div className='mt-2'>
+						<Image
+							src={logoPreview}
+							alt='Logo Preview'
+							width={80}
+							height={80}
+							className='rounded'
+						/>
+					</div>
+				)}
 				{errors.logo && (
 					<p className='text-sm text-red-500'>
 						{errors.logo.message}
@@ -242,8 +288,12 @@ export default function CompanyProfileForm({
 					disabled={isSubmitting}
 					className='px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-blue-300'>
 					{isSubmitting
-						? "Updating..."
-						: "Update Profile"}
+						? isUpdate
+							? "Updating..."
+							: "Creating..."
+						: isUpdate
+							? "Update Profile"
+							: "Create Company"}
 				</button>
 			</div>
 		</form>

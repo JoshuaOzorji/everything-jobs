@@ -5,6 +5,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/config";
 import { LoadingComponent } from "@/components/Loading";
 import CompanyProfileForm from "@/components/Company/CompanyProfileForm";
 import { redirect } from "next/navigation";
+import clientPromise from "@/lib/mongoClient";
 
 async function getCompanyData(companyId: string | undefined) {
 	if (!companyId) {
@@ -17,7 +18,7 @@ async function getCompanyData(companyId: string | undefined) {
         _id,
         name,
         website,
-        "industry": industry->_id,
+        "industry": industry->{_id, name},
         description,
         logo
       }`,
@@ -36,11 +37,16 @@ export default async function CompanyProfilePage() {
 		redirect("/auth/login");
 	}
 
-	const companyData = await getCompanyData(session?.user?.companyId);
+	// Fetch user from MongoDB to get the latest companyId
+	const db = (await clientPromise).db();
+	const user = await db
+		.collection("users")
+		.findOne({ email: session.user.email });
 
-	if (!companyData && session?.user?.role === "employer") {
-		// Redirect to company creation page if employer has no company
-		redirect("/dashboard/company/create");
+	const companyData = await getCompanyData(user?.companyId);
+
+	if (!companyData && user?.role === "employer") {
+		redirect("/dashboard/company");
 	}
 
 	return (

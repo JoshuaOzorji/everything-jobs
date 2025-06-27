@@ -30,3 +30,26 @@ export function validateDeadline(deadline: string): boolean {
 	today.setHours(0, 0, 0, 0);
 	return deadlineDate >= today;
 }
+
+export function formatURL(rawValue: string): string {
+	let value = rawValue.trim();
+
+	// Remove all protocols if user mistakenly adds multiple
+	value = value.replace(/^(https?:\/\/)+/i, "");
+
+	// Remove trailing slashes
+	value = value.replace(/\/+$/, "");
+
+	// Extract domain + path if user typed full thing
+	const match = value.match(/^([^\/?#]+)([\/?#].*)?$/);
+
+	if (!match) return `https://${value}`;
+
+	let [_, domain, rest = ""] = match;
+
+	// Lowercase domain for consistency
+	domain = domain.toLowerCase();
+
+	// Final formatted URL
+	return `https://${domain}${rest}`;
+}
