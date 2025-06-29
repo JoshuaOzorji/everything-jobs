@@ -118,10 +118,49 @@ export const authOptions: AuthOptions = {
 				token.email = user.email;
 				token.role = (user as any).role;
 				token.companyId = (user as any).companyId;
-				// Add submitter info for job submissions
+
+				// Better name handling - fetch from database if needed
+				let firstName = (user as any).firstName;
+				let lastName = (user as any).lastName;
+
+				// If firstName/lastName are not available, try to get them from database
+				if (!firstName || !lastName) {
+					try {
+						await dbConnect();
+						const dbUser =
+							await User.findById(
+								user.id,
+							);
+						if (dbUser) {
+							firstName =
+								dbUser.firstName ||
+								firstName;
+							lastName =
+								dbUser.lastName ||
+								lastName;
+						}
+					} catch (error) {
+						console.error(
+							"Error fetching user from database:",
+							error,
+						);
+					}
+				}
+
+				// Construct name with fallbacks
+				const fullName =
+					firstName && lastName
+						? `${firstName} ${lastName}`.trim()
+						: user.name ||
+							user.email?.split(
+								"@",
+							)[0] ||
+							"User";
+
+				token.name = fullName;
 				token.submitterInfo = {
-					name: `${(user as any).firstName} ${(user as any).lastName}`,
-					email: user.email,
+					name: fullName,
+					email: user.email || "",
 				};
 			}
 			return token;
@@ -134,7 +173,7 @@ export const authOptions: AuthOptions = {
 				session.user.role = token.role as string;
 				session.user.companyId =
 					token.companyId as string;
-				// Add submitter info to session
+				session.user.name = token.name as string;
 				session.user.submitterInfo =
 					token.submitterInfo as {
 						name: string;
