@@ -35,6 +35,36 @@ declare module "next-auth" {
 	}
 }
 
+// Helper function to extract names with fallbacks
+const extractNames = (
+	fullName: string | null | undefined,
+	email: string | null | undefined,
+) => {
+	let firstName = "";
+	let lastName = "";
+
+	if (fullName && fullName.trim()) {
+		const nameParts = fullName.trim().split(/\s+/);
+		firstName = nameParts[0] || "";
+		lastName = nameParts.slice(1).join(" ") || "";
+	}
+
+	// If we still don't have names, try to derive from email
+	if (!firstName && email) {
+		const emailPrefix = email.split("@")[0];
+		// Split by common delimiters like dots, underscores, etc.
+		const emailParts = emailPrefix.split(/[._-]/);
+		firstName = emailParts[0] || emailPrefix;
+		lastName = emailParts[1] || "User";
+	}
+
+	// Final fallbacks
+	if (!firstName) firstName = "User";
+	if (!lastName) lastName = "Account";
+
+	return { firstName, lastName };
+};
+
 export const authOptions: AuthOptions = {
 	adapter: MongoDBAdapter(clientPromise) as any,
 
@@ -59,19 +89,25 @@ export const authOptions: AuthOptions = {
 				"https://www.linkedin.com/oauth/openid/jwks",
 
 			async profile(profile) {
-				const [firstName, ...lastNameArr] = (
-					profile.name || ""
-				).split(" ");
+				console.log("LinkedIn profile data:", profile); // Debug log
+
+				// Extract names with better fallback logic
+				const { firstName, lastName } = extractNames(
+					profile.name,
+					profile.email,
+				);
+
 				return {
 					id: profile.sub,
-					firstName: firstName || "",
-					lastName: lastNameArr.join(" ") || "",
+					firstName,
+					lastName,
 					username: profile.email
 						? profile.email.split("@")[0]
-						: profile.sub,
+						: `user_${profile.sub}`,
 					email: profile.email,
 					image: profile.picture,
 					role: "employer",
+					name: `${firstName} ${lastName}`.trim(),
 				};
 			},
 		}),
@@ -188,47 +224,82 @@ export const authOptions: AuthOptions = {
 				return true;
 			}
 
-			await dbConnect();
-			const existingUser = await User.findOne({
-				email: user.email,
-			});
-
-			if (!existingUser) {
-				// Create new user with enhanced profile info
-				const userData = {
+			try {
+				await dbConnect();
+				const existingUser = await User.findOne({
 					email: user.email,
-					provider: account?.provider,
-					image: user.image,
-					role: "employer",
-					firstName:
-						account?.provider === "linkedin"
-							? (profile as any)
-									.firstName
-							: user.name?.split(
-									" ",
-								)[0] || "",
-					lastName:
-						account?.provider === "linkedin"
-							? (profile as any)
-									.lastName
-							: user.name
-									?.split(
-										" ",
-									)
-									.slice(
-										1,
-									)
-									.join(
-										" ",
-									) || "",
-					username:
-						user.email?.split("@")[0] || "",
-				};
+				});
 
-				await User.create(userData);
+				if (!existingUser) {
+					// Enhanced user data creation with proper fallbacks
+					let firstName = "";
+					let lastName = "";
+
+					if (account?.provider === "linkedin") {
+						// For LinkedIn, use the processed profile data
+						firstName =
+							(user as any)
+								.firstName ||
+							"";
+						lastName =
+							(user as any)
+								.lastName || "";
+					} else if (
+						account?.provider === "google"
+					) {
+						// For Google, extract from user.name
+						const extracted = extractNames(
+							user.name,
+							user.email,
+						);
+						firstName = extracted.firstName;
+						lastName = extracted.lastName;
+					}
+
+					// Final fallback extraction if still empty
+					if (!firstName || !lastName) {
+						const extracted = extractNames(
+							user.name,
+							user.email,
+						);
+						firstName =
+							firstName ||
+							extracted.firstName;
+						lastName =
+							lastName ||
+							extracted.lastName;
+					}
+
+					const userData = {
+						email: user.email,
+						provider: account?.provider,
+						image: user.image,
+						role: "employer",
+						firstName,
+						lastName,
+						username:
+							user.email?.split(
+								"@",
+							)[0] ||
+							`user_${Date.now()}`,
+					};
+
+					console.log(
+						"Creating user with data:",
+						userData,
+					); // Debug log
+
+					await User.create(userData);
+				}
+
+				return true;
+			} catch (error) {
+				console.error(
+					"Error in signIn callback:",
+					error,
+				);
+				return false; // This will redirect to the error page
 			}
-
-			return true;
 		},
 	},
 

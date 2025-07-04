@@ -8,13 +8,14 @@ import { uploadImageToSanity } from "@/lib/uploadImageToSanity";
 import { client } from "@/sanity/lib/client";
 import Image from "next/image";
 import { formatURL } from "@/lib/utils";
+import { useSession } from "next-auth/react";
 
 interface CompanyProfileFormProps {
 	initialData?: {
 		_id: string;
 		name: string;
 		website?: string;
-		industry?: { _id: string };
+		industry?: { _id: string; name?: string };
 		description?: string;
 		logo?: any;
 	};
@@ -31,32 +32,50 @@ export default function CompanyProfileForm({
 	const [logoFile, setLogoFile] = useState<File | null>(null);
 
 	const isUpdate = !!initialData;
-
+	const { update } = useSession();
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
-		watch,
 		reset,
-		setValue,
 	} = useForm<CompanyProfileUpdate>({
 		defaultValues: {
 			name: initialData?.name,
 			website: initialData?.website,
-			industry: initialData?.industry?._id,
+			industry: initialData?.industry?._id || "",
 			description: initialData?.description,
 		},
 	});
-
 	useEffect(() => {
 		async function fetchIndustries() {
 			try {
 				const result = await client.fetch<Industry[]>(`
-          *[_type == "industry"] {
-            _id,
-            name
-          } | order(name asc)
-        `);
+        *[_type == "industry"] {
+          _id,
+          name
+        } | order(name asc)
+      `);
+
+				// Ensure the current industry is included
+				if (
+					initialData?.industry &&
+					initialData.industry._id &&
+					!result.some(
+						(ind) =>
+							ind._id ===
+							initialData.industry!
+								._id,
+					)
+				) {
+					result.push({
+						_id: initialData.industry._id,
+						name:
+							initialData.industry
+								.name ??
+							"Current Industry",
+					});
+				}
+
 				setIndustries(result);
 			} catch (error) {
 				toast.error("Failed to load industries");
@@ -64,7 +83,7 @@ export default function CompanyProfileForm({
 		}
 
 		fetchIndustries();
-	}, []);
+	}, [initialData]);
 
 	// Update form values if initialData changes (e.g., after redirect)
 	useEffect(() => {
@@ -72,7 +91,7 @@ export default function CompanyProfileForm({
 			reset({
 				name: initialData.name,
 				website: initialData.website,
-				industry: initialData.industry?._id,
+				industry: initialData.industry?._id || "",
 				description: initialData.description,
 			});
 			setLogoPreview(initialData.logo?.asset?.url || null);
@@ -160,6 +179,10 @@ export default function CompanyProfileForm({
 			);
 		} finally {
 			setIsSubmitting(false);
+		}
+
+		if (update) {
+			await update(); // This will refresh the session with the new companyId
 		}
 	};
 

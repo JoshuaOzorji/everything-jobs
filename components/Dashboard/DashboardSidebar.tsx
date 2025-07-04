@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 import {
 	Sidebar,
 	SidebarContent,
@@ -8,18 +9,22 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { dashboardNav } from "@/lib/dashboard-config";
+import { useCompanyData } from "@/hooks/useCompanyStatus";
+import { getDynamicNav } from "@/lib/dashboard-config";
 
 export function DashboardSidebar({
 	variant = "sidebar",
 	collapsible = "none",
-	sidebarCollapsed = false, // NEW PROP
+	sidebarCollapsed = false,
 }: {
 	variant?: "inset" | "sidebar" | "floating";
 	collapsible?: "offcanvas" | "icon" | "none";
-	sidebarCollapsed?: boolean; // NEW PROP
+	sidebarCollapsed?: boolean;
 }) {
 	const pathname = usePathname();
+	const { data: session } = useSession();
+	const { hasCompanyData, loading, refetch } = useCompanyData();
+	const navItems = getDynamicNav(hasCompanyData);
 
 	return (
 		<Sidebar
@@ -34,7 +39,7 @@ export function DashboardSidebar({
 				className='bg-white font-poppins'
 				style={{ paddingTop: "var(--header-height)" }}>
 				<SidebarMenu className='flex flex-col gap-2'>
-					{dashboardNav.map((item) => (
+					{navItems.map((item) => (
 						<SidebarMenuItem
 							key={item.title}>
 							<SidebarMenuButton

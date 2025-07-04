@@ -10,7 +10,9 @@ export type NavItem = {
 	title: string;
 	url: string;
 	icon: LucideIcon;
+	matchUrls?: string[];
 	isActive?: boolean;
+	isDynamic?: boolean; // Flag for dynamic links
 };
 
 export const dashboardNav: NavItem[] = [
@@ -32,6 +34,29 @@ export const dashboardNav: NavItem[] = [
 	{
 		title: "Company Profile",
 		url: "/dashboard/company",
+		matchUrls: ["/dashboard/company-profile", "/dashboard/company"],
 		icon: Building2,
+		isDynamic: true,
 	},
 ];
+
+// Function to get dynamic navigation based on company data
+export const getDynamicNav = (hasCompanyData: boolean | null): NavItem[] => {
+	return dashboardNav.map((item) => {
+		if (item.isDynamic && item.title === "Company Profile") {
+			if (hasCompanyData === null) {
+				return item;
+			}
+
+			return {
+				...item,
+				title: "Company Profile",
+				// Only change the URL based on company data
+				url: hasCompanyData
+					? "/dashboard/company-profile"
+					: "/dashboard/company",
+			};
+		}
+		return item;
+	});
+};

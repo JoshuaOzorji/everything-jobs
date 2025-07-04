@@ -37,7 +37,7 @@ export default async function CompanyProfilePage() {
 		redirect("/auth/login");
 	}
 
-	// Fetch user from MongoDB to get the latest companyId
+	// Always fetch user from DB for latest companyId
 	const db = (await clientPromise).db();
 	const user = await db
 		.collection("users")
@@ -45,7 +45,8 @@ export default async function CompanyProfilePage() {
 
 	const companyData = await getCompanyData(user?.companyId);
 
-	if (!companyData && user?.role === "employer") {
+	// If user has no companyId or companyData, redirect to create page
+	if (!user?.companyId || !companyData) {
 		redirect("/dashboard/company");
 	}
 

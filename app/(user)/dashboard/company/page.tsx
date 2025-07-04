@@ -12,7 +12,6 @@ export default async function CompanyCreatePage() {
 		redirect("/auth/login");
 	}
 
-	// If user already has a company, redirect to profile
 	if (session.user.companyId) {
 		redirect("/dashboard/company-profile");
 	}
