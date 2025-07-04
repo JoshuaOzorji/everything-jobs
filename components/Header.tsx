@@ -25,8 +25,7 @@ const Header = () => {
 	};
 
 	return (
-		<header className='relative bg-white'>
-			{/* Header content always at top z-index */}
+		<header className='sticky top-0 z-50 bg-white shadow'>
 			<div className='relative z-50'>
 				<div className='md:hidden'>
 					<MobileNav
