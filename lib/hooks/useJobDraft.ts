@@ -47,7 +47,33 @@ export function useJobDraft() {
 	}, []);
 
 	const saveDraft = (data: Partial<JobDraft>) => {
-		const newDraft = {
+		if (!draft) {
+			// No existing draft, create a new one safely
+			const newDraft: JobDraft = {
+				title: "",
+				summary: [],
+				location: { _ref: "" },
+				jobType: { _ref: "" },
+				education: { _ref: "" },
+				jobField: { _ref: "" },
+				level: { _ref: "" },
+				deadline: "",
+				salaryRange: { min: 0, max: 0 },
+				requirements: [],
+				apply: [],
+				...data,
+				lastUpdated: Date.now(),
+			};
+			setDraft(newDraft);
+			localStorage.setItem(
+				DRAFT_KEY,
+				JSON.stringify(newDraft),
+			);
+			return;
+		}
+
+		// Merge safely with existing draft
+		const newDraft: JobDraft = {
 			...draft,
 			...data,
 			lastUpdated: Date.now(),
