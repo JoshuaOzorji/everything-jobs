@@ -89,8 +89,6 @@ export const authOptions: AuthOptions = {
 				"https://www.linkedin.com/oauth/openid/jwks",
 
 			async profile(profile) {
-				console.log("LinkedIn profile data:", profile); // Debug log
-
 				// Extract names with better fallback logic
 				const { firstName, lastName } = extractNames(
 					profile.name,
@@ -283,11 +281,6 @@ export const authOptions: AuthOptions = {
 							)[0] ||
 							`user_${Date.now()}`,
 					};
-
-					console.log(
-						"Creating user with data:",
-						userData,
-					); // Debug log
 
 					await User.create(userData);
 				}

@@ -28,17 +28,6 @@ const PostJobDropdown = () => {
 			);
 	}, []);
 
-	// Debug logging - remove this after fixing
-	useEffect(() => {
-		if (session?.user) {
-			console.log("Session user data:", {
-				name: session.user.name,
-				email: session.user.email,
-				submitterInfo: session.user.submitterInfo,
-			});
-		}
-	}, [session]);
-
 	const handleSignOut = async () => {
 		await signOut({ callbackUrl: "/" });
 	};
@@ -92,17 +81,17 @@ const PostJobDropdown = () => {
 	return (
 		<div className='relative font-poppins' ref={dropdownRef}>
 			<button
-				className='flex items-center justify-center w-9 h-9 rounded-full bg-pry text-white hover:bg-pry/90 transition-colors'
+				className='flex items-center justify-center text-white transition-colors rounded-full w-9 h-9 bg-pry hover:bg-pry/90'
 				onClick={() => setIsOpen(!isOpen)}
 				title={displayName} // Show full name on hover
 			>
-				<span className='text-sm md:text-base font-bold'>
+				<span className='text-sm font-bold md:text-base'>
 					{userInitials}
 				</span>
 			</button>
 
 			{isOpen && (
-				<div className='absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 border'>
+				<div className='absolute right-0 z-10 w-48 py-1 mt-2 bg-white border rounded-md shadow-lg'>
 					{/* Show user info at top of dropdown */}
 					<div className='px-4 py-2 border-b border-gray-100'>
 						<p className='text-sm font-medium text-gray-900 truncate'>
@@ -114,30 +103,30 @@ const PostJobDropdown = () => {
 					</div>
 
 					<Link href='/dashboard'>
-						<div className='px-4 py-2 hover:bg-gray-100 cursor-pointer'>
+						<div className='px-4 py-2 cursor-pointer hover:bg-gray-100'>
 							Dashboard
 						</div>
 					</Link>
 					<Link href='/dashboard/post-job'>
-						<div className='px-4 py-2 hover:bg-gray-100 cursor-pointer'>
+						<div className='px-4 py-2 cursor-pointer hover:bg-gray-100'>
 							Post New Job
 						</div>
 					</Link>
 
 					<Link href='/dashboard/company-profile'>
-						<div className='px-4 py-2 hover:bg-gray-100 cursor-pointer'>
+						<div className='px-4 py-2 cursor-pointer hover:bg-gray-100'>
 							Company Profile
 						</div>
 					</Link>
 
 					<Link href='/dashboard/view-jobs'>
-						<div className='px-4 py-2 hover:bg-gray-100 cursor-pointer'>
+						<div className='px-4 py-2 cursor-pointer hover:bg-gray-100'>
 							Job Submissions
 						</div>
 					</Link>
 					<button
 						onClick={handleSignOut}
-						className='w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-600'>
+						className='w-full px-4 py-2 text-left text-red-600 cursor-pointer hover:bg-gray-100'>
 						Logout
 					</button>
 				</div>

@@ -48,7 +48,7 @@ export default function ApplicationDetails({
 			</FormItem>
 
 			<FormItem>
-				<FormLabel>Application Instructions</FormLabel>
+				<FormLabel>Method of Application</FormLabel>
 				<FormControl>
 					<Textarea
 						{...register("apply")}

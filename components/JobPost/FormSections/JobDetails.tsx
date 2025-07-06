@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { UseFormRegister, FieldErrors } from "react-hook-form";
+import { UseFormRegister, FieldErrors, Control } from "react-hook-form";
 import { JobDraft } from "@/lib/hooks/useJobDraft";
 import { client } from "@/sanity/lib/client";
 import {
@@ -23,6 +23,7 @@ import { Input } from "@/components/ui/input";
 interface JobDetailsProps {
 	register: UseFormRegister<JobDraft>;
 	errors: FieldErrors<JobDraft>;
+	control: Control<JobDraft>; // Add control prop
 }
 
 interface ReferenceData {
@@ -30,10 +31,16 @@ interface ReferenceData {
 	name: string;
 }
 
-export default function JobDetails({ register, errors }: JobDetailsProps) {
+export default function JobDetails({
+	register,
+	errors,
+	control,
+}: JobDetailsProps) {
 	const [locations, setLocations] = useState<ReferenceData[]>([]);
 	const [jobTypes, setJobTypes] = useState<ReferenceData[]>([]);
 	const [levels, setLevels] = useState<ReferenceData[]>([]);
+	const [educations, setEducations] = useState<ReferenceData[]>([]);
+	const [jobFields, setJobFields] = useState<ReferenceData[]>([]);
 
 	useEffect(() => {
 		async function fetchReferenceData() {
@@ -42,6 +49,8 @@ export default function JobDetails({ register, errors }: JobDetailsProps) {
 					locationsData,
 					jobTypesData,
 					levelsData,
+					educationsData,
+					jobFieldsData,
 				] = await Promise.all([
 					client.fetch(
 						'*[_type == "state"] | order(name asc)',
@@ -52,11 +61,19 @@ export default function JobDetails({ register, errors }: JobDetailsProps) {
 					client.fetch(
 						'*[_type == "jobLevel"] | order(name asc)',
 					),
+					client.fetch(
+						'*[_type == "education"] | order(name asc)',
+					),
+					client.fetch(
+						'*[_type == "jobField"] | order(name asc)',
+					),
 				]);
 
 				setLocations(locationsData);
 				setJobTypes(jobTypesData);
 				setLevels(levelsData);
+				setEducations(educationsData);
+				setJobFields(jobFieldsData);
 			} catch (error) {
 				console.error(
 					"Error fetching reference data:",
@@ -74,7 +91,8 @@ export default function JobDetails({ register, errors }: JobDetailsProps) {
 
 			<div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
 				<FormField
-					name='location._ref'
+					control={control}
+					name='location'
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>
@@ -110,22 +128,14 @@ export default function JobDetails({ register, errors }: JobDetailsProps) {
 									)}
 								</SelectContent>
 							</Select>
-							{errors.location && (
-								<FormMessage>
-									{
-										errors
-											.location
-											._ref
-											?.message
-									}
-								</FormMessage>
-							)}
+							<FormMessage />
 						</FormItem>
 					)}
 				/>
 
 				<FormField
-					name='jobType._ref'
+					control={control}
+					name='jobType'
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>
@@ -161,19 +171,144 @@ export default function JobDetails({ register, errors }: JobDetailsProps) {
 									)}
 								</SelectContent>
 							</Select>
-							{errors.jobType && (
-								<FormMessage>
-									{
-										errors
-											.jobType
-											._ref
-											?.message
-									}
-								</FormMessage>
-							)}
+							<FormMessage />
 						</FormItem>
 					)}
 				/>
+			</div>
+
+			<div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
+				<FormField
+					control={control}
+					name='education'
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>
+								Education Level
+							</FormLabel>
+							<Select
+								onValueChange={
+									field.onChange
+								}
+								value={
+									field.value
+								}>
+								<SelectTrigger>
+									<SelectValue placeholder='Select education level' />
+								</SelectTrigger>
+								<SelectContent>
+									{educations.map(
+										(
+											education,
+										) => (
+											<SelectItem
+												key={
+													education._id
+												}
+												value={
+													education._id
+												}>
+												{
+													education.name
+												}
+											</SelectItem>
+										),
+									)}
+								</SelectContent>
+							</Select>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+
+				<FormField
+					control={control}
+					name='jobField'
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>
+								Job Field
+							</FormLabel>
+							<Select
+								onValueChange={
+									field.onChange
+								}
+								value={
+									field.value
+								}>
+								<SelectTrigger>
+									<SelectValue placeholder='Select job field' />
+								</SelectTrigger>
+								<SelectContent>
+									{jobFields.map(
+										(
+											field,
+										) => (
+											<SelectItem
+												key={
+													field._id
+												}
+												value={
+													field._id
+												}>
+												{
+													field.name
+												}
+											</SelectItem>
+										),
+									)}
+								</SelectContent>
+							</Select>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+			</div>
+
+			<div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
+				<FormField
+					control={control}
+					name='level'
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>
+								Experience Level
+							</FormLabel>
+							<Select
+								onValueChange={
+									field.onChange
+								}
+								value={
+									field.value
+								}>
+								<SelectTrigger>
+									<SelectValue placeholder='Select experience level' />
+								</SelectTrigger>
+								<SelectContent>
+									{levels.map(
+										(
+											level,
+										) => (
+											<SelectItem
+												key={
+													level._id
+												}
+												value={
+													level._id
+												}>
+												{
+													level.name
+												}
+											</SelectItem>
+										),
+									)}
+								</SelectContent>
+							</Select>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<div /> {/* Empty div for grid layout */}
 			</div>
 
 			<div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>

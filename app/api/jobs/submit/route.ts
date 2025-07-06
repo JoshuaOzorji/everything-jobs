@@ -15,7 +15,17 @@ export async function POST(request: Request) {
 
 		const job = await request.json();
 
-		// Create pending job document
+		console.log("Received job data:", job);
+
+		// Validate required fields
+		if (!job.title || !job.summary || !job.location?._ref) {
+			return NextResponse.json(
+				{ error: "Missing required fields" },
+				{ status: 400 },
+			);
+		}
+
+		// Create pending job document with proper structure
 		const result = await client.create({
 			_type: "pendingJob",
 			title: job.title,
@@ -23,38 +33,25 @@ export async function POST(request: Request) {
 				_type: "reference",
 				_ref: session.user.companyId,
 			},
-			summary: job.summary,
-			location: {
-				_type: "reference",
-				_ref: job.location,
-			},
-			jobType: {
-				_type: "reference",
-				_ref: job.jobType,
-			},
-			education: {
-				_type: "reference",
-				_ref: job.education,
-			},
-			jobField: {
-				_type: "reference",
-				_ref: job.jobField,
-			},
-			level: {
-				_type: "reference",
-				_ref: job.level,
-			},
+			summary: job.summary, // Already in block format
+			location: job.location, // Already in reference format
+			jobType: job.jobType,
+			education: job.education,
+			jobField: job.jobField,
+			level: job.level,
 			deadline: job.deadline,
 			salaryRange: job.salaryRange,
-			requirements: job.requirements,
+			requirements: job.requirements, // Already string array
 			responsibilities: job.responsibilities,
 			recruitmentProcess: job.recruitmentProcess,
-			apply: job.apply,
+			apply: job.apply, // Already in block format
 			status: "pending",
 			statusUpdatedAt: new Date().toISOString(),
 			userId: session.user.id,
 			submittedAt: new Date().toISOString(),
 		});
+
+		console.log("Sanity create result:", result);
 
 		return NextResponse.json({
 			success: true,
@@ -63,6 +60,7 @@ export async function POST(request: Request) {
 		});
 	} catch (error) {
 		console.error("Job submission error:", error);
+
 		return NextResponse.json(
 			{ error: "Failed to submit job" },
 			{ status: 500 },

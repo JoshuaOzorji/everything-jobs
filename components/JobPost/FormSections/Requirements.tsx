@@ -4,7 +4,6 @@ import { UseFormRegister, FieldErrors } from "react-hook-form";
 import { JobDraft } from "@/lib/hooks/useJobDraft";
 import {
 	FormControl,
-	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
@@ -25,25 +24,10 @@ export default function Requirements({ register, errors }: RequirementsProps) {
 
 			<FormItem>
 				<FormLabel>
-					Requirements (one per line)
-				</FormLabel>
-				<FormControl>
-					<Textarea
-						{...register("requirements")}
-						placeholder='Enter each requirement on a new line'
-						rows={4}
-					/>
-				</FormControl>
-				{errors.requirements && (
-					<FormMessage>
-						{errors.requirements.message}
-					</FormMessage>
-				)}
-			</FormItem>
-
-			<FormItem>
-				<FormLabel>
-					Responsibilities (one per line)
+					Responsibilities{" "}
+					<span className='italic'>
+						(Duties and Tasks)
+					</span>
 				</FormLabel>
 				<FormControl>
 					<Textarea
@@ -66,7 +50,31 @@ export default function Requirements({ register, errors }: RequirementsProps) {
 
 			<FormItem>
 				<FormLabel>
-					Recruitment Process (one per line)
+					Requirements{" "}
+					<span className='italic'>
+						(Ideal Candidate)
+					</span>
+				</FormLabel>
+				<FormControl>
+					<Textarea
+						{...register("requirements")}
+						placeholder='Enter each requirement on a new line'
+						rows={4}
+					/>
+				</FormControl>
+				{errors.requirements && (
+					<FormMessage>
+						{errors.requirements.message}
+					</FormMessage>
+				)}
+			</FormItem>
+
+			<FormItem>
+				<FormLabel>
+					Recruitment Process{" "}
+					<span className='italic'>
+						(Optional)
+					</span>
 				</FormLabel>
 				<FormControl>
 					<Textarea
