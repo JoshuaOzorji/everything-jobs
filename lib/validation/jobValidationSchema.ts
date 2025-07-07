@@ -2,7 +2,6 @@ import * as z from "zod";
 
 export const jobValidationSchema = z.object({
 	title: z.string().min(1, "Job title is required"),
-	// Form accepts strings, we'll transform them later
 	summary: z.string().min(1, "Job summary is required"),
 	location: z.string().min(1, "Location is required"),
 	jobType: z.string().min(1, "Job type is required"),

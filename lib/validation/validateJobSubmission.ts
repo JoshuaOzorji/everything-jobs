@@ -26,10 +26,17 @@ export async function validateJobSubmission(
 
 		type ReferenceField = keyof Pick<
 			JobDraft,
-			"location" | "jobType" | "education" | "jobField" | "level"
+			| "location"
+			| "jobType"
+			| "education"
+			| "jobField"
+			| "level"
 		>;
 
-		const requiredRefs: Array<{ field: ReferenceField; name: string }> = [
+		const requiredRefs: Array<{
+			field: ReferenceField;
+			name: string;
+		}> = [
 			{ field: "location", name: "Location" },
 			{ field: "jobType", name: "Job type" },
 			{ field: "education", name: "Education level" },
