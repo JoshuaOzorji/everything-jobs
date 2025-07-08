@@ -32,17 +32,6 @@ const config = defineConfig({
 			}
 			return prev;
 		},
-		actions: (prev, { schemaType }) => {
-			if (schemaType === "pendingJob") {
-				return prev.filter(
-					({ action }) =>
-						!["duplicate"].includes(
-							action || "",
-						),
-				);
-			}
-			return prev;
-		},
 	},
 });
 
