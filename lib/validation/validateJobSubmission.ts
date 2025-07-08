@@ -47,8 +47,7 @@ export async function validateJobSubmission(
 		for (const ref of requiredRefs) {
 			if (
 				!data[ref.field] ||
-				typeof data[ref.field] !== "string" ||
-				!data[ref.field].trim()
+				String(data[ref.field]).trim() === ""
 			) {
 				return {
 					success: false,
