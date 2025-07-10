@@ -15,18 +15,17 @@ export const jobSchema = defineType({
 			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
-			name: "summary",
-			type: "array",
-			title: "Job Summary Details",
-			of: [{ type: "block" }],
-			validation: (Rule) => Rule.required(),
-		}),
-		defineField({
 			name: "company",
 			type: "reference",
 			title: "Company",
 			to: [{ type: "company" }],
 			validation: (Rule) => Rule.required(),
+		}),
+		defineField({
+			name: "summary",
+			type: "array",
+			title: "Job Summary Details",
+			of: [{ type: "block" }],
 		}),
 		defineField({
 			name: "location",
@@ -246,7 +245,6 @@ export const jobSchema = defineType({
 			title: "Experience Level",
 			type: "reference",
 			to: [{ type: "jobLevel" }],
-			validation: (Rule) => Rule.required(),
 		}),
 
 		defineField({
@@ -259,11 +257,9 @@ export const jobSchema = defineType({
 					title: "Minimum Years",
 					type: "number",
 					validation: (Rule) =>
-						Rule.required()
-							.min(0)
-							.error(
-								"Minimum years must be 0 or greater",
-							),
+						Rule.min(0).error(
+							"Minimum years must be 0 or greater",
+						),
 				}),
 				defineField({
 					name: "max",
@@ -310,22 +306,12 @@ export const jobSchema = defineType({
 			title: "Responsibilities",
 			type: "array",
 			of: [{ type: "string" }],
-			// validation: (Rule) =>
-			// 	Rule.required()
-			// 		.min(1)
-			// 		.error(
-			// 			"Please add at least one requirement",
-			// 		),
 		}),
 		defineField({
 			name: "recruitmentProcess",
 			title: "Recruitment Process",
 			type: "array",
 			of: [{ type: "string" }],
-			// validation: (Rule) =>
-			// 	Rule.min(1).error(
-			// 		"Please describe the recruitment process",
-			// 	),
 		}),
 		defineField({
 			name: "mainImage",

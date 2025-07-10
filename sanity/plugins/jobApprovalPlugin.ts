@@ -52,14 +52,79 @@ export const jobApprovalPlugin = definePlugin({
 		actions: (prev, context) => {
 			// Handle published jobs (job documents) - keep only specific actions
 			if (context.schemaType === "job") {
-				return prev.filter(({ action }) =>
-					[
-						"discardChanges",
-						"publish",
-						"unpublish",
-						"duplicate",
-					].includes(action || ""),
-				);
+				const deleteUnpublishedAction: DocumentActionComponent =
+					(props: DocumentActionProps) => {
+						// Only show delete action for unpublished jobs (draft exists but no published version)
+						if (
+							props.published ||
+							!props.draft
+						) {
+							return null;
+						}
+
+						return {
+							label: "Delete",
+							tone: "critical",
+							dialog: {
+								type: "confirm",
+								onConfirm: async () => {
+									const client =
+										context.getClient(
+											{
+												apiVersion: "2023-01-01",
+											},
+										);
+
+									try {
+										// Delete both the draft and any document with this ID
+										await client.delete(
+											props.id,
+										);
+
+										// Also try to delete the draft specifically if it exists
+										if (
+											props.draft
+										) {
+											await client.delete(
+												`drafts.${props.id}`,
+											);
+										}
+
+										props.onComplete();
+										return {
+											type: "success",
+											message: "Job deleted successfully",
+										};
+									} catch (error) {
+										console.error(
+											"Error deleting job:",
+											error,
+										);
+										return {
+											type: "error",
+											message: `Failed to delete job: ${typeof error === "object" && error !== null && "message" in error ? (error as any).message : "Unknown error"}`,
+										};
+									}
+								},
+								onCancel: () => {
+									props.onComplete(); // <-- This closes the dialog!
+								},
+								message: "Are you sure you want to delete this job? This action cannot be undone.",
+							},
+						};
+					};
+
+				return [
+					...prev.filter(({ action }) =>
+						[
+							"discardChanges",
+							"publish",
+							"unpublish",
+							"duplicate",
+						].includes(action || ""),
+					),
+					deleteUnpublishedAction,
+				].filter(Boolean);
 			}
 
 			// Handle pending jobs

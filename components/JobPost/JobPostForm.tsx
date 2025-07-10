@@ -167,15 +167,17 @@ export default function JobPostForm() {
 			};
 
 			// Transform data for Sanity
-			const summary = stringToBlocks(data.summary);
-			const requirements = stringToArray(data.requirements);
+			const summary = stringToBlocks(data.summary ?? "");
+			const requirements = stringToArray(
+				data.requirements ?? "",
+			);
 			const responsibilities = stringToArray(
-				data.responsibilities,
+				data.responsibilities ?? "",
 			);
 			const recruitmentProcess = stringToArray(
-				data.recruitmentProcess,
+				data.recruitmentProcess ?? "",
 			);
-			const apply = stringToBlocks(data.apply);
+			const apply = stringToBlocks(data.apply ?? "");
 
 			// Transform data to match Sanity schema expectations
 			const submitData = {

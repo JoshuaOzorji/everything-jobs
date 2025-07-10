@@ -4,21 +4,21 @@ const DRAFT_KEY = "job_post_draft";
 
 export interface JobDraft {
 	title: string;
-	summary: string;
+	summary?: string;
 	location: string;
 	jobType: string;
 	education: string;
 	jobField: string;
-	level: string;
-	deadline?: string;
-	salaryRange: {
-		min: number;
-		max: number;
-	};
 	requirements: string;
 	responsibilities: string;
-	recruitmentProcess: string;
 	apply: string;
+	level?: string;
+	deadline?: string;
+	salaryRange?: {
+		min?: number;
+		max?: number;
+	};
+	recruitmentProcess?: string;
 }
 
 function blocksToString(blocks: any[] | string): string {

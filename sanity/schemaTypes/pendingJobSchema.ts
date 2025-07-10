@@ -26,7 +26,6 @@ export const pendingJobSchema = defineType({
 			type: "array",
 			title: "Job Summary Details",
 			of: [{ type: "block" }],
-			validation: (Rule) => Rule.required(),
 		}),
 		// Replace string fields with references
 		defineField({
