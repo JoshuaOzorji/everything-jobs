@@ -9,6 +9,7 @@ import { client } from "@/sanity/lib/client";
 import Image from "next/image";
 import { formatURL } from "@/lib/utils";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface CompanyProfileFormProps {
 	initialData?: {
@@ -33,6 +34,8 @@ export default function CompanyProfileForm({
 
 	const isUpdate = !!initialData;
 	const { update } = useSession();
+	const router = useRouter();
+
 	const {
 		register,
 		handleSubmit,
@@ -46,6 +49,7 @@ export default function CompanyProfileForm({
 			description: initialData?.description,
 		},
 	});
+
 	useEffect(() => {
 		async function fetchIndustries() {
 			try {
@@ -143,14 +147,22 @@ export default function CompanyProfileForm({
 					toast.error(
 						"You already have a company profile. Redirecting...",
 					);
-					window.location.href =
-						"/dashboard/company-profile";
+					router.push(
+						"/dashboard/company-profile",
+					);
 					return;
 				}
 				throw new Error(
 					errorData.error ||
 						`Failed to ${isUpdate ? "update" : "create"} company profile`,
 				);
+			}
+
+			const result = await response.json();
+
+			// Update session with new companyId if this is a new company
+			if (update && result.companyId) {
+				await update();
 			}
 
 			if (isUpdate) {
@@ -163,11 +175,15 @@ export default function CompanyProfileForm({
 					description:
 						"Your company profile has been created successfully",
 				});
-				window.location.href =
-					"/dashboard/company-profile";
+				// Use router.push for client-side navigation with session update
+				router.push("/dashboard/company-profile");
 				return;
 			}
 		} catch (error) {
+			console.error(
+				"Company profile submission error:",
+				error,
+			);
 			toast.error(
 				isUpdate ? "Update Failed" : "Creation Failed",
 				{
@@ -179,10 +195,6 @@ export default function CompanyProfileForm({
 			);
 		} finally {
 			setIsSubmitting(false);
-		}
-
-		if (update) {
-			await update(); // This will refresh the session with the new companyId
 		}
 	};
 
