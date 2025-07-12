@@ -1,5 +1,3 @@
-// lib/utils/companyProfileUtils.ts
-
 import { client } from "@/sanity/lib/client";
 import clientPromise from "@/lib/mongoClient";
 import { getServerSession } from "next-auth";
@@ -94,5 +92,33 @@ export async function requireAuthentication() {
 	return {
 		redirect: null,
 		session,
+	};
+}
+
+// New function for checking company profile without forcing redirect
+export async function checkCompanyProfile() {
+	const session = await getServerSession(authOptions);
+
+	if (!session?.user) {
+		return {
+			requiresAuth: true,
+			hasCompany: false,
+			user: null,
+			companyData: null,
+		};
+	}
+
+	const { user, companyData } = await getUserCompanyData(
+		session.user.email,
+	);
+
+	// Check if user has companyId and valid companyData
+	const hasCompany = !!(user?.companyId && companyData);
+
+	return {
+		requiresAuth: false,
+		hasCompany,
+		user,
+		companyData,
 	};
 }
