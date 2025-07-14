@@ -1,3 +1,4 @@
+// MainNav.tsx
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -7,15 +8,23 @@ import FindJobsDropdown from "./FindJobsDropdown";
 import { useSession } from "next-auth/react";
 import PostJobDropdown from "./PostJobDropdown";
 
+interface MainNavProps {
+	toggleSearch: () => void;
+	isSearchOpen: boolean;
+	initialSession?: any; // Server-side session to prevent flickering
+}
+
 const MainNav = ({
 	toggleSearch,
 	isSearchOpen,
-}: {
-	toggleSearch: () => void;
-	isSearchOpen: boolean;
-}) => {
-	const { status } = useSession();
-	const isAuthenticated = status === "authenticated";
+	initialSession,
+}: MainNavProps) => {
+	const { data: session, status } = useSession();
+
+	// Use server session first, then fall back to client session
+	const currentSession = session || initialSession;
+	const isAuthenticated = currentSession?.user ? true : false;
+	const isLoading = status === "loading" && !initialSession;
 
 	return (
 		<nav className='border-b font-poppins border-white'>
@@ -53,7 +62,12 @@ const MainNav = ({
 						<IoSearchOutline className='w-6 h-6' />
 					</button>
 
-					{isAuthenticated ? (
+					{/* Show loading state only when truly loading */}
+					{isLoading ? (
+						<div className='flex items-center justify-center w-[72px] h-[40px]'>
+							<div className='w-4 h-4 border-2 border-gray-300 border-t-pry rounded-full animate-spin'></div>
+						</div>
+					) : isAuthenticated ? (
 						<PostJobDropdown />
 					) : (
 						<Link href='/dashboard/post-job'>

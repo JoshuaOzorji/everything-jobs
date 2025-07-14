@@ -62,7 +62,7 @@ const PostJobDropdown = () => {
 		}
 
 		// Ultimate fallback
-		return "U";
+		return "";
 	};
 
 	// Try multiple sources for getting initials

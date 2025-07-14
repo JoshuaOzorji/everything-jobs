@@ -12,20 +12,28 @@ import { findJobsDropdownItems } from "@/lib/data";
 import { useSession } from "next-auth/react";
 import MobilePostJobDropdown from "./ui/MobilePostJobDropdown";
 
+interface MobileNavProps {
+	toggleSearch: () => void;
+	isSearchOpen: boolean;
+	isMenuOpen: boolean;
+	toggleMenu: () => void;
+	initialSession?: any; // Server-side session to prevent flickering
+}
+
 const MobileNav = ({
 	toggleSearch,
 	isSearchOpen,
 	isMenuOpen,
 	toggleMenu,
-}: {
-	toggleSearch: () => void;
-	isSearchOpen: boolean;
-	isMenuOpen: boolean;
-	toggleMenu: () => void;
-}) => {
+	initialSession,
+}: MobileNavProps) => {
 	const [isJobsDropdownOpen, setIsJobsDropdownOpen] = useState(false);
-	const { status } = useSession();
-	const isAuthenticated = status === "authenticated";
+	const { data: session, status } = useSession();
+
+	// Use server session first, then fall back to client session
+	const currentSession = session || initialSession;
+	const isAuthenticated = currentSession?.user ? true : false;
+	const isLoading = status === "loading" && !initialSession;
 
 	const toggleJobsDropdown = () => {
 		setIsJobsDropdownOpen((prev) => !prev);
@@ -161,7 +169,12 @@ const MobileNav = ({
 
 							{/* Post Job Button/Dropdown */}
 							<li className='border-t pt-2 mt-2'>
-								{isAuthenticated ? (
+								{/* Show loading state while session is loading */}
+								{isLoading ? (
+									<div className='flex items-center justify-center py-2 px-4'>
+										<div className='w-4 h-4 border-2 border-gray-300 border-t-pry rounded-full animate-spin'></div>
+									</div>
+								) : isAuthenticated ? (
 									<MobilePostJobDropdown />
 								) : (
 									<Link

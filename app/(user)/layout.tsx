@@ -1,3 +1,4 @@
+// layout.tsx
 import type { Metadata } from "next";
 import { Lato, Poppins, Open_Sans } from "next/font/google";
 import "./../globals.css";
@@ -6,6 +7,8 @@ import { Toaster } from "sonner";
 import BaseLayout from "@/components/BaseLayout";
 import { Suspense } from "react";
 import ProgressBar from "@/components/ProgressBar";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/config";
 
 export const metadata: Metadata = {
 	title: "Everything Jobs",
@@ -30,11 +33,14 @@ const openSans = Open_Sans({
 	weight: "400",
 });
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	// Get server session to prevent navbar flickering
+	const session = await getServerSession(authOptions);
+
 	return (
 		<html lang='en'>
 			<body
@@ -44,7 +50,7 @@ export default function RootLayout({
 						<ProgressBar />
 					</Suspense>
 
-					<BaseLayout>
+					<BaseLayout initialSession={session}>
 						{children}
 						<Toaster
 							richColors

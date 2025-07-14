@@ -5,7 +5,10 @@ import MainNav from "./MainNav";
 import MobileNav from "./MobileNav";
 import SearchComponent from "./SearchComponent";
 
-const Header = () => {
+interface HeaderProps {
+	initialSession?: any; // Server-side session to prevent flickering
+}
+const Header = ({ initialSession }: HeaderProps) => {
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -33,12 +36,14 @@ const Header = () => {
 						isSearchOpen={isSearchOpen}
 						isMenuOpen={isMenuOpen}
 						toggleMenu={toggleMenu}
+						initialSession={initialSession}
 					/>
 				</div>
 				<div className='hidden md:block'>
 					<MainNav
 						toggleSearch={toggleSearch}
 						isSearchOpen={isSearchOpen}
+						initialSession={initialSession}
 					/>
 				</div>
 			</div>
