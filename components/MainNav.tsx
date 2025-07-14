@@ -1,4 +1,4 @@
-// MainNav.tsx
+// components/MainNav.tsx (Optimized version)
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -6,24 +6,21 @@ import logo from "@/public/logo.png";
 import { IoSearchOutline } from "react-icons/io5";
 import FindJobsDropdown from "./FindJobsDropdown";
 import { useSession } from "next-auth/react";
+import { useEnhancedSession } from "./AuthProvider";
 import PostJobDropdown from "./PostJobDropdown";
 
 interface MainNavProps {
 	toggleSearch: () => void;
 	isSearchOpen: boolean;
-	initialSession?: any; // Server-side session to prevent flickering
 }
 
-const MainNav = ({
-	toggleSearch,
-	isSearchOpen,
-	initialSession,
-}: MainNavProps) => {
+const MainNav = ({ toggleSearch, isSearchOpen }: MainNavProps) => {
 	const { data: session, status } = useSession();
+	const { initialSession, hasCompany } = useEnhancedSession();
 
-	// Use server session first, then fall back to client session
+	// Use enhanced session data
 	const currentSession = session || initialSession;
-	const isAuthenticated = currentSession?.user ? true : false;
+	const isAuthenticated = !!currentSession?.user;
 	const isLoading = status === "loading" && !initialSession;
 
 	return (
@@ -62,7 +59,6 @@ const MainNav = ({
 						<IoSearchOutline className='w-6 h-6' />
 					</button>
 
-					{/* Show loading state only when truly loading */}
 					{isLoading ? (
 						<div className='flex items-center justify-center w-[72px] h-[40px]'>
 							<div className='w-4 h-4 border-2 border-gray-300 border-t-pry rounded-full animate-spin'></div>

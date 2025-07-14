@@ -1,4 +1,3 @@
-// layout.tsx
 import type { Metadata } from "next";
 import { Lato, Poppins, Open_Sans } from "next/font/google";
 import "./../globals.css";
@@ -7,8 +6,7 @@ import { Toaster } from "sonner";
 import BaseLayout from "@/components/BaseLayout";
 import { Suspense } from "react";
 import ProgressBar from "@/components/ProgressBar";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/config";
+import { getEnhancedSession } from "@/lib/sessionUtils";
 
 export const metadata: Metadata = {
 	title: "Everything Jobs",
@@ -38,19 +36,28 @@ export default async function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	// Get server session to prevent navbar flickering
-	const session = await getServerSession(authOptions);
+	// Get enhanced session with company data in one call
+	const enhancedSession = await getEnhancedSession();
 
 	return (
 		<html lang='en'>
 			<body
 				className={`${lato.variable} ${openSans.variable} ${poppins.variable}  antialiased`}>
-				<AuthProvider>
+				<AuthProvider
+					initialSession={enhancedSession}
+					hasCompany={
+						enhancedSession?.user
+							?.hasCompany
+					}
+					companyData={
+						enhancedSession?.user
+							?.companyData
+					}>
 					<Suspense fallback={null}>
 						<ProgressBar />
 					</Suspense>
 
-					<BaseLayout initialSession={session}>
+					<BaseLayout>
 						{children}
 						<Toaster
 							richColors

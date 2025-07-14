@@ -1,7 +1,6 @@
 import { client } from "@/sanity/lib/client";
 import clientPromise from "@/lib/mongoClient";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/config";
+import { getEnhancedSession } from "@/lib/sessionUtils";
 
 export interface CompanyProfileData {
 	_id: string;
@@ -12,6 +11,7 @@ export interface CompanyProfileData {
 	logo?: any;
 }
 
+// Optimized version that uses enhanced session
 export async function getUserCompanyData(userEmail: string | null | undefined) {
 	if (!userEmail) {
 		return { user: null, companyData: null };
@@ -48,10 +48,11 @@ export async function getUserCompanyData(userEmail: string | null | undefined) {
 	}
 }
 
+// Simplified functions using enhanced session
 export async function requireCompanyProfile() {
-	const session = await getServerSession(authOptions);
+	const session = await getEnhancedSession();
 
-	if (!session?.user) {
+	if (!session) {
 		return {
 			redirect: "/auth/login",
 			user: null,
@@ -59,30 +60,26 @@ export async function requireCompanyProfile() {
 		};
 	}
 
-	const { user, companyData } = await getUserCompanyData(
-		session.user.email,
-	);
-
-	// If user has no companyId or companyData, redirect to create page
-	if (!user?.companyId || !companyData) {
+	// Check if user has company profile
+	if (!session.user.hasCompany) {
 		return {
 			redirect: "/dashboard/company",
-			user,
+			user: session.user,
 			companyData: null,
 		};
 	}
 
 	return {
 		redirect: null,
-		user,
-		companyData,
+		user: session.user,
+		companyData: session.user.companyData,
 	};
 }
 
 export async function requireAuthentication() {
-	const session = await getServerSession(authOptions);
+	const session = await getEnhancedSession();
 
-	if (!session?.user) {
+	if (!session) {
 		return {
 			redirect: "/auth/login",
 			session: null,
@@ -95,11 +92,10 @@ export async function requireAuthentication() {
 	};
 }
 
-// New function for checking company profile without forcing redirect
 export async function checkCompanyProfile() {
-	const session = await getServerSession(authOptions);
+	const session = await getEnhancedSession();
 
-	if (!session?.user) {
+	if (!session) {
 		return {
 			requiresAuth: true,
 			hasCompany: false,
@@ -108,17 +104,10 @@ export async function checkCompanyProfile() {
 		};
 	}
 
-	const { user, companyData } = await getUserCompanyData(
-		session.user.email,
-	);
-
-	// Check if user has companyId and valid companyData
-	const hasCompany = !!(user?.companyId && companyData);
-
 	return {
 		requiresAuth: false,
-		hasCompany,
-		user,
-		companyData,
+		hasCompany: session.user.hasCompany,
+		user: session.user,
+		companyData: session.user.companyData,
 	};
 }
