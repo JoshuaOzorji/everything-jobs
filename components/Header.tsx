@@ -6,7 +6,7 @@ import MobileNav from "./MobileNav";
 import SearchComponent from "./SearchComponent";
 
 interface HeaderProps {
-	initialSession?: any; // Server-side session to prevent flickering
+	initialSession?: any;
 }
 const Header = ({ initialSession }: HeaderProps) => {
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -43,7 +43,7 @@ const Header = ({ initialSession }: HeaderProps) => {
 					<MainNav
 						toggleSearch={toggleSearch}
 						isSearchOpen={isSearchOpen}
-						initialSession={initialSession}
+						// initialSession={initialSession}
 					/>
 				</div>
 			</div>
