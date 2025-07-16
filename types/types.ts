@@ -253,6 +253,15 @@ export interface Industry {
 	name: string;
 }
 
+export interface CompanyProfileData {
+	_id: string;
+	name: string;
+	website?: string;
+	industry?: { _id: string; name?: string };
+	description?: string;
+	logo?: any;
+}
+
 export interface JobSubmissionItem {
 	_id: string;
 	title: string;

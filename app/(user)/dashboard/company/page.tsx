@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/config";
 import { redirect } from "next/navigation";
 import { LoadingComponent } from "@/components/Loading";
-import CompanyProfileForm from "@/components/Company/CompanyProfileForm";
+import CompanyProfileForm from "@/components/CompanyProfile/CompanyProfileForm";
 
 export default async function CompanyCreatePage() {
 	const session = await getServerSession(authOptions);

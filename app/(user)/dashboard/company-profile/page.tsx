@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { LoadingComponent } from "@/components/Loading";
-import CompanyProfileForm from "@/components/Company/CompanyProfileForm";
+import CompanyProfileForm from "@/components/CompanyProfile/CompanyProfileForm";
 import { redirect } from "next/navigation";
 import { requireCompanyProfile } from "@/lib/companyProfileUtils";
 
