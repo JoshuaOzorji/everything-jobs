@@ -6,8 +6,7 @@ import JobPostForm from "@/components/JobPost/JobPostForm";
 import CompanyRequiredMessage from "@/components/JobPost/CompanyRequiredMessage";
 
 export default async function PostJobPage() {
-	const { requiresAuth, hasCompany, companyData } =
-		await checkCompanyProfile();
+	const { requiresAuth, hasCompany } = await checkCompanyProfile();
 
 	// If user is not authenticated, redirect to login
 	if (requiresAuth) {
@@ -27,12 +26,6 @@ export default async function PostJobPage() {
 	// If user has a company profile, show the job post form
 	return (
 		<div className='dashboard-page-container'>
-			<div className='mb-6'>
-				<p className='text-sm italic font-light text-muted-foreground'>
-					Fill in the details below to create a
-					new job posting for {companyData?.name}
-				</p>
-			</div>
 			<Suspense fallback={<LoadingComponent />}>
 				<JobPostForm />
 			</Suspense>

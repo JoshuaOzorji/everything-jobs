@@ -129,9 +129,6 @@ export function useJobDraft() {
 		(data: any) => {
 			// Prevent saving if not loaded yet
 			if (!isLoaded) {
-				console.log(
-					"Draft not loaded yet, skipping save",
-				);
 				return;
 			}
 
@@ -145,10 +142,6 @@ export function useJobDraft() {
 				try {
 					// Ensure we have valid data
 					if (!data || typeof data !== "object") {
-						console.log(
-							"Invalid data for draft save:",
-							data,
-						);
 						return;
 					}
 
@@ -210,9 +203,6 @@ export function useJobDraft() {
 						serializedDraft !==
 							lastSavedRef.current
 					) {
-						console.log(
-							"💾 Saving draft to localStorage",
-						);
 						setDraft(newDraft);
 						localStorage.setItem(
 							DRAFT_KEY,
@@ -243,8 +233,6 @@ export function useJobDraft() {
 				clearTimeout(saveTimeoutRef.current);
 				saveTimeoutRef.current = null;
 			}
-
-			console.log("Draft cleared successfully");
 		} catch (error) {
 			console.error("Error clearing draft:", error);
 		}

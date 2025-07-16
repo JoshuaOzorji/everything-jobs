@@ -29,7 +29,7 @@ export default function ApplicationDetails({
 
 			<FormItem>
 				<FormLabel>Application Deadline</FormLabel>
-				<FormControl>
+				<FormControl className=''>
 					<Input
 						type='date'
 						{...register("deadline")}
@@ -38,6 +38,7 @@ export default function ApplicationDetails({
 								.toISOString()
 								.split("T")[0]
 						}
+						className='flex justify-between items-center'
 					/>
 				</FormControl>
 				{errors.deadline && (

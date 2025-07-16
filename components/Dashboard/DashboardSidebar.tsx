@@ -1,7 +1,6 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useSession } from "next-auth/react";
 import {
 	Sidebar,
 	SidebarContent,
@@ -22,8 +21,7 @@ export function DashboardSidebar({
 	sidebarCollapsed?: boolean;
 }) {
 	const pathname = usePathname();
-	const { data: session } = useSession();
-	const { hasCompanyData, loading, refetch } = useCompanyData();
+	const { hasCompanyData } = useCompanyData();
 	const navItems = getDynamicNav(hasCompanyData);
 
 	return (

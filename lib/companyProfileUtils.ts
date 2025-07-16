@@ -8,10 +8,15 @@ export interface CompanyProfileData {
 	website?: string;
 	industry?: { _id: string; name?: string };
 	description?: string;
-	logo?: any;
+	logo?: {
+		asset?: {
+			_id: string;
+			url: string;
+		};
+	};
 }
 
-// Optimized version that uses enhanced session
+// Fetch company data from Sanity with proper reference expansion
 export async function getUserCompanyData(userEmail: string | null | undefined) {
 	if (!userEmail) {
 		return { user: null, companyData: null };
@@ -28,16 +33,24 @@ export async function getUserCompanyData(userEmail: string | null | undefined) {
 			return { user, companyData: null };
 		}
 
-		// Fetch company data from Sanity
+		// Enhanced Sanity query with better error handling
 		const companyData = await client.fetch<CompanyProfileData>(
 			`*[_type == "company" && _id == $companyId][0]{
-        _id,
-        name,
-        website,
-        "industry": industry->{_id, name},
-        description,
-        logo
-      }`,
+				_id,
+				name,
+				website,
+				industry-> {
+					_id,
+					name
+				},
+				description,
+				logo {
+					asset-> {
+						_id,
+						url
+					}
+				}
+			}`,
 			{ companyId: user.companyId },
 		);
 
@@ -48,7 +61,7 @@ export async function getUserCompanyData(userEmail: string | null | undefined) {
 	}
 }
 
-// Simplified functions using enhanced session
+// Enhanced requireCompanyProfile with fresh data fetch
 export async function requireCompanyProfile() {
 	const session = await getEnhancedSession();
 
@@ -69,10 +82,19 @@ export async function requireCompanyProfile() {
 		};
 	}
 
+	// Option 1: Use session data
+	let companyData = session.user.companyData;
+
+	// Option 2: Fresh fetch if session data is incomplete
+	if (!companyData?.industry && session.user.email) {
+		const freshData = await getUserCompanyData(session.user.email);
+		companyData = freshData.companyData;
+	}
+
 	return {
 		redirect: null,
 		user: session.user,
-		companyData: session.user.companyData,
+		companyData,
 	};
 }
 

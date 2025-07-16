@@ -16,8 +16,6 @@ import type { JobSubmissionItem } from "@/types/types";
 import { toast } from "sonner";
 import { LoadingComponent } from "@/components/Loading";
 import Pagination from "@/components/PaginationComponent";
-import Image from "next/image";
-import { urlForImage } from "@/sanity/lib/image";
 
 const statusColors = {
 	pending: "bg-yellow-100 text-yellow-800",

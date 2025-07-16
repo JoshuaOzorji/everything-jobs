@@ -3,14 +3,15 @@
 import { SidebarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { dashboardNav } from "@/lib/dashboard-config";
-import { usePathname } from "next/navigation";
 import {
 	Breadcrumb,
 	BreadcrumbItem,
 	BreadcrumbList,
 	BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
+import { usePathname } from "next/navigation";
+import { useCompanyData } from "@/hooks/useCompanyStatus";
+import { getDynamicNav } from "@/lib/dashboard-config";
 
 export function SiteHeader({
 	onSidebarToggle,
@@ -20,7 +21,16 @@ export function SiteHeader({
 	sidebarOpen?: boolean;
 }) {
 	const pathname = usePathname();
-	const currentNav = dashboardNav.find((item) => item.url === pathname);
+	const { hasCompanyData } = useCompanyData();
+	const navItems = getDynamicNav(hasCompanyData);
+
+	// Match using full url or matchUrls fallback
+	const currentNav = navItems.find(
+		(item) =>
+			item.url === pathname ||
+			item.matchUrls?.some((url) => url === pathname),
+	);
+
 	const title = currentNav?.title || "Dashboard";
 
 	return (
