@@ -59,7 +59,12 @@ export async function validateJobSubmission(
 		// Validate salary range
 		if (data.salaryRange) {
 			const { min, max } = data.salaryRange;
-			if (min > max) {
+			// Check if both min and max are defined before comparing
+			if (
+				min !== undefined &&
+				max !== undefined &&
+				min > max
+			) {
 				return {
 					success: false,
 					error: "Maximum salary must be greater than minimum salary",
