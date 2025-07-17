@@ -17,6 +17,7 @@ interface MobileNavProps {
 	isSearchOpen: boolean;
 	isMenuOpen: boolean;
 	toggleMenu: () => void;
+	closeMenu: () => void;
 	initialSession?: any; // Server-side session to prevent flickering
 }
 
@@ -25,6 +26,7 @@ const MobileNav = ({
 	isSearchOpen,
 	isMenuOpen,
 	toggleMenu,
+	closeMenu,
 	initialSession,
 }: MobileNavProps) => {
 	const [isJobsDropdownOpen, setIsJobsDropdownOpen] = useState(false);
@@ -41,13 +43,7 @@ const MobileNav = ({
 
 	// This function closes the menu when clicking a link or button
 	const handleLinkClick = () => {
-		toggleMenu(); // This will close the menu
-	};
-
-	// Handle search button click - close menu and toggle search
-	const handleSearchClick = () => {
-		toggleMenu(); // Close the menu first
-		toggleSearch(); // Then toggle search
+		closeMenu(); // This will close the menu
 	};
 
 	return (
@@ -77,7 +73,7 @@ const MobileNav = ({
 
 				<div className='flex items-center gap-4'>
 					<button
-						onClick={handleSearchClick}
+						onClick={toggleSearch}
 						className={`p-2 transition-colors duration-200 ${
 							isSearchOpen
 								? "text-pry bg-slate-100 border-b-2 border-pry animate"

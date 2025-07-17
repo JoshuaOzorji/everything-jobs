@@ -79,7 +79,7 @@ export const customSerializers: PortableTextComponents = {
 			switch (node.style) {
 				case "h1":
 					return (
-						<h1 className='mt-4 text-xl font-bold md:text-2xl'>
+						<h1 className='mt-3 text-xl font-bold md:text-2xl'>
 							{node.children.map(
 								(child, i) => (
 									<span
@@ -97,7 +97,7 @@ export const customSerializers: PortableTextComponents = {
 					);
 				case "h2":
 					return (
-						<h2 className='mt-4 text-lg font-bold md:text-xl'>
+						<h2 className='mt-3 text-lg font-bold md:text-xl'>
 							{node.children.map(
 								(child, i) => (
 									<span
@@ -115,7 +115,7 @@ export const customSerializers: PortableTextComponents = {
 					);
 				case "h3":
 					return (
-						<h3 className='mt-4 text-base font-bold md:text-lg'>
+						<h3 className='mt-3 text-base font-bold md:text-lg'>
 							{node.children.map(
 								(child, i) => (
 									<span
@@ -134,7 +134,7 @@ export const customSerializers: PortableTextComponents = {
 				case "blockquote":
 					return (
 						<blockquote
-							className='mt-4 italic text-myBlack '
+							className='mt-3 italic text-myBlack '
 							style={{
 								borderLeftWidth:
 									"4px",

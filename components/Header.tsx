@@ -8,22 +8,42 @@ import SearchComponent from "./SearchComponent";
 interface HeaderProps {
 	initialSession?: any;
 }
+
 const Header = ({ initialSession }: HeaderProps) => {
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+	const openSearch = () => {
+		setIsMenuOpen(false);
+		setIsSearchOpen(true);
+	};
+
+	const closeSearch = () => {
+		setIsSearchOpen(false);
+	};
+
+	const openMenu = () => {
+		setIsSearchOpen(false);
+		setIsMenuOpen(true);
+	};
+
+	const closeMenu = () => {
+		setIsMenuOpen(false);
+	};
+
 	const toggleSearch = () => {
-		setIsSearchOpen((prev) => !prev);
-		// Close menu when search is opened
-		if (!isSearchOpen) {
-			setIsMenuOpen(false);
+		if (isSearchOpen) {
+			closeSearch();
+		} else {
+			openSearch();
 		}
 	};
 
 	const toggleMenu = () => {
-		setIsMenuOpen((prev) => !prev);
-		if (!isMenuOpen) {
-			setIsSearchOpen(false);
+		if (isMenuOpen) {
+			closeMenu();
+		} else {
+			openMenu();
 		}
 	};
 
@@ -36,6 +56,7 @@ const Header = ({ initialSession }: HeaderProps) => {
 						isSearchOpen={isSearchOpen}
 						isMenuOpen={isMenuOpen}
 						toggleMenu={toggleMenu}
+						closeMenu={closeMenu}
 						initialSession={initialSession}
 					/>
 				</div>

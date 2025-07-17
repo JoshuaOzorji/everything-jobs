@@ -104,6 +104,10 @@ body {
 	@apply space-y-4 text-sm;
 }
 
+.job-summary p {
+	margin-top: 0 !important;
+}
+
 .dashboard-sidebar-portal {
 	position: absolute !important;
 	left: 0;

@@ -29,7 +29,7 @@ const JobCard = ({ job }: JobCardProps) => {
 				</div>
 				<div className='w-full font-openSans text-myBlack'>
 					<div className='flex items-start justify-between'>
-						<h2 className='text-[13px] md:text-base font-bold font-poppins hover:text-pry animate max-w-[75%]'>
+						<h2 className='text-xs md:text-sm font-bold font-poppins hover:text-pry animate max-w-[75%]'>
 							<Link
 								href={`/job/${job.slug}`}>
 								{job.title} at{" "}
@@ -40,7 +40,7 @@ const JobCard = ({ job }: JobCardProps) => {
 								}
 							</Link>
 						</h2>
-						<p className='text-sm flex items-center gap-1 text-[11px] md:text-sm whitespace-nowrap flex-shrink-0'>
+						<p className='flex items-center gap-1 text-[10px] md:text-xs whitespace-nowrap flex-shrink-0'>
 							<span className='text-base text-pry'>
 								&bull;
 							</span>
@@ -55,7 +55,7 @@ const JobCard = ({ job }: JobCardProps) => {
 					</div>
 
 					{/* Summary */}
-					<div className='text-[12px] md:text-sm font-openSans line-clamp-2 mb-1'>
+					<div className='text-[11px] md:text-[12.5px] font-openSans line-clamp-2 mb-1 job-summary'>
 						<PortableText
 							value={job.summary}
 							components={
@@ -67,7 +67,7 @@ const JobCard = ({ job }: JobCardProps) => {
 					<div className='flex flex-wrap gap-3 text-xs md:text-[0.85rem] my-1'>
 						<Link
 							href={`/jobs/by-location/${job.location?.slug}`}>
-							<button className='font-medium first-letter:uppercase hover:underline bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded flex items-center'>
+							<button className='font-medium first-letter:uppercase hover:underline bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded flex items-center text-[11px] md:text-xs'>
 								{
 									locationDisplay
 								}
@@ -76,7 +76,7 @@ const JobCard = ({ job }: JobCardProps) => {
 
 						<Link
 							href={`jobs/by-type/${job.jobType?.slug}`}>
-							<button className='bg-green-100 text-green-800 font-medium px-2.5 py-0.5 rounded first-letter:uppercase hover:underline'>
+							<button className='bg-green-100 text-green-800 font-medium px-2.5 py-0.5 rounded first-letter:uppercase hover:underline text-[11px] md:text-xs'>
 								{
 									job
 										.jobType
@@ -86,7 +86,7 @@ const JobCard = ({ job }: JobCardProps) => {
 						</Link>
 						<Link
 							href={`/jobs/by-level/${job.level?.slug}`}>
-							<button className='bg-purple-100 text-purple-800 font-medium px-2.5 py-0.5 rounded first-letter:uppercase hover:underline'>
+							<button className='bg-purple-100 text-purple-800 font-medium px-2.5 py-0.5 rounded first-letter:uppercase hover:underline text-[11px] md:text-xs'>
 								{
 									job
 										.level
