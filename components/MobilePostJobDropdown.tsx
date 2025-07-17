@@ -4,12 +4,21 @@ import { useState } from "react";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { signOut, useSession } from "next-auth/react";
 
-const MobilePostJobDropdown = () => {
+interface MobilePostJobDropdownProps {
+	onLinkClick: () => void;
+}
+
+const MobilePostJobDropdown = ({ onLinkClick }: MobilePostJobDropdownProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const { data: session } = useSession();
 
 	const handleSignOut = async () => {
 		await signOut({ callbackUrl: "/" });
+		onLinkClick(); // Close the menu after signing out
+	};
+
+	const handleLinkClickWithClose = () => {
+		onLinkClick(); // Close the menu when a link is clicked
 	};
 
 	return (
@@ -34,28 +43,40 @@ const MobilePostJobDropdown = () => {
 					<li>
 						<Link
 							href='/dashboard'
-							className='block py-2 px-4 hover:bg-gray-100 rounded transition-colors text-sm'>
+							className='block py-2 px-4 hover:bg-gray-100 rounded transition-colors text-sm'
+							onClick={
+								handleLinkClickWithClose
+							}>
 							Dashboard
 						</Link>
 					</li>
 					<li>
 						<Link
 							href='/dashboard/post-job'
-							className='block py-2 px-4 hover:bg-gray-100 rounded transition-colors text-sm'>
+							className='block py-2 px-4 hover:bg-gray-100 rounded transition-colors text-sm'
+							onClick={
+								handleLinkClickWithClose
+							}>
 							Post Job
 						</Link>
 					</li>
 					<li>
 						<Link
 							href='/dashboard/view-jobs'
-							className='block py-2 px-4 hover:bg-gray-100 rounded transition-colors text-sm'>
+							className='block py-2 px-4 hover:bg-gray-100 rounded transition-colors text-sm'
+							onClick={
+								handleLinkClickWithClose
+							}>
 							Job Submissions
 						</Link>
 					</li>
 					<li>
 						<Link
 							href='/dashboard/company-profile'
-							className='block py-2 px-4 hover:bg-gray-100 rounded transition-colors text-sm'>
+							className='block py-2 px-4 hover:bg-gray-100 rounded transition-colors text-sm'
+							onClick={
+								handleLinkClickWithClose
+							}>
 							Company Profile
 						</Link>
 					</li>

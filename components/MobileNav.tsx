@@ -10,7 +10,7 @@ import { IoMdClose } from "react-icons/io";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { findJobsDropdownItems } from "@/lib/data";
 import { useSession } from "next-auth/react";
-import MobilePostJobDropdown from "./ui/MobilePostJobDropdown";
+import MobilePostJobDropdown from "./MobilePostJobDropdown";
 
 interface MobileNavProps {
 	toggleSearch: () => void;
@@ -39,9 +39,15 @@ const MobileNav = ({
 		setIsJobsDropdownOpen((prev) => !prev);
 	};
 
-	// This function closes the menu when clicking a link
+	// This function closes the menu when clicking a link or button
 	const handleLinkClick = () => {
 		toggleMenu(); // This will close the menu
+	};
+
+	// Handle search button click - close menu and toggle search
+	const handleSearchClick = () => {
+		toggleMenu(); // Close the menu first
+		toggleSearch(); // Then toggle search
 	};
 
 	return (
@@ -71,7 +77,7 @@ const MobileNav = ({
 
 				<div className='flex items-center gap-4'>
 					<button
-						onClick={toggleSearch}
+						onClick={handleSearchClick}
 						className={`p-2 transition-colors duration-200 ${
 							isSearchOpen
 								? "text-pry bg-slate-100 border-b-2 border-pry animate"
@@ -175,7 +181,11 @@ const MobileNav = ({
 										<div className='w-4 h-4 border-2 border-gray-300 border-t-pry rounded-full animate-spin'></div>
 									</div>
 								) : isAuthenticated ? (
-									<MobilePostJobDropdown />
+									<MobilePostJobDropdown
+										onLinkClick={
+											handleLinkClick
+										}
+									/>
 								) : (
 									<Link
 										href='/dashboard/post-job'
