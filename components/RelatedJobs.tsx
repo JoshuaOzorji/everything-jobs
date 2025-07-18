@@ -1,18 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { JobReference } from "@/types/types";
-
-type RelatedJob = {
-	_id: string;
-	title: string;
-	slug: string;
-	company: string;
-	companySlug: string;
-	jobType: JobReference;
-	location: JobReference;
-	jobField: JobReference;
-	level: JobReference;
-};
+import { RelatedJob } from "@/types/types";
 
 interface RelatedJobCardProps {
 	job: RelatedJob;

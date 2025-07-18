@@ -1,6 +1,6 @@
 "use client";
 
-const LoadingSpinner = ({ size = "md" }) => {
+const LoadingSpinner = ({ size = "sm" }) => {
 	const sizeClass = `loading-${size}`;
 
 	return (

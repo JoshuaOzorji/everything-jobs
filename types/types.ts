@@ -281,3 +281,14 @@ export interface JobSubmissionsResponse {
 	submissions: JobSubmissionItem[];
 	total: number;
 }
+export interface RelatedJob {
+	_id: string;
+	title: string;
+	slug: string;
+	company: string;
+	companySlug?: string;
+	jobType: JobReference;
+	location: JobReference;
+	jobField: JobReference;
+	level: JobReference;
+}
