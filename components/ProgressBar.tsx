@@ -92,7 +92,7 @@ const ProgressBar = () => {
 	return (
 		<Progress
 			value={progress}
-			className='fixed top-0 left-0 z-[9999] w-full h-1 bg-transparent '
+			className='fixed top-0 left-0 z-[9999] w-full h-1 bg-transparent hidden md:block'
 		/>
 	);
 };

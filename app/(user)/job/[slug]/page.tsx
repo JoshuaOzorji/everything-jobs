@@ -52,11 +52,11 @@ export default async function JobPage({ params }: PageProps) {
 
 	const relatedJobs: RelatedJob[] = await client.fetch(relatedJobsQuery, {
 		currentJobId: job._id,
-		jobFieldId: job.jobFieldId,
-		jobTypeId: job.jobTypeId,
-		levelId: job.levelId,
-		educationId: job.educationId,
-		locationId: job.locationId,
+		jobFieldId: job.jobFieldId ?? "",
+		jobTypeId: job.jobTypeId ?? "",
+		levelId: job.levelId ?? "",
+		educationId: job.educationId ?? "",
+		locationId: job.locationId ?? "",
 	});
 
 	const imageUrl = job.company.logo?.asset?._ref
