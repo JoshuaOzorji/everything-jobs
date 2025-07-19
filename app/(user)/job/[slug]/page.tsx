@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { lazy } from "react";
 import { client } from "@/sanity/lib/client";
 import { Job, RelatedJob } from "@/types/types";
 import SubLayout from "@/components/SubLayout";
@@ -50,13 +49,14 @@ export default async function JobPage({ params }: PageProps) {
 		return <div>Job not found.</div>;
 	}
 
+	// Fix: Pass null instead of empty strings for missing IDs
 	const relatedJobs: RelatedJob[] = await client.fetch(relatedJobsQuery, {
 		currentJobId: job._id,
-		jobFieldId: job.jobFieldId ?? "",
-		jobTypeId: job.jobTypeId ?? "",
-		levelId: job.levelId ?? "",
-		educationId: job.educationId ?? "",
-		locationId: job.locationId ?? "",
+		jobFieldId: job.jobFieldId || null,
+		jobTypeId: job.jobTypeId || null,
+		levelId: job.levelId || null,
+		educationId: job.educationId || null,
+		locationId: job.locationId || null,
 	});
 
 	const imageUrl = job.company.logo?.asset?._ref

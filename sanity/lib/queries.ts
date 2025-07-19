@@ -575,6 +575,43 @@ type CurrentJob = {
 	locationId?: string;
 };
 
+// export const relatedJobsQuery = groq`
+//   *[_type == "job" && _id != $currentJobId] {
+//     _id,
+//     title,
+//     "slug": slug.current,
+//     publishedAt,
+//     "company": company->name,
+//     "companySlug": company->slug.current,
+//     "location": location->{
+//           _id,
+//           name,
+//           slug
+//       },
+//       "jobType": jobType->{
+//           _id,
+//           name,
+//           "slug": slug.current
+//       },
+//       "jobField": jobField->{
+//           _id,
+//           name,
+//           "slug": slug.current
+//       },
+//       "level": level->{
+//           _id,
+//           name,
+//           "slug": slug.current
+//       },
+//     "score":
+//       (jobField->_id == $jobFieldId) * 5 +
+//       (jobType->_id == $jobTypeId) * 3 +
+//       (level->_id == $levelId) * 2 +
+//       (education->_id == $educationId) * 2 +
+//       (location->_id == $locationId) * 1
+//   } | order(score desc, publishedAt desc)[0...4]
+// `;
+
 export const relatedJobsQuery = groq`
   *[_type == "job" && _id != $currentJobId] {
     _id,
@@ -604,10 +641,10 @@ export const relatedJobsQuery = groq`
           "slug": slug.current
       },
     "score": 
-      (jobField->_id == $jobFieldId) * 5 +
-      (jobType->_id == $jobTypeId) * 3 +
-      (level->_id == $levelId) * 2 +
-      (education->_id == $educationId) * 2 +
-      (location->_id == $locationId) * 1
+      (defined($jobFieldId) && jobField->_id == $jobFieldId ? 5 : 0) +
+      (defined($jobTypeId) && jobType->_id == $jobTypeId ? 3 : 0) +
+      (defined($levelId) && level->_id == $levelId ? 2 : 0) +
+      (defined($educationId) && education->_id == $educationId ? 2 : 0) +
+      (defined($locationId) && location->_id == $locationId ? 1 : 0)
   } | order(score desc, publishedAt desc)[0...4]
 `;
