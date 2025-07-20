@@ -3,10 +3,7 @@ import { Job, RelatedJob } from "@/types/types";
 import JobHeader from "./JobHeader";
 import JobBasicInfo from "./JobBasicInfo";
 import RelatedJobs from "@/components/RelatedJobs";
-import { lazy } from "react";
-
-// Lazy load JobDetails
-const JobDetails = lazy(() => import("@/components/JobDetails"));
+import JobDetails from "@/components/JobDetails";
 
 interface JobPageContentProps {
 	job: Job;

@@ -612,46 +612,8 @@ type CurrentJob = {
 //   } | order(score desc, publishedAt desc)[0...4]
 // `;
 
-// export const relatedJobsQuery = groq`
-//   *[_type == "job" && _id != $currentJobId] {
-//     _id,
-//     title,
-//     "slug": slug.current,
-//     publishedAt,
-//     "company": company->name,
-//     "companySlug": company->slug.current,
-//     "location": location->{
-//           _id,
-//           name,
-//           slug
-//       },
-//       "jobType": jobType->{
-//           _id,
-//           name,
-//           "slug": slug.current
-//       },
-//       "jobField": jobField->{
-//           _id,
-//           name,
-//           "slug": slug.current
-//       },
-//       "level": level->{
-//           _id,
-//           name,
-//           "slug": slug.current
-//       },
-//     "score":
-//       (defined($jobFieldId) && jobField->_id == $jobFieldId ? 5 : 0) +
-//       (defined($jobTypeId) && jobType->_id == $jobTypeId ? 3 : 0) +
-//       (defined($levelId) && level->_id == $levelId ? 2 : 0) +
-//       (defined($educationId) && education->_id == $educationId ? 2 : 0) +
-//       (defined($locationId) && location->_id == $locationId ? 1 : 0)
-//   } | order(score desc, publishedAt desc)[0...4]
-// `;
-
-// Temporarily replace your relatedJobsQuery with this simplified version
 export const relatedJobsQuery = groq`
-  *[_type == "job" && _id != $currentJobId][0...4] {
+  *[_type == "job" && _id != $currentJobId] {
     _id,
     title,
     "slug": slug.current,
@@ -666,7 +628,7 @@ export const relatedJobsQuery = groq`
       "jobType": jobType->{
           _id,
           name,
-          "slug": slug.current 
+          "slug": slug.current
       },
       "jobField": jobField->{
           _id,
@@ -677,6 +639,12 @@ export const relatedJobsQuery = groq`
           _id,
           name,
           "slug": slug.current
-      }
-  } | order(publishedAt desc)
+      },
+    "score":
+      (defined($jobFieldId) && jobField->_id == $jobFieldId ? 5 : 0) +
+      (defined($jobTypeId) && jobType->_id == $jobTypeId ? 3 : 0) +
+      (defined($levelId) && level->_id == $levelId ? 2 : 0) +
+      (defined($educationId) && education->_id == $educationId ? 2 : 0) +
+      (defined($locationId) && location->_id == $locationId ? 1 : 0)
+  } | order(score desc, publishedAt desc)[0...4]
 `;

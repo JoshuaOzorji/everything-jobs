@@ -78,6 +78,7 @@
 // 		</SubLayout>
 // 	);
 // }
+
 import { Metadata } from "next";
 import { client } from "@/sanity/lib/client";
 import { Job, RelatedJob } from "@/types/types";
