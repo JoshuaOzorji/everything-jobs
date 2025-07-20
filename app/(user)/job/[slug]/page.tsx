@@ -133,22 +133,22 @@ export async function generateMetadata({
 	}
 }
 
-export async function generateStaticParams() {
-	try {
-		const jobs = await client.fetch(
-			`*[_type == "job" && _createdAt > now() - 60*60*24*30][0...50]{ "slug": slug.current }`,
-		);
-		return jobs.map((job: { slug: string }) => ({
-			slug: job.slug,
-		}));
-	} catch (error) {
-		console.error(
-			"Error in generateStaticParams:",
-			getErrorMessage(error),
-		);
-		return [];
-	}
-}
+// export async function generateStaticParams() {
+// 	try {
+// 		const jobs = await client.fetch(
+// 			`*[_type == "job" && _createdAt > now() - 60*60*24*30][0...50]{ "slug": slug.current }`,
+// 		);
+// 		return jobs.map((job: { slug: string }) => ({
+// 			slug: job.slug,
+// 		}));
+// 	} catch (error) {
+// 		console.error(
+// 			"Error in generateStaticParams:",
+// 			getErrorMessage(error),
+// 		);
+// 		return [];
+// 	}
+// }
 
 export default async function JobPage({ params }: PageProps) {
 	const resolvedParams = await params;
