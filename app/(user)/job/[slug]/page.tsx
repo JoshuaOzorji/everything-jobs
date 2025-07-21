@@ -33,13 +33,6 @@
 // 	};
 // }
 
-// export async function generateStaticParams() {
-// 	const jobs = await client.fetch(
-// 		`*[_type == "job" && _createdAt > now() - 60*60*24*30][0...50]{ "slug": slug.current }`,
-// 	);
-// 	return jobs.map((job: { slug: string }) => ({ slug: job.slug }));
-// }
-
 // export default async function JobPage({ params }: PageProps) {
 // 	const resolvedParams = await params;
 // 	const { slug } = resolvedParams;
@@ -49,7 +42,6 @@
 // 		return <div>Job not found.</div>;
 // 	}
 
-// 	// Fix: Pass null instead of empty strings for missing IDs
 // 	const relatedJobs: RelatedJob[] = await client.fetch(relatedJobsQuery, {
 // 		currentJobId: job._id,
 // 		jobFieldId: job.jobFieldId || null,
@@ -88,6 +80,7 @@ import placeholder from "@/public/placeholderCompany.png";
 import { urlForImage } from "@/sanity/lib/image";
 import { jobQuery, relatedJobsQuery } from "@/sanity/lib/queries";
 import JobPageContent from "@/components/Job/JobPageContent";
+import { notFound } from "next/navigation";
 
 type PageProps = {
 	params: Promise<{
@@ -95,23 +88,54 @@ type PageProps = {
 	}>;
 };
 
+// ISR - regenerate every hour
 export const revalidate = 3600;
 
-// Helper function to safely get error message
-function getErrorMessage(error: unknown): string {
-	if (error instanceof Error) return error.message;
-	if (typeof error === "string") return error;
-	return "An unknown error occurred";
+// Generate static params for POPULAR/RECENT jobs only
+export async function generateStaticParams() {
+	try {
+		// Only pre-generate the most recent/popular jobs to avoid build timeouts
+		const jobs = await client.fetch(
+			`*[_type == "job" && defined(slug.current) && publishedAt > now() - 60*60*24*7][0...20]{ 
+				"slug": slug.current 
+			}`,
+			{},
+			{
+				// Add timeout to prevent build failures
+				cache: "force-cache",
+				next: { revalidate: 3600 },
+			},
+		);
+
+		return jobs
+			.filter((job: { slug: string }) => job.slug) // Filter out null slugs
+			.map((job: { slug: string }) => ({
+				slug: job.slug,
+			}));
+	} catch (error) {
+		console.error("generateStaticParams error:", error);
+		// Return empty array to allow all pages to be generated on-demand
+		return [];
+	}
 }
 
 export async function generateMetadata({
 	params,
 }: PageProps): Promise<Metadata> {
-	const resolvedParams = await params;
-	const slug = resolvedParams.slug;
-
 	try {
-		const job: Job | null = await client.fetch(jobQuery, { slug });
+		const resolvedParams = await params;
+		const slug = resolvedParams.slug;
+
+		// Use faster, minimal query for metadata
+		const job = await client.fetch(
+			`*[_type == "job" && slug.current == $slug][0]{
+				title,
+				company->{name}
+			}`,
+			{ slug },
+			{ next: { revalidate: 3600 } },
+		);
+
 		return {
 			title: job
 				? `${job.title} at ${job.company.name} | Everything Jobs`
@@ -121,10 +145,7 @@ export async function generateMetadata({
 			keywords: "jobs in Nigeria, career opportunities, employment, job search, job listings, Nigerian jobs, job vacancies",
 		};
 	} catch (error) {
-		console.error(
-			"Error in generateMetadata:",
-			getErrorMessage(error),
-		);
+		console.error("generateMetadata error:", error);
 		return {
 			title: "Job Details | Everything Jobs",
 			description:
@@ -133,108 +154,95 @@ export async function generateMetadata({
 	}
 }
 
-// export async function generateStaticParams() {
-// 	try {
-// 		const jobs = await client.fetch(
-// 			`*[_type == "job" && _createdAt > now() - 60*60*24*30][0...50]{ "slug": slug.current }`,
-// 		);
-// 		return jobs.map((job: { slug: string }) => ({
-// 			slug: job.slug,
-// 		}));
-// 	} catch (error) {
-// 		console.error(
-// 			"Error in generateStaticParams:",
-// 			getErrorMessage(error),
-// 		);
-// 		return [];
-// 	}
-// }
-
 export default async function JobPage({ params }: PageProps) {
-	const resolvedParams = await params;
-	const { slug } = resolvedParams;
-
-	console.log("JobPage: Processing slug:", slug);
-
-	let job: Job | null = null;
 	try {
-		job = await client.fetch(jobQuery, { slug });
-		console.log("JobPage: Job fetched successfully", job?._id);
-	} catch (error) {
-		console.error("JobPage: Error fetching job:", error);
-		throw new Error(
-			`Failed to fetch job: ${getErrorMessage(error)}`,
+		const resolvedParams = await params;
+		const { slug } = resolvedParams;
+
+		// Main job query with caching
+		const job: Job | null = await client.fetch(
+			jobQuery,
+			{ slug },
+			{
+				next: {
+					revalidate: 3600,
+					tags: [`job-${slug}`], // For on-demand revalidation
+				},
+			},
 		);
-	}
 
-	if (!job) {
-		console.log("JobPage: Job not found for slug:", slug);
-		return <div>Job not found.</div>;
-	}
-
-	console.log("JobPage: Job data:", {
-		id: job._id,
-		jobFieldId: job.jobFieldId,
-		jobTypeId: job.jobTypeId,
-		levelId: job.levelId,
-		educationId: job.educationId,
-		locationId: job.locationId,
-	});
-
-	let relatedJobs: RelatedJob[] = [];
-	try {
-		const queryParams = {
-			currentJobId: job._id,
-			jobFieldId: job.jobFieldId || null,
-			jobTypeId: job.jobTypeId || null,
-			levelId: job.levelId || null,
-			educationId: job.educationId || null,
-			locationId: job.locationId || null,
-		};
-
-		console.log("JobPage: Related jobs query params:", queryParams);
-
-		relatedJobs = await client.fetch(relatedJobsQuery, queryParams);
-		console.log(
-			"JobPage: Related jobs fetched successfully, count:",
-			relatedJobs.length,
-		);
-	} catch (error) {
-		console.error(
-			"JobPage: Error fetching related jobs:",
-			getErrorMessage(error),
-		);
-		// Don't throw here, just log and continue with empty array
-		relatedJobs = [];
-	}
-
-	let imageUrl = placeholder.src;
-	try {
-		if (job.company.logo?.asset?._ref) {
-			imageUrl = urlForImage(job.company.logo).url();
+		if (!job) {
+			notFound(); // This gives better SEO than a custom 404
 		}
-	} catch (error) {
-		console.error(
-			"JobPage: Error processing company logo:",
-			getErrorMessage(error),
+
+		// Fetch related jobs in parallel with error handling
+		const relatedJobsPromise = client
+			.fetch(
+				relatedJobsQuery,
+				{
+					currentJobId: job._id,
+					jobFieldId: job.jobFieldId || null,
+					jobTypeId: job.jobTypeId || null,
+					levelId: job.levelId || null,
+					educationId: job.educationId || null,
+					locationId: job.locationId || null,
+				},
+				{
+					next: {
+						revalidate: 7200, // Related jobs can be cached longer
+					},
+				},
+			)
+			.catch((error) => {
+				console.error(
+					"Error fetching related jobs:",
+					error,
+				);
+				return []; // Return empty array on error
+			});
+
+		// Process image URL
+		let imageUrl = placeholder.src;
+		try {
+			if (job.company?.logo?.asset?._ref) {
+				imageUrl = urlForImage(job.company.logo).url();
+			}
+		} catch (error) {
+			console.error("Error processing image:", error);
+		}
+
+		// Await related jobs
+		const relatedJobs = await relatedJobsPromise;
+
+		return (
+			<SubLayout
+				aside={
+					<div className='hidden md:block'>
+						<AsideMain />
+					</div>
+				}>
+				<JobPageContent
+					job={job}
+					imageUrl={imageUrl}
+					relatedJobs={relatedJobs}
+				/>
+			</SubLayout>
 		);
-		// Continue with placeholder
-	}
-
-	console.log("JobPage: Rendering page for job:", job.title);
-
-	return (
-		<SubLayout
-			aside={
-				<div className='hidden md:block'>
-					<AsideMain />
+	} catch (error) {
+		console.error("Critical error in JobPage:", error);
+		// Return a proper error page
+		return (
+			<div className='min-h-screen flex items-center justify-center'>
+				<div className='text-center'>
+					<h1 className='text-2xl font-bold text-gray-900 mb-4'>
+						Something went wrong
+					</h1>
+					<p className='text-gray-600'>
+						Unable to load this job. Please
+						try again later.
+					</p>
 				</div>
-			}>
-			<JobPageContent
-				job={job}
-				imageUrl={imageUrl}
-				relatedJobs={relatedJobs}
-			/>
-		</SubLayout>
-	);
+			</div>
+		);
+	}
 }

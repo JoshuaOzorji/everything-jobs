@@ -504,36 +504,84 @@ export async function getJobsByLevelPaginated(
 	return { jobs, totalCount };
 }
 
-export const jobQuery = defineQuery(groq`
+// export const jobQuery = defineQuery(groq`
+//   *[_type == "job" && slug.current == $slug][0]{
+//     _id,
+//     title,
+//     summary,
+//     "company": company-> {
+//       name,
+//       logo,
+//       "slug": slug.current
+//     },
+//     "location": location-> {
+//       _id,
+//       name
+//     },
+//     "jobType": jobType-> {
+//       _id,
+//       name
+//     },
+//     "education": education-> {
+//       _id,
+//       name,
+//       value
+//     },
+//     "jobField": jobField-> {
+//       _id,
+//       name
+//     },
+//     "level": level-> {
+//       _id,
+//       name
+//     },
+//     salaryRange,
+//     publishedAt,
+//     deadline,
+//     experienceRange,
+//     requirements,
+//     responsibilities,
+//     recruitmentProcess,
+//     apply,
+//     // Reference IDs now come directly from the returned objects
+//     "jobFieldId": jobField->_id,
+//     "jobTypeId": jobType->_id,
+//     "levelId": level->_id,
+//     "educationId": education->_id,
+//     "locationId": location->_id,
+//   }
+// `);
+
+export const jobQuery = `
   *[_type == "job" && slug.current == $slug][0]{
     _id,
     title,
     summary,
-    "company": company-> { 
+    company->{
       name,
       logo,
-      "slug": slug.current 
+      "slug": slug.current
     },
-    "location": location-> { 
+    location->{
       _id,
-      name 
+      name
     },
-    "jobType": jobType-> { 
+    jobType->{
       _id,
-      name 
+      name
     },
-    "education": education-> { 
+    education->{
       _id,
       name,
-      value 
+      value
     },
-    "jobField": jobField-> { 
+    jobField->{
       _id,
-      name 
+      name
     },
-    "level": level-> { 
+    level->{
       _id,
-      name 
+      name
     },
     salaryRange,
     publishedAt,
@@ -543,14 +591,14 @@ export const jobQuery = defineQuery(groq`
     responsibilities,
     recruitmentProcess,
     apply,
-    // Reference IDs now come directly from the returned objects
-    "jobFieldId": jobField->_id,
-    "jobTypeId": jobType->_id,
-    "levelId": level->_id,
-    "educationId": education->_id,
-    "locationId": location->_id,
+    // Extract reference IDs more efficiently
+    "jobFieldId": jobField._ref,
+    "jobTypeId": jobType._ref,
+    "levelId": level._ref,
+    "educationId": education._ref,
+    "locationId": location._ref
   }
-`);
+`;
 
 export interface JobReference {
 	_id: string;
@@ -612,39 +660,27 @@ type CurrentJob = {
 //   } | order(score desc, publishedAt desc)[0...4]
 // `;
 
-export const relatedJobsQuery = groq`
-  *[_type == "job" && _id != $currentJobId] {
+export const relatedJobsQuery = `
+  *[
+    _type == "job" && 
+    _id != $currentJobId &&
+    (
+      jobField._ref in [$jobFieldId] ||
+      jobType._ref in [$jobTypeId] ||
+      location._ref in [$locationId]
+    )
+  ] | order(publishedAt desc)[0...6]{
     _id,
     title,
     "slug": slug.current,
+    company->{
+      name,
+      logo
+    },
+    location->{
+      name
+    },
     publishedAt,
-    "company": company->name,
-    "companySlug": company->slug.current,
-    "location": location->{
-          _id,
-          name,
-          slug
-      },
-      "jobType": jobType->{
-          _id,
-          name,
-          "slug": slug.current
-      },
-      "jobField": jobField->{
-          _id,
-          name,
-          "slug": slug.current
-      },
-      "level": level->{
-          _id,
-          name,
-          "slug": slug.current
-      },
-    "score":
-      (defined($jobFieldId) && jobField->_id == $jobFieldId ? 5 : 0) +
-      (defined($jobTypeId) && jobType->_id == $jobTypeId ? 3 : 0) +
-      (defined($levelId) && level->_id == $levelId ? 2 : 0) +
-      (defined($educationId) && education->_id == $educationId ? 2 : 0) +
-      (defined($locationId) && location->_id == $locationId ? 1 : 0)
-  } | order(score desc, publishedAt desc)[0...4]
+    salaryRange
+  }
 `;
