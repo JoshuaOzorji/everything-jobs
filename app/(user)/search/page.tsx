@@ -3,12 +3,12 @@ import { client } from "@/sanity/lib/client";
 import { searchJobsQuery, getFiltersQuery } from "@/sanity/lib/queries";
 import SearchPageClient from "./SearchPageClient";
 
-// Generate metadata for SEO
-export async function generateMetadata({
-	searchParams,
-}: {
+interface PageProps {
 	searchParams: { [key: string]: string | string[] | undefined };
-}) {
+}
+
+// Generate metadata for SEO
+export async function generateMetadata({ searchParams }: PageProps) {
 	const { q, location } = searchParams;
 
 	let title = "Job Search";
@@ -32,11 +32,7 @@ export async function generateMetadata({
 }
 
 // Server component for SEO
-export default async function SearchPage({
-	searchParams,
-}: {
-	searchParams: { [key: string]: string | string[] | undefined };
-}) {
+export default async function SearchPage({ searchParams }: PageProps) {
 	const {
 		q = "",
 		location = "",
@@ -71,7 +67,16 @@ export default async function SearchPage({
 			<SearchPageClient
 				initialJobs={initialJobs}
 				initialFilters={initialFilters}
-				searchParams={searchParams}
+				searchParams={
+					searchParams as {
+						q?: string;
+						location?: string;
+						jobType?: string;
+						jobLevel?: string;
+						education?: string;
+						jobField?: string;
+					}
+				}
 			/>
 		</Suspense>
 	);
