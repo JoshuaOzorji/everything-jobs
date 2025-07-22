@@ -10,7 +10,7 @@ export default function JobDeadline({ deadline }: JobDeadlineProps) {
 
 	return (
 		<div className='flex justify-center w-full mt-4 font-openSans'>
-			<p className='icon-container'>
+			<div className='icon-container'>
 				{new Date(deadline) > new Date() ? (
 					<>
 						<span className='text-red-500'>
@@ -26,7 +26,7 @@ export default function JobDeadline({ deadline }: JobDeadlineProps) {
 						<p>Job Expired</p>
 					</span>
 				)}
-			</p>
+			</div>
 		</div>
 	);
 }

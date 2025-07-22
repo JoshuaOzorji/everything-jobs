@@ -2,21 +2,13 @@ import { Suspense } from "react";
 import { client } from "@/sanity/lib/client";
 import { searchJobsQuery, getFiltersQuery } from "@/sanity/lib/queries";
 import SearchPageClient from "./SearchPageClient";
-import { SearchJobResult, FilterOptions } from "@/types/types";
-
-interface SearchPageProps {
-	searchParams: {
-		q?: string;
-		location?: string;
-		jobType?: string;
-		jobLevel?: string;
-		education?: string;
-		jobField?: string;
-	};
-}
 
 // Generate metadata for SEO
-export async function generateMetadata({ searchParams }: SearchPageProps) {
+export async function generateMetadata({
+	searchParams,
+}: {
+	searchParams: { [key: string]: string | string[] | undefined };
+}) {
 	const { q, location } = searchParams;
 
 	let title = "Job Search";
@@ -40,7 +32,11 @@ export async function generateMetadata({ searchParams }: SearchPageProps) {
 }
 
 // Server component for SEO
-export default async function SearchPage({ searchParams }: SearchPageProps) {
+export default async function SearchPage({
+	searchParams,
+}: {
+	searchParams: { [key: string]: string | string[] | undefined };
+}) {
 	const {
 		q = "",
 		location = "",
@@ -54,7 +50,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 	const [initialJobs, initialFilters] = await Promise.all([
 		// Only fetch jobs if there are search criteria
 		Object.values(searchParams).some(
-			(value) => value && value.trim() !== "",
+			(value) =>
+				typeof value === "string" &&
+				value.trim() !== "",
 		)
 			? client.fetch(searchJobsQuery, {
 					q: q || "",
