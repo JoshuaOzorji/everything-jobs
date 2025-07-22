@@ -1,15 +1,115 @@
+// import { Suspense } from "react";
+// import { client } from "@/sanity/lib/client";
+// import { searchJobsQuery, getFiltersQuery } from "@/sanity/lib/queries";
+// import SearchPageClient from "./SearchPageClient";
+
+// interface PageProps {
+// 	searchParams: { [key: string]: string | string[] | undefined };
+// }
+
+// // Generate metadata for SEO
+// export async function generateMetadata({ searchParams }: PageProps) {
+// 	const { q, location } = searchParams;
+
+// 	let title = "Job Search";
+// 	let description = "Find your dream job";
+
+// 	if (q && location) {
+// 		title = `${q} Jobs in ${location}`;
+// 		description = `Find ${q} jobs in ${location}. Browse the latest job opportunities.`;
+// 	} else if (q) {
+// 		title = `${q} Jobs`;
+// 		description = `Find ${q} jobs. Browse the latest job opportunities.`;
+// 	} else if (location) {
+// 		title = `Jobs in ${location}`;
+// 		description = `Find jobs in ${location}. Browse the latest job opportunities.`;
+// 	}
+
+// 	return {
+// 		title,
+// 		description,
+// 	};
+// }
+
+// // Server component for SEO
+// export default async function SearchPage({ searchParams }: PageProps) {
+// 	const {
+// 		q = "",
+// 		location = "",
+// 		jobType = "",
+// 		jobLevel = "",
+// 		education = "",
+// 		jobField = "",
+// 	} = searchParams;
+
+// 	// Server-side data fetching for SEO
+// 	const [initialJobs, initialFilters] = await Promise.all([
+// 		// Only fetch jobs if there are search criteria
+// 		Object.values(searchParams).some(
+// 			(value) =>
+// 				typeof value === "string" &&
+// 				value.trim() !== "",
+// 		)
+// 			? client.fetch(searchJobsQuery, {
+// 					q: q || "",
+// 					location,
+// 					jobType,
+// 					jobLevel,
+// 					education,
+// 					jobField,
+// 				})
+// 			: [],
+// 		client.fetch(getFiltersQuery),
+// 	]);
+
+// 	return (
+// 		<Suspense fallback={<SearchPageSkeleton />}>
+// 			<SearchPageClient
+// 				initialJobs={initialJobs}
+// 				initialFilters={initialFilters}
+// 				searchParams={
+// 					searchParams as {
+// 						q?: string;
+// 						location?: string;
+// 						jobType?: string;
+// 						jobLevel?: string;
+// 						education?: string;
+// 						jobField?: string;
+// 					}
+// 				}
+// 			/>
+// 		</Suspense>
+// 	);
+// }
+
+// function SearchPageSkeleton() {
+// 	return (
+// 		<main className='mx-auto'>
+// 			<div className='px-2 bg-white rounded-md'>
+// 				<div className='h-20 bg-gray-200 animate-pulse rounded' />
+// 				<div className='h-10 bg-gray-200 animate-pulse rounded mt-4' />
+// 			</div>
+// 			<div className='flex flex-col gap-6 my-2 md:flex-row'>
+// 				<div className='md:w-1/4 min-h-[60vh] bg-gray-100 animate-pulse rounded' />
+// 				<div className='flex-1 bg-gray-100 animate-pulse rounded min-h-[60vh]' />
+// 			</div>
+// 		</main>
+// 	);
+// }
+
 import { Suspense } from "react";
 import { client } from "@/sanity/lib/client";
 import { searchJobsQuery, getFiltersQuery } from "@/sanity/lib/queries";
 import SearchPageClient from "./SearchPageClient";
 
 interface PageProps {
-	searchParams: { [key: string]: string | string[] | undefined };
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 // Generate metadata for SEO
 export async function generateMetadata({ searchParams }: PageProps) {
-	const { q, location } = searchParams;
+	const resolvedSearchParams = await searchParams;
+	const { q, location } = resolvedSearchParams;
 
 	let title = "Job Search";
 	let description = "Find your dream job";
@@ -33,6 +133,7 @@ export async function generateMetadata({ searchParams }: PageProps) {
 
 // Server component for SEO
 export default async function SearchPage({ searchParams }: PageProps) {
+	const resolvedSearchParams = await searchParams;
 	const {
 		q = "",
 		location = "",
@@ -40,12 +141,12 @@ export default async function SearchPage({ searchParams }: PageProps) {
 		jobLevel = "",
 		education = "",
 		jobField = "",
-	} = searchParams;
+	} = resolvedSearchParams;
 
 	// Server-side data fetching for SEO
 	const [initialJobs, initialFilters] = await Promise.all([
 		// Only fetch jobs if there are search criteria
-		Object.values(searchParams).some(
+		Object.values(resolvedSearchParams).some(
 			(value) =>
 				typeof value === "string" &&
 				value.trim() !== "",
@@ -67,16 +168,29 @@ export default async function SearchPage({ searchParams }: PageProps) {
 			<SearchPageClient
 				initialJobs={initialJobs}
 				initialFilters={initialFilters}
-				searchParams={
-					searchParams as {
-						q?: string;
-						location?: string;
-						jobType?: string;
-						jobLevel?: string;
-						education?: string;
-						jobField?: string;
-					}
-				}
+				searchParams={{
+					q: typeof q === "string" ? q : "",
+					location:
+						typeof location === "string"
+							? location
+							: "",
+					jobType:
+						typeof jobType === "string"
+							? jobType
+							: "",
+					jobLevel:
+						typeof jobLevel === "string"
+							? jobLevel
+							: "",
+					education:
+						typeof education === "string"
+							? education
+							: "",
+					jobField:
+						typeof jobField === "string"
+							? jobField
+							: "",
+				}}
 			/>
 		</Suspense>
 	);
