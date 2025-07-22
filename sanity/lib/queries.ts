@@ -1,4 +1,4 @@
-import { defineQuery, groq } from "next-sanity";
+import { groq } from "next-sanity";
 import { client } from "./client";
 import {
 	getDisplayNameForEducation,
@@ -18,8 +18,10 @@ export const searchJobsQuery = groq`
     _id,
     title,
     "slug": slug.current,
-    "company": company->name,
-    "companyLogo": company->logo.asset->url,
+    "company": {
+      "name": company->name,
+      "logo": company->logo.asset->url
+    },
     "location": location->name,
     "jobType": jobType->name,
     "level": level->name,
@@ -591,7 +593,7 @@ export const jobQuery = `
     responsibilities,
     recruitmentProcess,
     apply,
-    // Extract reference IDs more efficiently
+    
     "jobFieldId": jobField._ref,
     "jobTypeId": jobType._ref,
     "levelId": level._ref,
@@ -623,64 +625,42 @@ type CurrentJob = {
 	locationId?: string;
 };
 
-// export const relatedJobsQuery = groq`
-//   *[_type == "job" && _id != $currentJobId] {
-//     _id,
-//     title,
-//     "slug": slug.current,
-//     publishedAt,
-//     "company": company->name,
-//     "companySlug": company->slug.current,
-//     "location": location->{
-//           _id,
-//           name,
-//           slug
-//       },
-//       "jobType": jobType->{
-//           _id,
-//           name,
-//           "slug": slug.current
-//       },
-//       "jobField": jobField->{
-//           _id,
-//           name,
-//           "slug": slug.current
-//       },
-//       "level": level->{
-//           _id,
-//           name,
-//           "slug": slug.current
-//       },
-//     "score":
-//       (jobField->_id == $jobFieldId) * 5 +
-//       (jobType->_id == $jobTypeId) * 3 +
-//       (level->_id == $levelId) * 2 +
-//       (education->_id == $educationId) * 2 +
-//       (location->_id == $locationId) * 1
-//   } | order(score desc, publishedAt desc)[0...4]
-// `;
-
-export const relatedJobsQuery = `
-  *[
-    _type == "job" && 
-    _id != $currentJobId &&
-    (
-      jobField._ref in [$jobFieldId] ||
-      jobType._ref in [$jobTypeId] ||
-      location._ref in [$locationId]
-    )
-  ] | order(publishedAt desc)[0...6]{
+export const relatedJobsQuery = groq`
+  *[_type == "job" && _id != $currentJobId] {
     _id,
     title,
     "slug": slug.current,
-    company->{
-      name,
-      logo
-    },
-    location->{
-      name
-    },
     publishedAt,
-    salaryRange
-  }
+    "company": company->{
+		name,
+		logo,
+		"slug": slug.current
+	},
+    "location": location->{
+          _id,
+          name,
+          "slug": slug.current
+      },
+      "jobType": jobType->{
+          _id,
+          name,
+          "slug": slug.current
+      },
+      "jobField": jobField->{
+          _id,
+          name,
+          "slug": slug.current
+      },
+      "level": level->{
+          _id,
+          name,
+          "slug": slug.current
+      },
+    "score":
+      (jobField->_id == $jobFieldId) * 5 +
+      (jobType->_id == $jobTypeId) * 3 +
+      (level->_id == $levelId) * 2 +
+      (education->_id == $educationId) * 2 +
+      (location->_id == $locationId) * 1
+  } | order(score desc, publishedAt desc)[0...4]
 `;

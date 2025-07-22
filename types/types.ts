@@ -176,7 +176,10 @@ export interface SearchJobResult {
 	_id: string;
 	title: string;
 	slug: string;
-	company: string;
+	company: {
+		name: string;
+		logo: string;
+	};
 	companyLogo?: string;
 	summary?: any[];
 	location: string;
@@ -188,6 +191,7 @@ export interface SearchJobResult {
 	publishedAt: string;
 	deadline: string;
 }
+
 export interface Filter {
 	_id: string;
 	name: string;
@@ -285,10 +289,29 @@ export interface RelatedJob {
 	_id: string;
 	title: string;
 	slug: string;
-	company: string;
+	company: {
+		name: string;
+		logo: any;
+	};
 	companySlug?: string;
-	jobType: JobReference;
-	location: JobReference;
-	jobField: JobReference;
-	level: JobReference;
+	jobType: {
+		_id: string;
+		name: string;
+		slug: string;
+	};
+	location: {
+		_id: string;
+		name: string;
+		slug: string;
+	};
+	jobField: {
+		_id: string;
+		name: string;
+		slug: string;
+	};
+	level: {
+		_id: string;
+		name: string;
+		slug: string;
+	};
 }

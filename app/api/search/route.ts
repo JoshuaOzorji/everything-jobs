@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { client } from "@/sanity/lib/client";
-import { searchJobsQuery, getFiltersQuery } from "@/sanity/lib/queries";
+import { searchJobsQuery } from "@/sanity/lib/queries";
 
 export async function GET(request: NextRequest) {
 	const searchParams = request.nextUrl.searchParams;
@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
 	const jobField = searchParams.get("jobField") || "";
 
 	try {
-		// Fetch results with all filters applied at database level
+		// Only fetch jobs - filters are now separate
 		const jobs = await client.fetch(searchJobsQuery, {
 			q: query || "",
 			location,
@@ -22,10 +22,7 @@ export async function GET(request: NextRequest) {
 			jobField,
 		});
 
-		// Fetch filter options
-		const filters = await client.fetch(getFiltersQuery);
-
-		return NextResponse.json({ jobs, filters });
+		return NextResponse.json({ jobs });
 	} catch (error) {
 		console.error("Error fetching search results:", error);
 		return NextResponse.json(

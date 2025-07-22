@@ -21,10 +21,10 @@ const JobCard2: React.FC<JobCard2Props> = ({ job }) => {
 				<div className='overflow-hidden rounded'>
 					<Image
 						src={
-							job.companyLogo ||
+							job.company.logo ||
 							placeholder
 						}
-						alt={job.company}
+						alt={job.company.name}
 						className='h-[5vh] w-[5vh] md:h-[6vh] md:w-[6vh] rounded-sm'
 						width={50}
 						height={50}
@@ -59,7 +59,7 @@ const JobCard2: React.FC<JobCard2Props> = ({ job }) => {
 					</div>
 					<div>
 						<p className='text-sm text-myBlack font-poppins'>
-							{job.company}
+							{job.company.name}
 						</p>
 					</div>
 

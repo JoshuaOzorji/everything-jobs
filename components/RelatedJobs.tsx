@@ -11,14 +11,14 @@ const RelatedJobCard: React.FC<RelatedJobCardProps> = ({ job }) => {
 		<div className='p-3 md:p-4 transition-shadow bg-white border rounded-lg hover:shadow-sm font-openSans'>
 			<div className='text-sm font-poppins hover:text-pry2 mb-2'>
 				<Link href={`/job/${job.slug}`}>
-					{job.title} at {job.company}
+					{job.title} at {job.company.name}
 				</Link>
 			</div>
 
 			<div className='flex flex-wrap gap-2 text-xs md:text-[0.85rem] '>
 				<span className='bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded flex items-center first-letter:uppercase font-medium'>
 					<Link
-						href={`/jobs/by-location/${job.location?.slug?.current || ""}`}>
+						href={`/jobs/by-location/${job.location?.slug || ""}`}>
 						{job.location?.name ||
 							"Nigeria"}
 					</Link>
@@ -26,7 +26,7 @@ const RelatedJobCard: React.FC<RelatedJobCardProps> = ({ job }) => {
 				{job.jobType && (
 					<span className='bg-green-100 text-green-800 font-medium px-2.5 py-0.5 rounded first-letter:uppercase'>
 						<Link
-							href={`/jobs/by-type/${job.jobType?.slug}`}>
+							href={`/jobs/by-type/${job.jobType?.slug || ""}`}>
 							{job.jobType?.name}
 						</Link>
 					</span>
@@ -34,7 +34,7 @@ const RelatedJobCard: React.FC<RelatedJobCardProps> = ({ job }) => {
 
 				<span className='bg-purple-100 text-purple-800  font-medium px-2.5 py-0.5 rounded first-letter:uppercase'>
 					<Link
-						href={`/jobs/by-level/${job.level?.slug}`}>
+						href={`/jobs/by-level/${job.level?.slug || ""}`}>
 						{job.level?.name}
 					</Link>
 				</span>

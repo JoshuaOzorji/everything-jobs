@@ -5,7 +5,7 @@ import logo from "@/public/logo.png";
 import { IoSearchOutline } from "react-icons/io5";
 import FindJobsDropdown from "./FindJobsDropdown";
 import { useSession } from "next-auth/react";
-import { useEnhancedSession } from "./AuthProvider";
+import { useEnhancedSession } from "./Providers/AuthProvider";
 import PostJobDropdown from "./PostJobDropdown";
 
 interface MainNavProps {

@@ -39,6 +39,7 @@
 		"@sanity/vision": "^3.74.1",
 		"@tailwindcss/postcss": "^4.0.3",
 		"@tanstack/react-query": "^5.83.0",
+		"@tanstack/react-query-devtools": "^5.83.0",
 		"bcryptjs": "^2.4.3",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
