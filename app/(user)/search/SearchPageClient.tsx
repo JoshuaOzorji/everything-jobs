@@ -62,8 +62,14 @@ const SearchPageClient = ({
 	const jobs = jobsData?.jobs ?? initialJobs;
 	const filters = filtersData ?? initialFilters;
 
-	// Determine if search has been performed
-	const hasSearched = Object.values(currentParams).some(
+	// Determine if search has been performed - now only considers query text and location as "search"
+	// Other filters are considered filtering, not searching
+	const hasSearched =
+		currentParams.q.trim() !== "" ||
+		currentParams.location.trim() !== "";
+
+	// Check if any filters are applied (for showing active filters)
+	const hasActiveFilters = Object.values(currentParams).some(
 		(value) => value && value.trim() !== "",
 	);
 
@@ -112,15 +118,25 @@ const SearchPageClient = ({
 					setShowFilters={setShowFilters}
 				/>
 
-				<ActiveFilters
-					location={currentParams.location}
-					jobType={currentParams.jobType}
-					jobLevel={currentParams.jobLevel}
-					education={currentParams.education}
-					jobField={currentParams.jobField}
-					query={currentParams.q}
-					updateFilters={updateFilters}
-				/>
+				{hasActiveFilters && (
+					<ActiveFilters
+						location={
+							currentParams.location
+						}
+						jobType={currentParams.jobType}
+						jobLevel={
+							currentParams.jobLevel
+						}
+						education={
+							currentParams.education
+						}
+						jobField={
+							currentParams.jobField
+						}
+						query={currentParams.q}
+						updateFilters={updateFilters}
+					/>
+				)}
 			</div>
 
 			<div className='flex flex-col gap-6 my-2 md:flex-row'>

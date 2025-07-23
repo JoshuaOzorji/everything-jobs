@@ -1,5 +1,5 @@
 import React from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 interface ActiveFiltersProps {
 	location: string;
@@ -23,7 +23,6 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({
 	updateFilters,
 }) => {
 	const router = useRouter();
-	const searchParams = useSearchParams();
 
 	// Map filter display names to their actual parameter names
 	const filterMapping: Record<FilterName, string> = {
