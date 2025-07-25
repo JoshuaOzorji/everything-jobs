@@ -47,10 +47,14 @@ export default async function SearchPage({ searchParams }: PageProps) {
 		jobLevel = "",
 		education = "",
 		jobField = "",
+		page = "1",
 	} = resolvedSearchParams;
 
 	// Server-side data fetching for SEO
 	// Always fetch jobs - when no search params, it will return all jobs ordered by latest
+	const currentPage = parseInt(typeof page === "string" ? page : "1", 10);
+	const perPage = 10; // Jobs per page
+
 	const [initialJobs, initialFilters] = await Promise.all([
 		client.fetch(searchJobsQuery, {
 			q: q || "",
@@ -59,6 +63,8 @@ export default async function SearchPage({ searchParams }: PageProps) {
 			jobLevel,
 			education,
 			jobField,
+			offset: (currentPage - 1) * perPage,
+			limit: perPage,
 		}),
 		client.fetch(getFiltersQuery),
 	]);
@@ -68,6 +74,8 @@ export default async function SearchPage({ searchParams }: PageProps) {
 			<SearchPageClient
 				initialJobs={initialJobs}
 				initialFilters={initialFilters}
+				currentPage={currentPage}
+				perPage={perPage}
 				searchParams={{
 					q: typeof q === "string" ? q : "",
 					location:
@@ -90,6 +98,10 @@ export default async function SearchPage({ searchParams }: PageProps) {
 						typeof jobField === "string"
 							? jobField
 							: "",
+					page:
+						typeof page === "string"
+							? page
+							: "1",
 				}}
 			/>
 		</Suspense>

@@ -8,10 +8,12 @@ interface SearchParams {
 	jobLevel?: string;
 	education?: string;
 	jobField?: string;
+	page?: string;
 }
 
 interface SearchResponse {
 	jobs: SearchJobResult[];
+	total: number;
 	filters: FilterOptions;
 }
 
@@ -39,15 +41,12 @@ export const useSearchJobs = (params: SearchParams) => {
 	// Create a stable query key that changes when filters change
 	const queryKey = ["search", params];
 
-	// Determine if we should enable the query (has any search criteria)
-	const hasSearchCriteria = Object.values(params).some(
-		(value) => value && value.trim() !== "",
-	);
-
+	// Always enable the query now since we want to show all jobs when no search criteria
+	// This change supports showing all jobs on initial load
 	return useQuery({
 		queryKey,
 		queryFn: () => fetchSearchResults(params),
-		enabled: hasSearchCriteria,
+		enabled: true, // Changed from hasSearchCriteria to true
 		// More aggressive stale time for search results since they don't change frequently
 		staleTime: 10 * 60 * 1000, // 10 minutes
 		// Keep search results cached longer

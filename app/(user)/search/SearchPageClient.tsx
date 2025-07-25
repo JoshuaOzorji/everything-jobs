@@ -11,10 +11,13 @@ import SearchResults from "@/components/Search/SearchResults";
 import { useSearchJobs, useFilters } from "@/hooks/useSearch";
 import { toast } from "sonner";
 import { useEffect } from "react";
+import Pagination from "@/components/Pagination";
 
 interface SearchPageClientProps {
 	initialJobs: SearchJobResult[];
 	initialFilters: FilterOptions;
+	currentPage: number;
+	perPage: number;
 	searchParams: {
 		q?: string;
 		location?: string;
@@ -22,12 +25,15 @@ interface SearchPageClientProps {
 		jobLevel?: string;
 		education?: string;
 		jobField?: string;
+		page?: string;
 	};
 }
 
 const SearchPageClient = ({
 	initialJobs,
 	initialFilters,
+	currentPage,
+	perPage,
 	searchParams: initialSearchParams,
 }: SearchPageClientProps) => {
 	const searchParams = useSearchParams();
@@ -42,6 +48,7 @@ const SearchPageClient = ({
 		jobLevel: searchParams.get("jobLevel") || "",
 		education: searchParams.get("education") || "",
 		jobField: searchParams.get("jobField") || "",
+		page: searchParams.get("page") || "1",
 	};
 
 	// Use React Query with initial data for hydration
@@ -60,6 +67,7 @@ const SearchPageClient = ({
 
 	// Use server data as fallback
 	const jobs = jobsData?.jobs ?? initialJobs;
+	const totalJobs = jobsData?.total ?? initialJobs.length;
 	const filters = filtersData ?? initialFilters;
 
 	// Determine if search has been performed - now only considers query text and location as "search"
@@ -96,6 +104,9 @@ const SearchPageClient = ({
 		} else {
 			params.delete(filterName);
 		}
+
+		// Reset to page 1 when filters change
+		params.delete("page");
 
 		router.push(`/search?${params.toString()}`);
 	};
@@ -174,6 +185,18 @@ const SearchPageClient = ({
 					query={currentParams.q}
 				/>
 			</div>
+
+			{/* Pagination */}
+			{totalJobs > perPage && (
+				<Pagination
+					currentPage={parseInt(
+						currentParams.page,
+						10,
+					)}
+					total={totalJobs}
+					perPage={perPage}
+				/>
+			)}
 		</main>
 	);
 };

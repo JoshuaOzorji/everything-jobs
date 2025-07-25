@@ -6,60 +6,43 @@ import {
 } from "./utility";
 import { Job } from "@/types/types";
 
-// export const searchJobsQuery = groq`
-//   *[_type == "job" &&
-//     (title match $q + "*" || company->name match $q + "*") &&
-//     ($location == "" || location->name match $location) &&
-//     ($jobType == "" || jobType->name == $jobType) &&
-//     ($jobLevel == "" || level->name == $jobLevel) &&
-//     ($education == "" || education->name == $education) &&
-//     ($jobField == "" || jobField->name == $jobField)
-//   ] {
-//     _id,
-//     title,
-//     "slug": slug.current,
-//     "company": {
-//       "name": company->name,
-//       "logo": company->logo.asset->url
-//     },
-//     "location": location->name,
-//     "jobType": jobType->name,
-//     "level": level->name,
-//     "education": education->name,
-//     "jobField": jobField->name,
-//     salaryRange,
-//     publishedAt,
-//     deadline,
-//     summary
-//   } | order(publishedAt desc)[0...50]
-// `;
-
 export const searchJobsQuery = groq`
-*[_type == "job" &&
-  ($q == "" || title match $q + "*" || company->name match $q + "*") &&
-  ($location == "" || location->name match $location) &&
-  ($jobType == "" || jobType->name == $jobType) &&
-  ($jobLevel == "" || level->name == $jobLevel) &&
-  ($education == "" || education->name == $education) &&
-  ($jobField == "" || jobField->name == $jobField)
-] {
-  _id,
-  title,
-  "slug": slug.current,
-  "company": {
-    "name": company->name,
-    "logo": company->logo.asset->url
-  },
-  "location": location->name,
-  "jobType": jobType->name,
-  "level": level->name,
-  "education": education->name,
-  "jobField": jobField->name,
-  salaryRange,
-  publishedAt,
-  deadline,
-  summary
-} | order(publishedAt desc)[0...50]
+{
+  "jobs": *[_type == "job" &&
+    ($q == "" || title match $q + "*" || company->name match $q + "*") &&
+    ($location == "" || location->name match $location) &&
+    ($jobType == "" || jobType->name == $jobType) &&
+    ($jobLevel == "" || level->name == $jobLevel) &&
+    ($education == "" || education->name == $education) &&
+    ($jobField == "" || jobField->name == $jobField)
+  ] {
+    _id,
+    title,
+    "slug": slug.current,
+    "company": {
+      "name": company->name,
+      "logo": company->logo.asset->url
+    },
+    "location": location->name,
+    "jobType": jobType->name,
+    "level": level->name,
+    "education": education->name,
+    "jobField": jobField->name,
+    salaryRange,
+    publishedAt,
+    deadline,
+    summary
+  } | order(publishedAt desc)[$offset...($offset + $limit)],
+  
+  "total": count(*[_type == "job" &&
+    ($q == "" || title match $q + "*" || company->name match $q + "*") &&
+    ($location == "" || location->name match $location) &&
+    ($jobType == "" || jobType->name == $jobType) &&
+    ($jobLevel == "" || level->name == $jobLevel) &&
+    ($education == "" || education->name == $education) &&
+    ($jobField == "" || jobField->name == $jobField)
+  ])
+}
 `;
 
 export const getFiltersQuery = groq`{
