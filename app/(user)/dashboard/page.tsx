@@ -3,23 +3,25 @@
 import { LoadingComponent } from "@/components/Loading";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 export default function Dashboard() {
 	const { data: session, status } = useSession();
 	const router = useRouter();
 
-	useEffect(() => {
-		if (status === "unauthenticated") {
-			router.replace("/auth/login");
-		}
-	}, [status, router]);
-
+	// Handle different states declaratively
 	if (status === "loading") {
 		return <LoadingComponent />;
 	}
 
+	if (status === "unauthenticated") {
+		// Redirect immediately and return null
+		router.replace("/auth/login");
+		return null;
+	}
+
 	if (!session) {
+		// Fallback safety check
+		router.replace("/auth/login");
 		return null;
 	}
 

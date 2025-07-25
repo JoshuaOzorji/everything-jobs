@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,38 +9,38 @@ import { useWatch } from "react-hook-form";
 import { useJobDraft, type JobDraft } from "@/lib/hooks/useJobDraft";
 import { jobValidationSchema } from "@/lib/validation/jobValidationSchema";
 import { Form } from "@/components/ui/form";
-import { useDebounce } from "@/hooks/useDebounce";
 import BasicDetails from "./FormSections/BasicDetails";
 import JobDetails from "./FormSections/JobDetails";
 import Requirements from "./FormSections/Requirements";
 import ApplicationDetails from "./FormSections/ApplicationDetails";
-import { LoadingComponent } from "@/components/Loading";
+
+const DEFAULT_VALUES: JobDraft = {
+	title: "",
+	summary: "",
+	location: "",
+	jobType: "",
+	education: "",
+	jobField: "",
+	level: "",
+	deadline: "",
+	salaryRange: { min: 0, max: 0 },
+	requirements: "",
+	responsibilities: "",
+	recruitmentProcess: "",
+	apply: "",
+};
 
 export default function JobPostForm() {
 	const { data: session } = useSession();
 	const [isSubmitting, setIsSubmitting] = useState(false);
-	const { draft, saveDraft, clearDraft, isLoaded } = useJobDraft();
-	const hasInitialized = useRef(false);
+	const { draft, saveDraft, clearDraft, saveImmediately } = useJobDraft();
 	const formRef = useRef<HTMLFormElement>(null);
+	const lastSavedValuesRef = useRef<string>("");
 
 	const form = useForm<JobDraft>({
 		resolver: zodResolver(jobValidationSchema),
 		mode: "onChange",
-		defaultValues: {
-			title: "",
-			summary: "",
-			location: "",
-			jobType: "",
-			education: "",
-			jobField: "",
-			level: "",
-			deadline: "",
-			salaryRange: { min: 0, max: 0 },
-			requirements: "",
-			responsibilities: "",
-			recruitmentProcess: "",
-			apply: "",
-		},
+		defaultValues: draft || DEFAULT_VALUES,
 	});
 
 	const {
@@ -49,76 +49,38 @@ export default function JobPostForm() {
 		formState: { errors, isDirty, isValid },
 		reset,
 		control,
+		getValues,
 	} = form;
-
-	// Debug: Log form errors
-	useEffect(() => {
-		if (Object.keys(errors).length > 0) {
-			console.log("Form validation errors:", errors);
-		}
-	}, [errors]);
-
-	// Initialize form with draft data when it's loaded
-	useEffect(() => {
-		if (isLoaded && !hasInitialized.current) {
-			if (draft) {
-				console.log(
-					"🔄 Initializing form with draft data:",
-					draft,
-				);
-				reset(draft);
-			} else {
-				console.log(
-					"🔄 Initializing form with default values",
-				);
-				// Reset to ensure form is properly initialized even without draft
-				reset({
-					title: "",
-					summary: "",
-					location: "",
-					jobType: "",
-					education: "",
-					jobField: "",
-					level: "",
-					deadline: "",
-					salaryRange: { min: 0, max: 0 },
-					requirements: "",
-					responsibilities: "",
-					recruitmentProcess: "",
-					apply: "",
-				});
-			}
-			hasInitialized.current = true;
-		}
-	}, [isLoaded, draft, reset]);
 
 	// Watch form values for draft saving
 	const watchedValues = useWatch({ control });
-	const debouncedValues = useDebounce(watchedValues, 1000);
 
-	// Save draft when form values change
+	// Create a stable save callback that prevents infinite loops
+	const handleSave = useCallback(
+		(values: any) => {
+			const serializedValues = JSON.stringify(values);
+
+			// Only save if values actually changed
+			if (serializedValues !== lastSavedValuesRef.current) {
+				lastSavedValuesRef.current = serializedValues;
+				saveDraft(values);
+			}
+		},
+		[saveDraft],
+	);
+
+	// Single useEffect for draft saving - eliminates the need for useDebounce
 	useEffect(() => {
-		// Only save after initialization, if form is dirty, and we have valid data
-		if (
-			hasInitialized.current &&
-			isDirty &&
-			debouncedValues &&
-			isLoaded
-		) {
-			console.log(
-				"💾 Saving draft with values:",
-				debouncedValues,
-			);
-			saveDraft(debouncedValues);
+		if (isDirty && watchedValues) {
+			handleSave(watchedValues);
 		}
-	}, [debouncedValues, isDirty, saveDraft, isLoaded]);
+	}, [watchedValues, isDirty, handleSave]);
 
-	// Handle page unload to save draft
+	// Handle page unload
 	useEffect(() => {
-		const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-			if (isDirty && hasInitialized.current) {
-				const currentValues = form.getValues();
-				saveDraft(currentValues);
+		const handleBeforeUnload = () => {
+			if (isDirty) {
+				saveImmediately(getValues());
 			}
 		};
 
@@ -128,7 +90,7 @@ export default function JobPostForm() {
 				"beforeunload",
 				handleBeforeUnload,
 			);
-	}, [isDirty, saveDraft, form]);
+	}, [isDirty, saveImmediately, getValues]);
 
 	const onSubmit: SubmitHandler<JobDraft> = async (data) => {
 		console.log("Form submitted with data:", data);
@@ -243,25 +205,8 @@ export default function JobPostForm() {
 
 			// Clear draft after successful submission
 			clearDraft();
-
-			// Reset form to default values
-			reset({
-				title: "",
-				summary: "",
-				location: "",
-				jobType: "",
-				education: "",
-				jobField: "",
-				level: "",
-				deadline: "",
-				salaryRange: { min: 0, max: 0 },
-				requirements: "",
-				responsibilities: "",
-				recruitmentProcess: "",
-				apply: "",
-			});
-
-			hasInitialized.current = false; // Allow re-initialization
+			reset(DEFAULT_VALUES);
+			lastSavedValuesRef.current = "";
 		} catch (error) {
 			console.error("Submission error:", error);
 			toast.error("Submission Failed", {
@@ -283,10 +228,11 @@ export default function JobPostForm() {
 		});
 	};
 
-	// Show loading state while draft is being loaded
-	if (!isLoaded) {
-		return <LoadingComponent />;
-	}
+	const handleClearDraft = () => {
+		clearDraft();
+		reset(DEFAULT_VALUES);
+		lastSavedValuesRef.current = "";
+	};
 
 	return (
 		<Form {...form}>
@@ -334,7 +280,6 @@ export default function JobPostForm() {
 										{
 											key
 										}
-
 										:{" "}
 										{error?.message ||
 											"Invalid value"}
@@ -348,30 +293,7 @@ export default function JobPostForm() {
 				<div className='flex justify-end gap-4'>
 					<button
 						type='button'
-						onClick={() => {
-							clearDraft();
-							reset({
-								title: "",
-								summary: "",
-								location: "",
-								jobType: "",
-								education: "",
-								jobField: "",
-								level: "",
-								deadline: "",
-								salaryRange: {
-									min: 0,
-									max: 0,
-								},
-								requirements:
-									"",
-								responsibilities:
-									"",
-								recruitmentProcess:
-									"",
-								apply: "",
-							});
-						}}
+						onClick={handleClearDraft}
 						className='inline-flex px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pry'>
 						Clear Draft
 					</button>
