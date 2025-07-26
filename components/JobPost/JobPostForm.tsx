@@ -69,7 +69,6 @@ export default function JobPostForm() {
 		[saveDraft],
 	);
 
-	// Single useEffect for draft saving - eliminates the need for useDebounce
 	useEffect(() => {
 		if (isDirty && watchedValues) {
 			handleSave(watchedValues);
@@ -280,6 +279,7 @@ export default function JobPostForm() {
 										{
 											key
 										}
+
 										:{" "}
 										{error?.message ||
 											"Invalid value"}

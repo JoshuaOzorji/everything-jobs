@@ -1,16 +1,9 @@
 "use client";
 
-import { client } from "@/sanity/lib/client";
 import React, { FormEvent, useEffect, useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
-
-const fetchLocationsQuery = `
-  *[_type == "state" && name != "Remote"] { 
-    _id, 
-    name 
-  }
-`;
+import { useLocations } from "@/hooks/useReferenceData";
 
 const SearchComponent = ({
 	isSearchOpen,
@@ -21,19 +14,16 @@ const SearchComponent = ({
 }) => {
 	const router = useRouter();
 	const [searchQuery, setSearchQuery] = useState("");
-	const [locations, setLocations] = useState<
-		{ _id: string; name: string }[]
-	>([]);
 	const [selectedLocation, setSelectedLocation] = useState("");
 
-	// Fetch locations from Sanity
-	useEffect(() => {
-		const fetchStates = async () => {
-			const data = await client.fetch(fetchLocationsQuery);
-			setLocations(data);
-		};
-		fetchStates();
-	}, []);
+	// Use the existing hook instead of manual fetch
+	const { data: locations = [], isLoading: locationsLoading } =
+		useLocations();
+
+	// Filter out "Remote" locations if needed
+	const filteredLocations = locations.filter(
+		(location) => location.name !== "Remote",
+	);
 
 	// Handle select change
 	const handleLocationChange = (
@@ -64,7 +54,7 @@ const SearchComponent = ({
 		setIsSearchOpen(false);
 	};
 
-	// Escape key listener
+	// Keep escape key as global listener since it's better UX
 	useEffect(() => {
 		const handleEscKey = (event: KeyboardEvent) => {
 			if (isSearchOpen && event.key === "Escape") {
@@ -92,7 +82,7 @@ const SearchComponent = ({
 						<input
 							type='search'
 							placeholder='Search Jobs or Company'
-							className=' hero-input'
+							className='hero-input'
 							value={searchQuery}
 							onChange={
 								handleSearchChange
@@ -108,11 +98,16 @@ const SearchComponent = ({
 							value={selectedLocation}
 							onChange={
 								handleLocationChange
+							}
+							disabled={
+								locationsLoading
 							}>
 							<option value=''>
-								Select Location
+								{locationsLoading
+									? "Loading..."
+									: "Select Location"}
 							</option>
-							{locations.map(
+							{filteredLocations.map(
 								(location) => (
 									<option
 										key={

@@ -48,7 +48,7 @@ function useCompanyProfile(initialData?: CompanyProfileData) {
 	const { update } = useSession();
 	const router = useRouter();
 
-	// Use TanStack Query for industries - eliminates useEffect
+	// Use TanStack Query for industries
 	const {
 		data: industries = [],
 		isLoading: industriesLoading,
