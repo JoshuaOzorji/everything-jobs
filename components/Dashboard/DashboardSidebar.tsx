@@ -8,7 +8,7 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { useCompanyData } from "@/hooks/useCompanyStatus";
+import { useCompanyData } from "@/hooks/useCompanyData";
 import { getDynamicNav } from "@/lib/dashboard-config";
 
 export function DashboardSidebar({

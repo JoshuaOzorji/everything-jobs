@@ -10,7 +10,7 @@ import {
 	BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
 import { usePathname } from "next/navigation";
-import { useCompanyData } from "@/hooks/useCompanyStatus";
+import { useCompanyData } from "@/hooks/useCompanyData";
 import { getDynamicNav } from "@/lib/dashboard-config";
 
 export function SiteHeader({

@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { UseFormRegister, FieldErrors, Control } from "react-hook-form";
 import { JobDraft } from "@/lib/hooks/useJobDraft";
-import { client } from "@/sanity/lib/client";
+import { useReferenceData } from "@/hooks/useReferenceData";
 import {
 	FormControl,
 	FormField,
@@ -23,12 +22,7 @@ import { Input } from "@/components/ui/input";
 interface JobDetailsProps {
 	register: UseFormRegister<JobDraft>;
 	errors: FieldErrors<JobDraft>;
-	control: Control<JobDraft>; // Add control prop
-}
-
-interface ReferenceData {
-	_id: string;
-	name: string;
+	control: Control<JobDraft>;
 }
 
 export default function JobDetails({
@@ -36,54 +30,14 @@ export default function JobDetails({
 	errors,
 	control,
 }: JobDetailsProps) {
-	const [locations, setLocations] = useState<ReferenceData[]>([]);
-	const [jobTypes, setJobTypes] = useState<ReferenceData[]>([]);
-	const [levels, setLevels] = useState<ReferenceData[]>([]);
-	const [educations, setEducations] = useState<ReferenceData[]>([]);
-	const [jobFields, setJobFields] = useState<ReferenceData[]>([]);
+	const { data: referenceData, isError } = useReferenceData();
 
-	useEffect(() => {
-		async function fetchReferenceData() {
-			try {
-				const [
-					locationsData,
-					jobTypesData,
-					levelsData,
-					educationsData,
-					jobFieldsData,
-				] = await Promise.all([
-					client.fetch(
-						'*[_type == "state"] | order(name asc)',
-					),
-					client.fetch(
-						'*[_type == "jobType"] | order(name asc)',
-					),
-					client.fetch(
-						'*[_type == "jobLevel"] | order(name asc)',
-					),
-					client.fetch(
-						'*[_type == "education"] | order(name asc)',
-					),
-					client.fetch(
-						'*[_type == "jobField"] | order(name asc)',
-					),
-				]);
-
-				setLocations(locationsData);
-				setJobTypes(jobTypesData);
-				setLevels(levelsData);
-				setEducations(educationsData);
-				setJobFields(jobFieldsData);
-			} catch (error) {
-				console.error(
-					"Error fetching reference data:",
-					error,
-				);
-			}
-		}
-
-		fetchReferenceData();
-	}, []);
+	// Provide fallback empty arrays while data is loading or on error
+	const locations = referenceData?.locations || [];
+	const jobTypes = referenceData?.jobTypes || [];
+	const levels = referenceData?.levels || [];
+	const educations = referenceData?.educations || [];
+	const jobFields = referenceData?.jobFields || [];
 
 	return (
 		<div className='dashboard-post-job-heading'>
@@ -104,9 +58,21 @@ export default function JobDetails({
 								}
 								value={
 									field.value
+								}
+								disabled={
+									isError
 								}>
 								<SelectTrigger>
-									<SelectValue placeholder='Select location' />
+									<SelectValue
+										placeholder={
+											isError
+												? "Error loading locations"
+												: locations.length ===
+													  0
+													? "Loading locations..."
+													: "Select location"
+										}
+									/>
 								</SelectTrigger>
 								<SelectContent>
 									{locations.map(
@@ -147,9 +113,21 @@ export default function JobDetails({
 								}
 								value={
 									field.value
+								}
+								disabled={
+									isError
 								}>
 								<SelectTrigger>
-									<SelectValue placeholder='Select job type' />
+									<SelectValue
+										placeholder={
+											isError
+												? "Error loading job types"
+												: jobTypes.length ===
+													  0
+													? "Loading job types..."
+													: "Select job type"
+										}
+									/>
 								</SelectTrigger>
 								<SelectContent>
 									{jobTypes.map(
@@ -192,9 +170,21 @@ export default function JobDetails({
 								}
 								value={
 									field.value
+								}
+								disabled={
+									isError
 								}>
 								<SelectTrigger>
-									<SelectValue placeholder='Select education level' />
+									<SelectValue
+										placeholder={
+											isError
+												? "Error loading education levels"
+												: educations.length ===
+													  0
+													? "Loading education levels..."
+													: "Select education level"
+										}
+									/>
 								</SelectTrigger>
 								<SelectContent>
 									{educations.map(
@@ -235,9 +225,21 @@ export default function JobDetails({
 								}
 								value={
 									field.value
+								}
+								disabled={
+									isError
 								}>
 								<SelectTrigger>
-									<SelectValue placeholder='Select job field' />
+									<SelectValue
+										placeholder={
+											isError
+												? "Error loading job fields"
+												: jobFields.length ===
+													  0
+													? "Loading job fields..."
+													: "Select job field"
+										}
+									/>
 								</SelectTrigger>
 								<SelectContent>
 									{jobFields.map(
@@ -280,9 +282,21 @@ export default function JobDetails({
 								}
 								value={
 									field.value
+								}
+								disabled={
+									isError
 								}>
 								<SelectTrigger>
-									<SelectValue placeholder='Select experience level' />
+									<SelectValue
+										placeholder={
+											isError
+												? "Error loading experience levels"
+												: levels.length ===
+													  0
+													? "Loading experience levels..."
+													: "Select experience level"
+										}
+									/>
 								</SelectTrigger>
 								<SelectContent>
 									{levels.map(
