@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FilterOptions } from "@/types/types";
 import FilterSelect from "./FilterSelect";
 
@@ -29,27 +29,21 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 	updateFilters,
 	clearAllFilters,
 }) => {
+	// Only maintain local state for the search input while user is typing
 	const [searchQuery, setSearchQuery] = useState(query);
-	const [selectedLocationId, setSelectedLocationId] = useState("");
 
-	useEffect(() => {
-		setSearchQuery(query);
+	// Compute selectedLocationId directly from props - no state needed
+	const getSelectedLocationId = (): string => {
+		if (!filters?.locations || !location) return "";
 
-		if (filters?.locations && location) {
-			const locationObj = filters.locations.find(
-				(loc) => loc.name === location,
-			);
-			if (locationObj) {
-				setSelectedLocationId(locationObj._id);
-			} else if (location) {
-				setSelectedLocationId("custom");
-			} else {
-				setSelectedLocationId("");
-			}
-		} else {
-			setSelectedLocationId("");
-		}
-	}, [query, location, filters]);
+		const locationObj = filters.locations.find(
+			(loc) => loc.name === location,
+		);
+
+		return locationObj ? locationObj._id : "custom";
+	};
+
+	const selectedLocationId = getSelectedLocationId();
 
 	const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchQuery(e.target.value);
@@ -59,11 +53,20 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 		updateFilters("q", searchQuery);
 	};
 
+	// Reset local search query when URL query changes (e.g., from clear filters)
+	if (searchQuery !== query && searchQuery === "") {
+		setSearchQuery(query);
+	}
+
 	const handleLocationChange = (
 		e: React.ChangeEvent<HTMLSelectElement>,
 	) => {
 		const selectedId = e.target.value;
-		setSelectedLocationId(selectedId);
+
+		if (selectedId === "") {
+			updateFilters("location", "");
+			return;
+		}
 
 		const selectedLocation = filters?.locations?.find(
 			(loc) => loc._id === selectedId,
@@ -71,9 +74,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
 		const locationValue = selectedLocation
 			? selectedLocation.name
-			: selectedId === "custom"
-				? location
-				: "";
+			: location; // Keep current location for custom case
 
 		updateFilters("location", locationValue);
 	};
@@ -109,7 +110,6 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 			</div>
 
 			{/* Location Select */}
-
 			<div className='mb-4'>
 				<label className='block mb-1 font-medium'>
 					Location

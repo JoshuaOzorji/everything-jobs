@@ -6,87 +6,102 @@ import { usePathname, useSearchParams } from "next/navigation";
 
 const ProgressBar = () => {
 	const [progress, setProgress] = useState(0);
+	const [visible, setVisible] = useState(false);
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 	const intervalRef = useRef<NodeJS.Timeout | null>(null);
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
-	const [visible, setVisible] = useState(false);
+
+	// Centralized cleanup function
+	const cleanup = useCallback(() => {
+		if (timeoutRef.current) {
+			clearTimeout(timeoutRef.current);
+			timeoutRef.current = null;
+		}
+		if (intervalRef.current) {
+			clearInterval(intervalRef.current);
+			intervalRef.current = null;
+		}
+	}, []);
 
 	const startLoading = useCallback(() => {
-		// Clear any existing timers
-		if (timeoutRef.current) clearTimeout(timeoutRef.current);
-		if (intervalRef.current) clearInterval(intervalRef.current);
-
-		// Show the progress bar
+		cleanup();
 		setVisible(true);
-		setProgress(10); // Start with a small initial progress
+		setProgress(10);
 
-		// Gradually increase progress
 		intervalRef.current = setInterval(() => {
 			setProgress((prev) => {
 				if (prev >= 90) {
-					// Don't go past 90% while waiting
-					if (intervalRef.current)
+					if (intervalRef.current) {
 						clearInterval(
 							intervalRef.current,
 						);
+						intervalRef.current = null;
+					}
 					return 90;
 				}
-				// Increment speed slows down as we approach 90%
 				const increment = (90 - prev) / 10;
 				return prev + Math.max(1, increment);
 			});
 		}, 100);
-	}, []);
+	}, [cleanup]);
 
 	const completeLoading = useCallback(() => {
-		// Clear the interval that was incrementing progress
 		if (intervalRef.current) {
 			clearInterval(intervalRef.current);
 			intervalRef.current = null;
 		}
 
-		// Set to 100% complete
 		setProgress(100);
 
-		// Hide the progress bar after a short delay
 		timeoutRef.current = setTimeout(() => {
 			setVisible(false);
-			// Reset progress after hiding
-			setTimeout(() => setProgress(0), 100);
+			// Reset progress after a brief delay to allow fade out
+			timeoutRef.current = setTimeout(
+				() => setProgress(0),
+				100,
+			);
 		}, 500);
 	}, []);
 
-	// Watch for navigation changes
+	// Handle link clicks with event delegation (moved inside useEffect)
+	const handleLinkClick = useCallback(
+		(e: MouseEvent) => {
+			const target = e.target as HTMLElement;
+			const link = target.closest("a");
+
+			// More robust check for internal navigation
+			if (link) {
+				const href = link.getAttribute("href");
+				if (
+					href?.startsWith("/") &&
+					!link.hasAttribute("target")
+				) {
+					startLoading();
+				}
+			}
+		},
+		[startLoading],
+	);
+
+	// Single useEffect for navigation changes
 	useEffect(() => {
 		completeLoading();
 	}, [pathname, searchParams, completeLoading]);
 
-	// Handle link clicks
+	// Single useEffect for click handling and cleanup
 	useEffect(() => {
-		const handleLinkClick = (e: MouseEvent) => {
-			const target = e.target as HTMLElement;
-			const link = target.closest("a");
-
-			// Check if it's an internal navigation link
-			if (link?.getAttribute("href")?.startsWith("/")) {
-				startLoading();
-			}
-		};
-
-		// Add click listener to the entire document
-		document.addEventListener("click", handleLinkClick);
+		document.addEventListener("click", handleLinkClick, {
+			passive: true,
+		});
 
 		return () => {
 			document.removeEventListener("click", handleLinkClick);
-			if (timeoutRef.current)
-				clearTimeout(timeoutRef.current);
-			if (intervalRef.current)
-				clearInterval(intervalRef.current);
+			cleanup();
 		};
-	}, [startLoading]);
+	}, [handleLinkClick, cleanup]);
 
-	// Don't render anything if progress is 0 or component is invisible
+	// Early return for better performance
 	if (!visible) return null;
 
 	return (

@@ -21,27 +21,21 @@ export const revalidate = 3600;
 // Generate static params for POPULAR/RECENT jobs only
 export async function generateStaticParams() {
 	try {
-		// Only pre-generate the most recent/popular jobs to avoid build timeouts
+		// Step 1: Test basic connection with minimal query
 		const jobs = await client.fetch(
-			`*[_type == "job" && defined(slug.current) && publishedAt > now() - 60*60*24*7][0...20]{ 
+			`*[_type == "job" && defined(slug.current)][0...20]{ 
 				"slug": slug.current 
 			}`,
-			{},
-			{
-				// Add timeout to prevent build failures
-				cache: "force-cache",
-				next: { revalidate: 3600 },
-			},
 		);
 
+		// Step 2: Validate and return results
 		return jobs
-			.filter((job: { slug: string }) => job.slug) // Filter out null slugs
+			.filter((job: any) => job?.slug)
 			.map((job: { slug: string }) => ({
 				slug: job.slug,
 			}));
 	} catch (error) {
 		console.error("generateStaticParams error:", error);
-		// Return empty array to allow all pages to be generated on-demand
 		return [];
 	}
 }
