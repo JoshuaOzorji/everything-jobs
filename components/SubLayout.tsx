@@ -6,7 +6,7 @@ interface SubLayoutProps {
 }
 const SubLayout = ({ children, aside }: SubLayoutProps) => {
 	return (
-		<div className='flex flex-col md:flex-row gap-8 my-6'>
+		<div className='flex flex-col md:flex-row gap-8 my-2 md:my-4'>
 			<div className='md:w-[66%]'>{children}</div>
 			<aside className='md:w-[34%]'>{aside}</aside>
 		</div>

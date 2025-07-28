@@ -38,7 +38,7 @@ export default function CompanyDetailsAside({
 	)[0];
 
 	return (
-		<div className='bg-white divide-y divide-gray-200 rounded-lg shadow-sm font-openSans md:px-6'>
+		<div className='bg-white divide-y divide-gray-200 rounded-lg shadow-sm font-saira md:px-6'>
 			{/* Company stats section */}
 			<div className='p-4'>
 				<h3 className='mb-4 text-lg font-bold font-poppins'>

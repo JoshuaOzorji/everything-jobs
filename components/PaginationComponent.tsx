@@ -67,7 +67,7 @@ export default function Pagination({
 	const pageNumbers = getPageNumbers();
 
 	return (
-		<div className='flex justify-center items-center my-8 gap-1 font-openSans text-sm'>
+		<div className='flex justify-center items-center my-8 gap-1 font-saira text-sm'>
 			{/* Previous button */}
 			{currentPage > 1 && (
 				<Link

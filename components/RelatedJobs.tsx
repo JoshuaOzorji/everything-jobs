@@ -8,7 +8,7 @@ interface RelatedJobCardProps {
 
 const RelatedJobCard: React.FC<RelatedJobCardProps> = ({ job }) => {
 	return (
-		<div className='p-3 md:p-4 transition-shadow bg-white border rounded-lg hover:shadow-sm font-openSans'>
+		<div className='p-3 md:p-4 transition-shadow bg-white border rounded-lg hover:shadow-sm font-saira'>
 			<div className='text-sm font-poppins hover:text-pry2 mb-2'>
 				<Link href={`/job/${job.slug}`}>
 					{job.title} at {job.company.name}

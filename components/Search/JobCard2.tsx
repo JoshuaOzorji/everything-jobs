@@ -64,7 +64,7 @@ const JobCard2: React.FC<JobCard2Props> = ({ job }) => {
 					</div>
 
 					{/* Summary */}
-					<div className='hidden overflow-hidden text-sm md:block font-openSans'>
+					<div className='hidden overflow-hidden text-sm md:block font-saira'>
 						<div className='line-clamp-2'>
 							<PortableText
 								value={
@@ -77,7 +77,7 @@ const JobCard2: React.FC<JobCard2Props> = ({ job }) => {
 						</div>
 					</div>
 
-					<div className='flex flex-wrap gap-3 mt-2 font-openSans'>
+					<div className='flex flex-wrap gap-3 mt-2 font-saira'>
 						{locationName && (
 							<span className='px-2 py-0.5 text-[12.5px] text-blue-800 bg-blue-100 rounded first-letter:uppercase'>
 								{locationName}

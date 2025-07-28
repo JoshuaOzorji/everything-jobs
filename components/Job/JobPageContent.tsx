@@ -17,11 +17,11 @@ export default function JobPageContent({
 	relatedJobs,
 }: JobPageContentProps) {
 	return (
-		<div className='p-4 bg-white rounded-md font-openSans text-myBlack md:p-8'>
+		<div className='p-4 bg-white rounded-md font-saira text-myBlack md:p-8'>
 			<section className='pb-4 mb-4 border-b border-zinc-300'>
 				<JobHeader job={job} imageUrl={imageUrl} />
 
-				<h1 className='mt-6 mb-2 text-xl font-bold md:text-3xl font-poppins text-pry'>
+				<h1 className='mt-6 mb-2 text-xl font-bold md:text-2xl font-poppins text-pry'>
 					{job.title}
 				</h1>
 

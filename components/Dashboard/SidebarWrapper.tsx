@@ -1,6 +1,5 @@
 "use client";
 
-import { ReactNode } from "react";
 import { useSidebar } from "@/components/ui/sidebar";
 import { DashboardSidebar } from "./DashboardSidebar";
 

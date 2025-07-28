@@ -14,7 +14,7 @@ export default withAuth(
 		if (isAuthPage) {
 			if (isAuth) {
 				return NextResponse.redirect(
-					new URL("/dashboard", req.url),
+					new URL("/dashboard/post-job", req.url),
 				);
 			}
 

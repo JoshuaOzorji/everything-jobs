@@ -11,12 +11,12 @@ interface JobHeaderProps {
 
 export default function JobHeader({ job, imageUrl }: JobHeaderProps) {
 	return (
-		<div className='flex items-center justify-between text-sm font-poppins md:text-base'>
+		<div className='flex items-center justify-between text-xs font-poppins md:text-sm'>
 			<div className='flex items-center gap-2'>
 				<Image
 					src={imageUrl}
 					alt={job.company.name}
-					className='h-[5vh] w-[5vh] md:h-[6vh] md:w-[6vh] rounded-sm'
+					className='h-[4vh] w-[4vh] md:h-[5vh] md:w-[5vh] rounded-full'
 					width={50}
 					height={50}
 					priority

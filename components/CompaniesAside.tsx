@@ -48,7 +48,7 @@ const CompaniesAside = async () => {
 					No companies found
 				</p>
 			) : (
-				<ul className='space-y-3 font-openSans'>
+				<ul className='space-y-3 font-saira'>
 					{topCompanies.map((company) => (
 						<li
 							key={company._id}
@@ -103,8 +103,13 @@ const CompaniesAside = async () => {
 							</Link>
 
 							<span className='flex-shrink-0 px-2 py-1 text-xs text-center bg-gray-100 rounded-md'>
-								{company.jobCount}{" "}
-								{company.jobCount === 1 ? "job" : "jobs"}
+								{
+									company.jobCount
+								}{" "}
+								{company.jobCount ===
+								1
+									? "job"
+									: "jobs"}
 							</span>
 						</li>
 					))}

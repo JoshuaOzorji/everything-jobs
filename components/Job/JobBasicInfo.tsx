@@ -9,7 +9,7 @@ interface JobBasicInfoProps {
 
 export default function JobBasicInfo({ job }: JobBasicInfoProps) {
 	return (
-		<div className='space-y-1 font-openSans'>
+		<div className='space-y-1 text-sm font-saira md:text-base'>
 			<div className='icon-container'>
 				<ImLocation className='icon' />
 				<span>Location: </span>

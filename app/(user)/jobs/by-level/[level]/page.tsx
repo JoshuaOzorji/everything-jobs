@@ -120,7 +120,7 @@ export default async function JobLevelJobsPage({
 						))}
 					</div>
 				) : (
-					<div className='py-12 text-center font-openSans'>
+					<div className='py-12 text-center font-saira'>
 						<h2 className='text-base font-semibold md:text-lg'>
 							No{" "}
 							{jobLevelData.name.toLowerCase()}{" "}

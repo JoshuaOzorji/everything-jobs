@@ -25,7 +25,7 @@ export default function LoginForm() {
 		try {
 			const result = await signIn("credentials", {
 				redirect: true,
-				callbackUrl: "/dashboard",
+				callbackUrl: "/dashboard/post-job",
 				email,
 				password,
 			});
@@ -41,14 +41,14 @@ export default function LoginForm() {
 		setLoading(true);
 		signIn(provider, {
 			redirect: true,
-			callbackUrl: "/dashboard",
+			callbackUrl: "/dashboard/post-job",
 		});
 	};
 
 	return (
 		<form
 			onSubmit={handleSubmit}
-			className='mt-8 space-y-6 font-openSans'>
+			className='mt-8 space-y-6 font-saira'>
 			{error && (
 				<div className='p-3 text-sm text-red-500 rounded bg-red-50'>
 					{error}

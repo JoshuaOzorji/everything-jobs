@@ -18,17 +18,14 @@ type PageProps = {
 // ISR - regenerate every hour
 export const revalidate = 3600;
 
-// Generate static params for POPULAR/RECENT jobs only
 export async function generateStaticParams() {
 	try {
-		// Step 1: Test basic connection with minimal query
 		const jobs = await client.fetch(
 			`*[_type == "job" && defined(slug.current)][0...20]{ 
 				"slug": slug.current 
 			}`,
 		);
 
-		// Step 2: Validate and return results
 		return jobs
 			.filter((job: any) => job?.slug)
 			.map((job: { slug: string }) => ({
@@ -119,7 +116,7 @@ export default async function JobPage({ params }: PageProps) {
 					"Error fetching related jobs:",
 					error,
 				);
-				return []; // Return empty array on error
+				return [];
 			});
 
 		// Process image URL

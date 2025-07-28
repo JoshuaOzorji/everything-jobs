@@ -39,7 +39,7 @@ export default function JobSubmissionsTable() {
 	if (isLoading) return <LoadingComponent />;
 
 	return (
-		<div className='space-y-4 font-openSans'>
+		<div className='space-y-4 font-saira'>
 			<div className='rounded-md border'>
 				<Table>
 					<TableHeader className='bg-white '>

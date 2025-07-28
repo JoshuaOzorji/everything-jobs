@@ -59,7 +59,7 @@ body {
 }
 
 .page-sub-div {
-	@apply mb-6 font-openSans;
+	@apply mb-6 font-saira;
 }
 
 .page-p {
@@ -93,7 +93,7 @@ body {
 	@apply relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none rounded-t-md focus:outline-none focus:ring-pry focus:border-pry focus:z-10 sm:text-sm;
 }
 .dashboard-page-container {
-	@apply max-w-2xl py-4 px-6 mx-auto font-openSans;
+	@apply max-w-2xl py-4 md:px-6 mx-auto font-saira;
 }
 
 .dashboard-form-heading {

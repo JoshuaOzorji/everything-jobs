@@ -79,7 +79,7 @@ const JobLevels: React.FC<JobLevelsProps> = ({ jobLevels = [] }) => {
 				Career Experience Levels
 			</h2>
 			<nav aria-label='Featured job levels navigation'>
-				<ul className='grid grid-cols-2 gap-2 font-openSans'>
+				<ul className='grid grid-cols-2 gap-2 font-saira'>
 					{jobLevels.map((jobLevel) => (
 						<li key={jobLevel._id}>
 							<Link
@@ -98,7 +98,7 @@ const JobLevels: React.FC<JobLevelsProps> = ({ jobLevels = [] }) => {
 					))}
 				</ul>
 				{/* CTA */}
-				<div className='flex justify-end mt-2 text-sm font-openSans'>
+				<div className='flex justify-end mt-2 text-sm font-saira'>
 					<Link href='/jobs/by-level'>
 						<button className='flex items-center gap-1 underline text-pry2 hover:text-pry'>
 							Explore all levels

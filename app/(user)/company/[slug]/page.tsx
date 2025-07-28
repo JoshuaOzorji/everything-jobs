@@ -40,7 +40,7 @@ function CompanyContent({
 	pagination: { currentPage: number; total: number; perPage: number };
 }) {
 	return (
-		<div className='font-openSans'>
+		<div className='font-saira'>
 			<Link href='/companies'>
 				<p className='inline-flex items-center gap-1 mb-4 text-[13px] text-pry2 hover:underline animate md:text-sm'>
 					<FaArrowLeft />
@@ -161,7 +161,7 @@ function CompanyContent({
 			</h2>
 
 			{!jobs || jobs.length === 0 ? (
-				<div className='p-6 text-center rounded-lg bg-gray-50 font-openSans'>
+				<div className='p-6 text-center rounded-lg bg-gray-50 font-saira'>
 					<p className='text-myBlack'>
 						No active job listings for this
 						company

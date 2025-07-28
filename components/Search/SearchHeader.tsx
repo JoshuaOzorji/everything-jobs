@@ -17,7 +17,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
 					: "All Jobs "}
 				{location && ` in ${location}`}
 			</h1>
-			<span className='flex gap-1 text-myBlack font-openSans'>
+			<span className='flex gap-1 text-myBlack font-saira'>
 				<p className='ml-1'>
 					&bull; {jobCount} jobs found
 				</p>

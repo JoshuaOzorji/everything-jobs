@@ -66,7 +66,7 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({
 				Active Filters:
 			</h3>
 
-			<div className='flex flex-wrap gap-2 font-openSans'>
+			<div className='flex flex-wrap gap-2 font-saira'>
 				{activeFilters.map((filter) => (
 					<div
 						key={filter.name}

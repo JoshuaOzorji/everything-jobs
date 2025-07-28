@@ -11,7 +11,7 @@ const CompanyJobCard: React.FC<CompanyJobCardProps> = ({ job }) => {
 	const locationDisplay = job.location?.name || "Nigeria";
 
 	return (
-		<div className='p-3 md:p-4 transition-shadow bg-white border rounded-lg hover:shadow-sm font-openSans'>
+		<div className='p-3 md:p-4 transition-shadow bg-white border rounded-lg hover:shadow-sm font-saira'>
 			<div className='mb-2 text-base font-poppins hover:text-pry2'>
 				<Link href={`/job/${job.slug.current}`}>
 					{job.title}

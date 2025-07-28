@@ -53,7 +53,7 @@ export default function SignupForm() {
 			if (result?.error) {
 				setError(result.error);
 			} else {
-				router.push("/dashboard");
+				router.push("/dashboard/post-job");
 				router.refresh();
 			}
 		} catch (error: any) {
@@ -66,7 +66,7 @@ export default function SignupForm() {
 	return (
 		<form
 			onSubmit={handleSubmit}
-			className='mt-8 space-y-6 font-openSans'>
+			className='mt-8 space-y-6 font-saira'>
 			{error && (
 				<div className='p-3 text-sm text-red-500 rounded bg-red-50'>
 					{error}
@@ -155,7 +155,7 @@ export default function SignupForm() {
 							signIn("google", {
 								redirect: true,
 								callbackUrl:
-									"/dashboard",
+									"/dashboard/post-job",
 							})
 						}
 						type='button'
@@ -168,7 +168,7 @@ export default function SignupForm() {
 							signIn("linkedin", {
 								redirect: true,
 								callbackUrl:
-									"/dashboard",
+									"/dashboard/post-job",
 							})
 						}
 						type='button'

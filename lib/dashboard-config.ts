@@ -1,9 +1,4 @@
-import {
-	LayoutDashboard,
-	Building2,
-	ClipboardList,
-	FilePlus,
-} from "lucide-react";
+import { Building2, ClipboardList, FilePlus } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 export type NavItem = {
@@ -16,11 +11,6 @@ export type NavItem = {
 };
 
 export const dashboardNav: NavItem[] = [
-	{
-		title: "Dashboard",
-		url: "/dashboard",
-		icon: LayoutDashboard,
-	},
 	{
 		title: "Post New Job",
 		url: "/dashboard/post-job",

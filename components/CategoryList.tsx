@@ -51,7 +51,7 @@ export default function CategoryList({
 							<h2 className='text-base md:text-xl md:font-semibold font-poppins text-myBlack hover:underline first-letter:uppercase'>
 								{name}
 							</h2>
-							<span className='bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded font-openSans'>
+							<span className='bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded font-saira'>
 								{count || 0}{" "}
 								jobs
 							</span>

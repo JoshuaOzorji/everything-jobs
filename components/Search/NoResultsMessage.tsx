@@ -8,7 +8,7 @@ const NoResultsMessage: React.FC<NoResultsMessageProps> = ({
 	query = "",
 }) => {
 	return (
-		<div className='flex flex-col items-center justify-center h-full p-8 text-center bg-white rounded-md shadow-sm font-openSans'>
+		<div className='flex flex-col items-center justify-center h-full p-8 text-center bg-white rounded-md shadow-sm font-saira'>
 			{hasSearched ? (
 				<>
 					<h3 className='mb-4 text-xl font-semibold'>

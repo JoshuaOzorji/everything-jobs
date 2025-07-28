@@ -53,7 +53,7 @@ export default function JobSubmissionsFilter() {
 	};
 
 	return (
-		<div className='flex flex-wrap gap-4 p-2 bg-white rounded-lg shadow-sm font-openSans'>
+		<div className='flex flex-wrap gap-4 p-2 bg-white rounded-lg shadow-sm font-saira'>
 			<Select
 				onValueChange={onStatusChange}
 				defaultValue='all'>

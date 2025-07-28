@@ -36,7 +36,7 @@ const JobTypes: React.FC<JobTypesProps> = ({ jobTypes = [] }) => {
 				Popular Employment Types
 			</h2>
 			<nav aria-label='Featured job types navigation'>
-				<ul className='grid grid-cols-2 gap-2 font-openSans'>
+				<ul className='grid grid-cols-2 gap-2 font-saira'>
 					{jobTypes.map((jobType) => (
 						<li key={jobType._id}>
 							<Link
@@ -55,7 +55,7 @@ const JobTypes: React.FC<JobTypesProps> = ({ jobTypes = [] }) => {
 					))}
 				</ul>
 				{/* CTA */}
-				<div className='flex justify-end mt-2 text-sm font-openSans'>
+				<div className='flex justify-end mt-2 text-sm font-saira'>
 					<Link href='/jobs/by-type'>
 						<button className='flex items-center gap-1 underline text-pry2 hover:text-pry'>
 							Explore all types

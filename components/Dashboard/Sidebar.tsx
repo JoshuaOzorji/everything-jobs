@@ -1,4 +1,3 @@
-import Image from "next/image";
 import SidebarLink from "../Dashboard/SidebarLink";
 
 const Sidebar = () => {
@@ -13,10 +12,6 @@ const Sidebar = () => {
 
 			{/* Navigation Links */}
 			<div className='space-y-2'>
-				<SidebarLink
-					href='/dashboard'
-					label='Dashboard'
-				/>
 				<SidebarLink
 					href='/dashboard/company'
 					label='Company Profile'

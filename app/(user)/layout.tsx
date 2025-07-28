@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Lato, Poppins, Open_Sans } from "next/font/google";
+import { Lato, Poppins, Saira } from "next/font/google";
 import "./../globals.css";
 import AuthProvider from "@/components/Providers/AuthProvider";
 import { Toaster } from "sonner";
@@ -26,8 +26,8 @@ const lato = Lato({
 	weight: "400",
 });
 
-const openSans = Open_Sans({
-	variable: "--font-open-sans",
+const saira = Saira({
+	variable: "--font-saira",
 	subsets: ["latin"],
 	weight: "400",
 });
@@ -43,7 +43,7 @@ export default async function RootLayout({
 	return (
 		<html lang='en'>
 			<body
-				className={`${lato.variable} ${openSans.variable} ${poppins.variable}  antialiased`}>
+				className={`${lato.variable} ${poppins.variable} ${saira.variable} antialiased`}>
 				<QueryProvider>
 					<AuthProvider
 						initialSession={enhancedSession}

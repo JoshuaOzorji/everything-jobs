@@ -27,7 +27,7 @@ const JobCard = ({ job }: JobCardProps) => {
 						priority
 					/>
 				</div>
-				<div className='w-full font-openSans text-myBlack'>
+				<div className='w-full font-saira text-myBlack'>
 					<div className='flex items-start justify-between'>
 						<h2 className='text-xs md:text-sm font-bold font-poppins hover:text-pry animate max-w-[75%]'>
 							<Link
@@ -55,7 +55,7 @@ const JobCard = ({ job }: JobCardProps) => {
 					</div>
 
 					{/* Summary */}
-					<div className='text-[11px] md:text-[12.5px] font-openSans line-clamp-2 mb-1 job-summary'>
+					<div className='text-[11px] md:text-[12.5px] font-saira line-clamp-2 mb-1 job-summary'>
 						<PortableText
 							value={job.summary}
 							components={
