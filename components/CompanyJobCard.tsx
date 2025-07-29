@@ -11,14 +11,14 @@ const CompanyJobCard: React.FC<CompanyJobCardProps> = ({ job }) => {
 	const locationDisplay = job.location?.name || "Nigeria";
 
 	return (
-		<div className='p-3 md:p-4 transition-shadow bg-white border rounded-lg hover:shadow-sm font-saira'>
-			<div className='mb-2 text-base font-poppins hover:text-pry2'>
+		<div className='p-3 transition-shadow bg-white border rounded-lg md:p-4 hover:shadow-sm font-saira'>
+			<div className='mb-2 text-xs font-medium md:text-sm font-poppins hover:text-pry2'>
 				<Link href={`/job/${job.slug.current}`}>
 					{job.title}
 				</Link>
 			</div>
 
-			<div className='flex flex-wrap gap-2 mb-1.5 text-xs md:text-[0.85rem]'>
+			<div className='flex flex-wrap gap-2 mb-1.5 text-[11px] md:text-xs'>
 				<span className='bg-blue-100 text-blue-800  px-2.5 py-0.5 rounded flex items-center first-letter:uppercase font-medium'>
 					<Link
 						href={`/jobs/by-location/${job.location?.name}`}>
@@ -39,7 +39,7 @@ const CompanyJobCard: React.FC<CompanyJobCardProps> = ({ job }) => {
 				</span>
 			</div>
 
-			<div className='text-[0.85rem] text-myBlack'>
+			<div className='text-[11px] md:text-xs text-myBlack space-y-1'>
 				<p>
 					Posted:{" "}
 					{formatDate2(new Date(job.publishedAt))}

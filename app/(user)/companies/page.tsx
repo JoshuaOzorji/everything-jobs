@@ -6,7 +6,7 @@ import SubLayout from "@/components/SubLayout";
 import { Suspense } from "react";
 import { LoadingComponent } from "@/components/Loading";
 import CompaniesAside from "@/components/CompaniesAside";
-import Pagination from "@/components/PaginationComponent";
+import Pagination from "@/components/Pagination";
 import { Metadata } from "next";
 
 export const dynamic = "force-dynamic";

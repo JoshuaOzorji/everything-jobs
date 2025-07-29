@@ -90,10 +90,9 @@ export default async function JobPage({ params }: PageProps) {
 		);
 
 		if (!job) {
-			notFound(); // This gives better SEO than a custom 404
+			notFound();
 		}
 
-		// Fetch related jobs in parallel with error handling
 		const relatedJobsPromise = client
 			.fetch(
 				relatedJobsQuery,
@@ -119,7 +118,6 @@ export default async function JobPage({ params }: PageProps) {
 				return [];
 			});
 
-		// Process image URL
 		let imageUrl = placeholder.src;
 		try {
 			if (job.company?.logo?.asset?._ref) {
@@ -129,7 +127,6 @@ export default async function JobPage({ params }: PageProps) {
 			console.error("Error processing image:", error);
 		}
 
-		// Await related jobs
 		const relatedJobs = await relatedJobsPromise;
 
 		return (
@@ -148,11 +145,11 @@ export default async function JobPage({ params }: PageProps) {
 		);
 	} catch (error) {
 		console.error("Critical error in JobPage:", error);
-		// Return a proper error page
+
 		return (
-			<div className='min-h-screen flex items-center justify-center'>
+			<div className='flex items-center justify-center min-h-screen'>
 				<div className='text-center'>
-					<h1 className='text-2xl font-bold text-gray-900 mb-4'>
+					<h1 className='mb-4 text-2xl font-bold text-gray-900'>
 						Something went wrong
 					</h1>
 					<p className='text-gray-600'>

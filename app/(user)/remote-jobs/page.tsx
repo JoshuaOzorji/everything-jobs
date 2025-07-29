@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { getRemoteJobs } from "@/sanity/lib/queries";
-import Pagination from "@/components/PaginationComponent";
+import Pagination from "@/components/Pagination";
 import AsideMain from "@/components/sidebar/AsideMain";
 import SubLayout from "@/components/SubLayout";
 import JobCardCategories from "@/components/JobCardCategories";

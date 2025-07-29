@@ -2,7 +2,7 @@ import { JobCardProps } from "@/types/types";
 import JobCard from "./JobCard";
 import { client } from "@/sanity/lib/client";
 import { groq } from "next-sanity";
-import Pagination from "./PaginationComponent";
+import Pagination from "./Pagination";
 import { JOBS_PER_PAGE } from "@/sanity/lib/constants";
 
 type Job = JobCardProps["job"];
@@ -72,7 +72,7 @@ async function JobsList({ page = 1 }: JobsListProps) {
 		<div>
 			{jobs.length > 0 ? (
 				<>
-					<div className='flex flex-col gap-2'>
+					<div className='flex flex-col gap-1.5'>
 						{jobs.map((job: Job) => (
 							<JobCard
 								key={job._id}

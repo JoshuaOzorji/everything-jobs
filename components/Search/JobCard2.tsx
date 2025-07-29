@@ -18,17 +18,16 @@ const JobCard2: React.FC<JobCard2Props> = ({ job }) => {
 	return (
 		<div className='px-4 py-3 transition bg-white rounded shadow md:p-4 hover:shadow-sm'>
 			<div className='flex gap-3'>
-				<div className='overflow-hidden rounded'>
+				<div className='jobcard-image-container'>
 					<Image
 						src={
 							job.company.logo ||
 							placeholder
 						}
 						alt={job.company.name}
-						className='h-[5vh] w-[5vh] md:h-[6vh] md:w-[6vh] rounded-sm'
+						className='object-cover w-full h-full'
 						width={50}
 						height={50}
-						priority
 					/>
 				</div>
 
@@ -37,17 +36,17 @@ const JobCard2: React.FC<JobCard2Props> = ({ job }) => {
 						<div className='flex-1 min-w-0'>
 							<Link
 								href={`/job/${job.slug}`}
-								className='text-[13px] md:text-base font-bold flex items-center font-poppins hover:text-pry animate'>
+								className='flex items-center text-xs font-bold md:text-sm font-poppins hover:text-pry animate'>
 								{job.title}
 							</Link>
 						</div>
 
 						<div className='flex-shrink-0 ml-2'>
-							<p className='text-sm flex items-center gap-1 text-[11px] md:text-sm whitespace-nowrap'>
-								<span className='text-base text-pry'>
+							<p className='text-sm flex items-center gap-1 text-[11px] md:text-xs whitespace-nowrap font-saira'>
+								<span className='text-xs text-pry'>
 									&bull;
 								</span>
-								<span className='text-xs md:text-sm font-poppins'>
+								<span>
 									{formatDate(
 										new Date(
 											job.publishedAt,
@@ -58,13 +57,13 @@ const JobCard2: React.FC<JobCard2Props> = ({ job }) => {
 						</div>
 					</div>
 					<div>
-						<p className='text-sm text-myBlack font-poppins'>
+						<p className='text-xs md:text-[13px] text-myBlack font-poppins'>
 							{job.company.name}
 						</p>
 					</div>
 
 					{/* Summary */}
-					<div className='hidden overflow-hidden text-sm md:block font-saira'>
+					<div className='hidden overflow-hidden text-[13px] md:block font-saira'>
 						<div className='line-clamp-2'>
 							<PortableText
 								value={
@@ -77,16 +76,16 @@ const JobCard2: React.FC<JobCard2Props> = ({ job }) => {
 						</div>
 					</div>
 
-					<div className='flex flex-wrap gap-3 mt-2 font-saira'>
+					<div className='flex flex-wrap gap-3 mt-2 font-saira text-[11px] md:text-xs'>
 						{locationName && (
-							<span className='px-2 py-0.5 text-[12.5px] text-blue-800 bg-blue-100 rounded first-letter:uppercase'>
+							<span className='px-2 py-0.5 text-blue-800 bg-blue-100 rounded first-letter:uppercase'>
 								{locationName}
 							</span>
 						)}
-						<span className='px-2 py-0.5 text-[12.5px] text-green-800 bg-green-100 rounded first-letter:uppercase'>
+						<span className='px-2 py-0.5 text-green-800 bg-green-100 rounded first-letter:uppercase'>
 							{jobTypeName}
 						</span>
-						<span className='px-2 py-0.5 text-[12.5px] text-purple-800 bg-purple-100 rounded first-letter:uppercase'>
+						<span className='px-2 py-0.5 text-purple-800 bg-purple-100 rounded first-letter:uppercase'>
 							{levelName}
 						</span>
 					</div>

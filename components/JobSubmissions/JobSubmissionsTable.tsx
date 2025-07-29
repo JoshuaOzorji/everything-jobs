@@ -13,7 +13,7 @@ import { formatDate } from "@/lib/formatDate";
 import type { JobSubmissionItem } from "@/types/types";
 import { toast } from "sonner";
 import { LoadingComponent } from "@/components/Loading";
-import Pagination from "@/components/PaginationComponent";
+import Pagination from "@/components/Pagination";
 import { useJobSubmissions } from "@/hooks/useJobSubmissions";
 import { useEffect } from "react";
 
@@ -40,17 +40,17 @@ export default function JobSubmissionsTable() {
 
 	return (
 		<div className='space-y-4 font-saira'>
-			<div className='rounded-md border'>
+			<div className='border rounded-md'>
 				<Table>
 					<TableHeader className='bg-white '>
 						<TableRow>
-							<TableHead className='text-black px-2 text-xs md:text-sm'>
+							<TableHead className='px-2 text-xs text-black md:text-sm'>
 								Job Title
 							</TableHead>
-							<TableHead className='text-black px-2 text-xs md:text-sm'>
+							<TableHead className='px-2 text-xs text-black md:text-sm'>
 								Submitted Date
 							</TableHead>
-							<TableHead className='text-black px-2 text-xs md:text-sm'>
+							<TableHead className='px-2 text-xs text-black md:text-sm'>
 								Status
 							</TableHead>
 						</TableRow>
@@ -62,7 +62,7 @@ export default function JobSubmissionsTable() {
 									colSpan={
 										3
 									}
-									className='text-center py-8'>
+									className='py-8 text-center'>
 									No job
 									submissions
 									found

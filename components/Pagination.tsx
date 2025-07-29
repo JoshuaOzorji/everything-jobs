@@ -17,6 +17,11 @@ export default function Pagination({
 	const searchParams = useSearchParams();
 	const totalPages = Math.ceil(total / perPage);
 
+	// Don't render pagination if there's only one page or no pages
+	if (totalPages <= 1) {
+		return null;
+	}
+
 	// Helper function to build URL with preserved search params
 	const buildPageUrl = (pageNumber: number) => {
 		const params = new URLSearchParams(searchParams.toString());
@@ -81,7 +86,7 @@ export default function Pagination({
 	const pageNumbers = getPageNumbers();
 
 	return (
-		<div className='flex justify-center items-center my-8 gap-1 font-saira text-sm'>
+		<div className='flex items-center justify-center gap-1 my-8 text-sm font-saira'>
 			{/* Previous button */}
 			{currentPage > 1 && (
 				<Link

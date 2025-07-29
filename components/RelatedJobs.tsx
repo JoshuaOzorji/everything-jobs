@@ -8,15 +8,15 @@ interface RelatedJobCardProps {
 
 const RelatedJobCard: React.FC<RelatedJobCardProps> = ({ job }) => {
 	return (
-		<div className='p-3 md:p-4 transition-shadow bg-white border rounded-lg hover:shadow-sm font-saira'>
-			<div className='text-sm font-poppins hover:text-pry2 mb-2'>
+		<div className='p-3 transition-shadow bg-white border rounded-lg md:p-4 hover:shadow-sm font-saira'>
+			<div className='mb-2 text-xs font-medium md:text-sm font-poppins hover:text-pry animate'>
 				<Link href={`/job/${job.slug}`}>
 					{job.title} at {job.company.name}
 				</Link>
 			</div>
 
-			<div className='flex flex-wrap gap-2 text-xs md:text-[0.85rem] '>
-				<span className='bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded flex items-center first-letter:uppercase font-medium'>
+			<div className='flex flex-wrap gap-2 text-[11px] md:text-xs'>
+				<span className='bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded flex items-center first-letter:uppercase font-medium hover:underline'>
 					<Link
 						href={`/jobs/by-location/${job.location?.slug || ""}`}>
 						{job.location?.name ||
@@ -24,7 +24,7 @@ const RelatedJobCard: React.FC<RelatedJobCardProps> = ({ job }) => {
 					</Link>
 				</span>
 				{job.jobType && (
-					<span className='bg-green-100 text-green-800 font-medium px-2.5 py-0.5 rounded first-letter:uppercase'>
+					<span className='bg-green-100 text-green-800 font-medium px-2.5 py-0.5 rounded first-letter:uppercase hover:underline'>
 						<Link
 							href={`/jobs/by-type/${job.jobType?.slug || ""}`}>
 							{job.jobType?.name}
@@ -32,7 +32,7 @@ const RelatedJobCard: React.FC<RelatedJobCardProps> = ({ job }) => {
 					</span>
 				)}
 
-				<span className='bg-purple-100 text-purple-800  font-medium px-2.5 py-0.5 rounded first-letter:uppercase'>
+				<span className='bg-purple-100 text-purple-800  font-medium px-2.5 py-0.5 rounded first-letter:uppercase hover:underline'>
 					<Link
 						href={`/jobs/by-level/${job.level?.slug || ""}`}>
 						{job.level?.name}
@@ -47,12 +47,12 @@ export default function RelatedJobs({ jobs }: { jobs: RelatedJob[] }) {
 	if (!jobs || jobs.length === 0) return null;
 
 	return (
-		<section className='mt-8 border-t border-zinc-300 pt-6'>
-			<h2 className='text-xl font-bold font-poppins text-pry mb-4'>
+		<section className='pt-6 mt-8 border-t border-zinc-300'>
+			<h2 className='mb-4 text-xl font-bold font-poppins text-pry'>
 				Jobs you may also like:
 			</h2>
 
-			<div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+			<div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
 				{jobs.map((job) => (
 					<RelatedJobCard
 						key={job._id}

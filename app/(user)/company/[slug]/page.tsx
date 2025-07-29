@@ -9,7 +9,7 @@ import SubLayout from "@/components/SubLayout";
 import CompanyDetailsAside from "@/components/CompanyDetailsAside";
 import ExpandableDescription from "@/components/ExpandableDescription";
 import CompanyJobCard from "@/components/CompanyJobCard";
-import Pagination from "@/components/PaginationComponent";
+import Pagination from "@/components/Pagination";
 import placeholder from "@/public/placeholderCompany.png";
 import { urlForImage } from "@/sanity/lib/image";
 import { LoadingComponent } from "@/components/Loading";
@@ -69,7 +69,7 @@ function CompanyContent({
 									height={
 										200
 									}
-									className='object-contain rounded-md max-h-28'
+									className='object-contain rounded-full max-h-28'
 								/>
 							) : (
 								<Image
@@ -213,7 +213,7 @@ export default async function CompanyDetailPage({
 		? parseInt(resolvedSearchParams.page, 10)
 		: 1;
 
-	const perPage = 4; // Number of jobs per page
+	const perPage = 20; // Number of jobs per page
 
 	const data = await getAllCompanyData(slug, page, perPage);
 

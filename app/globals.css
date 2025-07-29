@@ -6,6 +6,10 @@ body {
 	font-family: Arial, Helvetica, sans-serif;
 }
 
+.jobcard-image-container {
+	@apply h-[4vh] w-[4vh] md:h-[5vh] md:w-[5vh] rounded-full overflow-hidden flex-shrink-0;
+}
+
 .animate {
 	@apply transition-all delay-150 ease-in;
 }

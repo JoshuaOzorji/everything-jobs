@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { getJobFields, getJobsByField } from "@/sanity/lib/queries";
-import Pagination from "@/components/PaginationComponent";
+import Pagination from "@/components/Pagination";
 import { notFound } from "next/navigation";
 import AsideMain from "@/components/sidebar/AsideMain";
 import SubLayout from "@/components/SubLayout";
