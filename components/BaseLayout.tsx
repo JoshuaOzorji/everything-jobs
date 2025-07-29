@@ -14,7 +14,7 @@ const BaseLayout = ({ children, initialSession }: BaseLayoutProps) => {
 		<div className='flex flex-col min-h-screen bg-[#eeeef1]'>
 			<Header initialSession={initialSession} />
 
-			<main className='flex-1 mx-4 my-2 md:w-[84%] md:mx-auto'>
+			<main className='flex-1 mx-2 my-2 md:w-[84%] md:mx-auto'>
 				{children}
 			</main>
 

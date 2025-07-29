@@ -8,9 +8,31 @@ interface MobilePostJobDropdownProps {
 	onLinkClick: () => void;
 }
 
+interface NavigationLink {
+	href: string;
+	label: string;
+	isExternal?: boolean;
+}
+
 const MobilePostJobDropdown = ({ onLinkClick }: MobilePostJobDropdownProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const { data: session } = useSession();
+
+	// Define your navigation links in an array
+	const navigationLinks: NavigationLink[] = [
+		{
+			href: "/dashboard/post-job",
+			label: "Post Job",
+		},
+		{
+			href: "/dashboard/view-jobs",
+			label: "Job Submissions",
+		},
+		{
+			href: "/dashboard/company-profile",
+			label: "Company Profile",
+		},
+	];
 
 	const handleSignOut = async () => {
 		await signOut({ callbackUrl: "/" });
@@ -24,7 +46,7 @@ const MobilePostJobDropdown = ({ onLinkClick }: MobilePostJobDropdownProps) => {
 	return (
 		<div className='relative'>
 			<button
-				className='flex items-center justify-between w-full py-2 px-4 hover:bg-gray-100 rounded transition-colors'
+				className='flex items-center justify-between w-full px-4 py-2 transition-colors rounded hover:bg-gray-100'
 				onClick={() => setIsOpen(!isOpen)}
 				aria-expanded={isOpen}
 				aria-controls='mobile-post-job-dropdown'>
@@ -39,42 +61,24 @@ const MobilePostJobDropdown = ({ onLinkClick }: MobilePostJobDropdownProps) => {
 			{isOpen && (
 				<ul
 					id='mobile-post-job-dropdown'
-					className='pl-4 mt-1 space-y-1'>
-					<li>
-						<Link
-							href='/dashboard/post-job'
-							className='block py-2 px-4 hover:bg-gray-100 rounded transition-colors text-sm'
-							onClick={
-								handleLinkClickWithClose
-							}>
-							Post Job
-						</Link>
-					</li>
-					<li>
-						<Link
-							href='/dashboard/view-jobs'
-							className='block py-2 px-4 hover:bg-gray-100 rounded transition-colors text-sm'
-							onClick={
-								handleLinkClickWithClose
-							}>
-							Job Submissions
-						</Link>
-					</li>
-					<li>
-						<Link
-							href='/dashboard/company-profile'
-							className='block py-2 px-4 hover:bg-gray-100 rounded transition-colors text-sm'
-							onClick={
-								handleLinkClickWithClose
-							}>
-							Company Profile
-						</Link>
-					</li>
+					className='pl-4 mt-1 text-[12px]'>
+					{navigationLinks.map((link, index) => (
+						<li key={index}>
+							<Link
+								href={link.href}
+								className='block px-4 py-1 space-y-1 transition-colors rounded hover:bg-gray-100'
+								onClick={
+									handleLinkClickWithClose
+								}>
+								{link.label}
+							</Link>
+						</li>
+					))}
 
 					<li>
 						<button
 							onClick={handleSignOut}
-							className='w-full text-left py-2 px-4 hover:bg-gray-100 rounded transition-colors text-sm text-red-600'>
+							className='w-full px-4 py-1 text-left text-red-600 transition-colors rounded hover:bg-gray-100'>
 							Logout
 						</button>
 					</li>

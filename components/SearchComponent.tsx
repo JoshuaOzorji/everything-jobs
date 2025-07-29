@@ -8,9 +8,11 @@ import { useLocations } from "@/hooks/useReferenceData";
 const SearchComponent = ({
 	isSearchOpen,
 	setIsSearchOpen,
+	onSearchStart,
 }: {
 	isSearchOpen: boolean;
 	setIsSearchOpen: (value: boolean) => void;
+	onSearchStart: () => void;
 }) => {
 	const router = useRouter();
 	const [searchQuery, setSearchQuery] = useState("");
@@ -40,6 +42,9 @@ const SearchComponent = ({
 
 	const handleSubmit = (e: FormEvent) => {
 		e.preventDefault();
+
+		// Start loading state
+		onSearchStart();
 
 		//Create query params
 		const params = new URLSearchParams();

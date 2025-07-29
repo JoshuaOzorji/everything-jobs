@@ -28,7 +28,7 @@ const JobCard = ({ job }: JobCardProps) => {
 				</div>
 				<div className='w-full font-saira text-myBlack'>
 					<div className='flex items-start justify-between'>
-						<h2 className='text-xs md:text-sm font-bold font-poppins hover:text-pry animate max-w-[75%]'>
+						<h2 className='text-xs md:text-sm font-semibold font-poppins hover:text-pry animate max-w-[75%]'>
 							<Link
 								href={`/job/${job.slug}`}>
 								{job.title} at{" "}

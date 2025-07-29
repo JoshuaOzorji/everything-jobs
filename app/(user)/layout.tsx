@@ -37,7 +37,6 @@ export default async function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	// Get enhanced session with company data in one call
 	const enhancedSession = await getEnhancedSession();
 
 	return (

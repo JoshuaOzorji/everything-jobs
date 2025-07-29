@@ -72,7 +72,7 @@ async function JobsList({ page = 1 }: JobsListProps) {
 		<div>
 			{jobs.length > 0 ? (
 				<>
-					<div className='flex flex-col gap-1.5'>
+					<div className='flex flex-col gap-2'>
 						{jobs.map((job: Job) => (
 							<JobCard
 								key={job._id}

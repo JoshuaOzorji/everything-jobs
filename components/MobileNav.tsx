@@ -18,7 +18,7 @@ interface MobileNavProps {
 	isMenuOpen: boolean;
 	toggleMenu: () => void;
 	closeMenu: () => void;
-	initialSession?: any; // Server-side session to prevent flickering
+	initialSession?: any;
 }
 
 const MobileNav = ({
@@ -88,12 +88,12 @@ const MobileNav = ({
 			{isMenuOpen && (
 				<div className='absolute left-0 w-full bg-white shadow-lg rounded-b-lg transform transition-transform duration-200 z-40 mt-0.5 font-poppins'>
 					<div className='py-4 px-2 max-h-[calc(100vh-80px)] overflow-y-auto'>
-						<ul className='space-y-2'>
+						<ul className='space-y-1 text-sm'>
 							{/* Find Jobs Dropdown */}
 							<li>
 								<div className='relative'>
 									<button
-										className='flex items-center justify-between w-full py-2 px-4 hover:bg-gray-100 rounded transition-colors'
+										className='flex items-center justify-between w-full px-4 py-2 transition-colors rounded hover:bg-gray-100'
 										onClick={
 											toggleJobsDropdown
 										}
@@ -115,7 +115,7 @@ const MobileNav = ({
 									{isJobsDropdownOpen && (
 										<ul
 											id='find-jobs-dropdown'
-											className='pl-4 mt-1 space-y-1'>
+											className='pl-4 mt-1'>
 											{findJobsDropdownItems.map(
 												(
 													item,
@@ -129,7 +129,7 @@ const MobileNav = ({
 															href={
 																item.href
 															}
-															className='block py-2 px-4 hover:bg-gray-100 rounded transition-colors text-sm'
+															className='block px-4 py-1 text-[12px] transition-colors rounded hover:bg-gray-100'
 															onClick={
 																handleLinkClick
 															}>
@@ -148,7 +148,7 @@ const MobileNav = ({
 							<li>
 								<Link
 									href='/remote-jobs'
-									className='block py-2 px-4 hover:bg-gray-100 rounded transition-colors'
+									className='block px-4 py-2 transition-colors rounded hover:bg-gray-100'
 									onClick={
 										handleLinkClick
 									}>
@@ -160,7 +160,7 @@ const MobileNav = ({
 							<li>
 								<Link
 									href='/companies'
-									className='block py-2 px-4 hover:bg-gray-100 rounded transition-colors'
+									className='block px-4 py-2 transition-colors rounded hover:bg-gray-100'
 									onClick={
 										handleLinkClick
 									}>
@@ -170,11 +170,11 @@ const MobileNav = ({
 							</li>
 
 							{/* Post Job Button/Dropdown */}
-							<li className='border-t pt-2 mt-2'>
+							<li className='pt-2 mt-2 border-t'>
 								{/* Show loading state while session is loading */}
 								{isLoading ? (
-									<div className='flex items-center justify-center py-2 px-4'>
-										<div className='w-4 h-4 border-2 border-gray-300 border-t-pry rounded-full animate-spin'></div>
+									<div className='flex items-center justify-center px-4 py-2'>
+										<div className='w-4 h-4 border-2 border-gray-300 rounded-full border-t-pry animate-spin'></div>
 									</div>
 								) : isAuthenticated ? (
 									<MobilePostJobDropdown
@@ -185,7 +185,7 @@ const MobileNav = ({
 								) : (
 									<Link
 										href='/dashboard/post-job'
-										className='block py-2 px-4 text-center text-white rounded-md bg-pry hover:bg-pry/90 transition-colors'
+										className='block px-4 py-2 text-center text-white transition-colors rounded-md bg-pry hover:bg-pry/90'
 										onClick={
 											handleLinkClick
 										}>

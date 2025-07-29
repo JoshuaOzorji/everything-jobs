@@ -13,6 +13,6 @@ const LoadingSpinner = ({ size = "sm" }) => {
 	);
 };
 
-export function LoadingComponent({ className = "" }) {
+export function LoadingComponent() {
 	return <LoadingSpinner />;
 }

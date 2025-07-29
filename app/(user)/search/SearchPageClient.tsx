@@ -152,7 +152,7 @@ const SearchPageClient = ({
 
 			<div className='flex flex-col gap-6 my-2 md:flex-row'>
 				{filtersLoading ? (
-					<div className='md:w-1/4 min-h-[60vh] bg-gray-100 animate-pulse rounded'></div>
+					<div className='hidden md:w-1/4 min-h-[60vh] bg-gray-100 animate-pulse rounded'></div>
 				) : (
 					<FilterSidebar
 						filters={filters}
