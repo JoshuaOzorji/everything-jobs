@@ -122,7 +122,7 @@ export default function CompanyDetailsAside({
 									}
 									className='text-sm'>
 									<Link
-										href={`/jobs/${job.slug.current}`}
+										href={`/job/${job.slug.current}`}
 										className='hover:text-pry2'>
 										<p className='font-medium'>
 											{

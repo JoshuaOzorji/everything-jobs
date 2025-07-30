@@ -61,7 +61,7 @@ const MobilePostJobDropdown = ({ onLinkClick }: MobilePostJobDropdownProps) => {
 			{isOpen && (
 				<ul
 					id='mobile-post-job-dropdown'
-					className='pl-4 mt-1 text-[12px]'>
+					className='pl-4 mt-1 text-[13px]'>
 					{navigationLinks.map((link, index) => (
 						<li key={index}>
 							<Link

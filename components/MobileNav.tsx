@@ -129,7 +129,7 @@ const MobileNav = ({
 															href={
 																item.href
 															}
-															className='block px-4 py-1 text-[12px] transition-colors rounded hover:bg-gray-100'
+															className='block px-4 py-1 text-[13px] transition-colors rounded hover:bg-gray-100'
 															onClick={
 																handleLinkClick
 															}>

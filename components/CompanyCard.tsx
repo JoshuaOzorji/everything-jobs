@@ -11,33 +11,46 @@ type CompanyCardProps = {
 const SmallScreenCompanyCard = ({ company }: CompanyCardProps) => {
 	return (
 		<div className='block w-full'>
-			<div className='flex flex-row items-center w-full gap-2 p-2 bg-white border rounded-lg shadow-sm hover:shadow-md font-poppins'>
-				<div className='flex items-center justify-center rounded w-10 h-10'>
+			<div className='flex flex-row items-center w-full gap-2 p-2 bg-white border rounded-lg shadow-sm hover:shadow-md font-saira'>
+				<div className='flex items-center justify-center rounded '>
 					{company.logo ? (
-						<Image
-							src={urlForImage(
-								company.logo,
-							)
-								.width(50)
-								.height(50)
-								.url()}
-							alt={
-								company.logo
-									.alt ||
-								company.name
-							}
-							width={50}
-							height={50}
-							className='object-cover rounded-md'
-						/>
+						<div className='w-8 h-8'>
+							<Image
+								src={urlForImage(
+									company.logo,
+								)
+									.width(
+										50,
+									)
+									.height(
+										50,
+									)
+									.url()}
+								alt={
+									company
+										.logo
+										.alt ||
+									company.name
+								}
+								width={50}
+								height={50}
+								className='object-contain w-full h-full rounded-full'
+							/>
+						</div>
 					) : (
-						<Image
-							src={placeholder}
-							alt={company.name}
-							width={50}
-							height={50}
-							className='object-cover rounded-md'
-						/>
+						<div className='w-8 h-8'>
+							<Image
+								src={
+									placeholder
+								}
+								alt={
+									company.name
+								}
+								width={50}
+								height={50}
+								className='object-cover w-full h-full rounded-full'
+							/>
+						</div>
 					)}
 				</div>
 
@@ -53,22 +66,27 @@ const SmallScreenCompanyCard = ({ company }: CompanyCardProps) => {
 
 const LargeScreenCompanyCard = ({ company }: CompanyCardProps) => {
 	return (
-		<div className='flex flex-col h-full p-2 bg-white border rounded-lg shadow-sm hover:shadow-md font-poppins'>
+		<div className='flex flex-col h-full p-2 bg-white border rounded-lg shadow-sm hover:shadow-md font-saira'>
 			<div className='flex flex-col items-center justify-center mb-2'>
 				{company.logo ? (
-					<Image
-						src={urlForImage(company.logo)
-							.width(200)
-							.height(100)
-							.url()}
-						alt={
-							company.logo.alt ||
-							company.name
-						}
-						width={200}
-						height={100}
-						className='object-contain rounded-md max-h-24 w-full aspect-[2/1]'
-					/>
+					<div className='w-full'>
+						<Image
+							src={urlForImage(
+								company.logo,
+							)
+								.width(200)
+								.height(100)
+								.url()}
+							alt={
+								company.logo
+									.alt ||
+								company.name
+							}
+							width={200}
+							height={100}
+							className='object-contain rounded-md aspect-[2/1]'
+						/>
+					</div>
 				) : (
 					<div className='flex items-center justify-center w-full h-full rounded'>
 						<Image

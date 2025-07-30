@@ -51,7 +51,7 @@ function CompanyContent({
 			<div className='p-4 bg-white rounded-lg shadow-sm md:p-6'>
 				<div className='flex flex-col gap-2 md:gap-6 md:flex-row md:items-center'>
 					<div className='flex items-center gap-3'>
-						<div className='flex items-center justify-center flex-shrink-0 w-[8vh] h-[8vh] md:w-[20vh] md:h-[20vh]'>
+						<div className='flex items-center justify-center flex-shrink-0 w-[7vh] h-[7vh] md:w-[20vh] md:h-[20vh]'>
 							{company.logo?.asset ? (
 								<Image
 									src={urlForImage(
@@ -92,24 +92,27 @@ function CompanyContent({
 
 						{/* COMPANY NAME & WEBSITE SMALL SCREEN*/}
 						<div className='block md:hidden'>
-							<h1 className='text-lg font-bold md:text-2xl font-poppins'>
+							<h1 className='text-sm font-bold md:text-2xl font-poppins'>
 								{company.name}
 							</h1>
-							{company.website && (
-								<a
-									href={
-										company.website
-									}
-									target='_blank'
-									rel='noopener noreferrer'
-									className='flex items-center gap-1 text-sm text-pry2 hover:underline group animate'>
-									<span>
-										Visit
-										website
-									</span>
-									<RxExternalLink className='hidden w-4 h-4 group-hover:inline' />
-								</a>
-							)}
+
+							<div className='mt-0.5 font-poppins text-xs text-pry2 '>
+								{company.website && (
+									<a
+										href={
+											company.website
+										}
+										target='_blank'
+										rel='noopener noreferrer'
+										className='flex items-center gap-1  hover:underline animate '>
+										<span>
+											Visit
+											Website
+										</span>
+										<RxExternalLink className='w-3 h-3' />
+									</a>
+								)}
+							</div>
 						</div>
 					</div>
 
@@ -117,24 +120,26 @@ function CompanyContent({
 					<div className='mt-2'>
 						{/* COMPANY NAME & WEBSITE MD/LG SCREEN*/}
 						<div className='hidden md:block'>
-							<h1 className='text-lg font-bold md:text-2xl font-poppins'>
+							<h1 className='font-bold md:text-2xl font-poppins'>
 								{company.name}
 							</h1>
-							{company.website && (
-								<a
-									href={
-										company.website
-									}
-									target='_blank'
-									rel='noopener noreferrer'
-									className='inline-block mb-3 text-sm text-pry2 hover:underline group animate'>
-									<span>
-										Visit
-										website
-									</span>
-									<RxExternalLink className='hidden w-4 h-4 group-hover:inline' />
-								</a>
-							)}
+							<div className=''>
+								{company.website && (
+									<a
+										href={
+											company.website
+										}
+										target='_blank'
+										rel='noopener noreferrer'
+										className='mb-2 text-sm text-pry2 hover:underline animate gap-0.5 flex items-center'>
+										<span>
+											Visit
+											website
+										</span>
+										<RxExternalLink className='w-4 h-4' />
+									</a>
+								)}
+							</div>
 						</div>
 						{company.description && (
 							<ExpandableDescription
@@ -169,7 +174,7 @@ function CompanyContent({
 				</div>
 			) : (
 				// COMPANY JOB CARDS
-				<div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+				<div className='grid grid-cols-1 gap-2 md:gap-4 md:grid-cols-2'>
 					{jobs.map((job) => (
 						<div key={job._id}>
 							<CompanyJobCard
