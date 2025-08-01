@@ -58,7 +58,7 @@ const TrendingJobFields: React.FC<TrendingJobFieldsProps> = ({
 								className='flex items-center justify-between px-2 py-1 text-sm rounded hover:text-pry2 text-myBlack group md:text-base'>
 								<span className='flex items-center gap-1'>
 									<HiOutlineBriefcase />
-									<span className='truncate'>
+									<span className='aside-p'>
 										{
 											jobField.displayName
 										}

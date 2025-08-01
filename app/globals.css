@@ -76,9 +76,12 @@ body {
 }
 
 .aside-title {
-	@apply mb-2 font-semibold text-myBlack font-poppins;
+	@apply mb-2 font-semibold text-myBlack font-poppins text-[13px] md:text-sm;
 }
 
+.aside-p {
+	@apply truncate text-[13px] md:text-sm;
+}
 .footer-h2 {
 	@apply text-[13px] md:text-sm font-semibold mb-2 font-poppins;
 }

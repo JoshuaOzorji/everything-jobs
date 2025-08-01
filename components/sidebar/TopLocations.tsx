@@ -30,7 +30,7 @@ const TopLocations: React.FC<TopLocationsProps> = ({ locations = [] }) => {
 	}
 
 	return (
-		<section className='pt-4 mb-4 text-sm md:text-base'>
+		<section className='pt-4 mb-4 text-sm'>
 			<h2 className='aside-title'>Top Jobs Locations</h2>
 			<nav aria-label='Featured locations navigation '>
 				<ul className='grid grid-cols-2 gap-1 font-saira'>
@@ -41,7 +41,7 @@ const TopLocations: React.FC<TopLocationsProps> = ({ locations = [] }) => {
 								className='flex items-center justify-between px-2 py-1 text-sm rounded hover:text-pry2 text-myBlack group md:text-base'>
 								<span className='flex items-center gap-1'>
 									<CiLocationOn />
-									<span className='truncate'>
+									<span className='aside-p'>
 										{
 											location.name
 										}
