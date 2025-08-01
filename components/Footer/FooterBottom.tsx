@@ -9,8 +9,7 @@ const FooterBottom = () => {
 			<div className='w-[96%] mx-auto'>
 				<div className='flex flex-col items-center justify-between md:flex-row'>
 					<p className=''>
-						© {currentYear} Your Job Search
-						Company. All rights reserved.
+						© {currentYear} Everything Jobs
 					</p>
 					<div className='flex mt-2 space-x-6 md:mt-0'>
 						{legalLinks.map(

@@ -1,14 +1,29 @@
-export const navItems = [
-	{ label: "Find Jobs", href: "/" },
-	{ label: "Remote Jobs", href: "/" },
-	{ label: "Find Company", href: "/companies" },
-];
-
 export const findJobsDropdownItems = [
 	{ label: "Jobs by Education", href: "/jobs/by-education" },
 	{ label: "Jobs by Field", href: "/jobs/by-field" },
 	{ label: "Jobs by Location", href: "/jobs/by-location" },
 	{ label: "Jobs by Type", href: "/jobs/by-type" },
+];
+
+interface NavigationLink {
+	href: string;
+	label: string;
+	isExternal?: boolean;
+}
+
+export const navigationLinks: NavigationLink[] = [
+	{
+		href: "/dashboard/post-job",
+		label: "Post Job",
+	},
+	{
+		href: "/dashboard/view-jobs",
+		label: "Job Submissions",
+	},
+	{
+		href: "/dashboard/company-profile",
+		label: "Profile",
+	},
 ];
 
 export const quickLinks = [

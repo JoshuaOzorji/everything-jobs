@@ -100,14 +100,14 @@ export default async function LocationJobsPage({
 					Jobs in {locationData.name}, Nigeria
 				</h1>
 
-				<div className='page-sub-div'>
+				{/* <div className='page-sub-div'>
 					<p className='page-p'>
 						Browse {totalCount} job
 						opportunities in{" "}
 						{locationData.name}. Find your
 						next career opportunity locally.
 					</p>
-				</div>
+				</div> */}
 
 				{jobs.length > 0 ? (
 					<div className='flex flex-col gap-2'>

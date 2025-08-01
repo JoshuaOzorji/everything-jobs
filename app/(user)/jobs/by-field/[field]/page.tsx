@@ -102,7 +102,7 @@ export default async function JobsByFieldPage({
 					Jobs in Nigeria
 				</h1>
 
-				<div className='page-sub-div'>
+				{/* <div className='page-sub-div'>
 					<p className='page-p'>
 						Browse {totalCount} job
 						opportunities in{" "}
@@ -110,7 +110,7 @@ export default async function JobsByFieldPage({
 						your next career opportunity in
 						this field.
 					</p>
-				</div>
+				</div> */}
 
 				{jobs.length > 0 ? (
 					<div className='flex flex-col gap-2'>

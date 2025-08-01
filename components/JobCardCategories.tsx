@@ -15,11 +15,11 @@ const JobCardCategories = ({ job }: JobCardProps) => {
 	return (
 		<>
 			<div className='flex items-start gap-2 p-2 bg-white rounded-md md:p-3 md:gap-3'>
-				<div>
+				<div className='jobcard-image-container'>
 					<Image
 						src={imageUrl}
 						alt={job.company.name}
-						className='h-[5vh] w-[5vh] md:h-[6vh] md:w-[6vh] rounded-sm'
+						className='object-cover w-full h-full'
 						width={50}
 						height={50}
 						priority
@@ -27,7 +27,7 @@ const JobCardCategories = ({ job }: JobCardProps) => {
 				</div>
 				<div className='w-full font-saira text-myBlack'>
 					<div className='flex items-start justify-between'>
-						<h2 className='text-[13px] md:text-base font-bold font-poppins hover:text-pry animate max-w-[75%]'>
+						<h2 className='text-xs md:text-sm font-semibold font-poppins hover:text-pry animate max-w-[75%]'>
 							<Link
 								href={`/job/${job.slug}`}>
 								{job.title} at{" "}
@@ -38,11 +38,11 @@ const JobCardCategories = ({ job }: JobCardProps) => {
 								}
 							</Link>
 						</h2>
-						<p className='text-sm flex items-center gap-1 text-[11px] md:text-sm whitespace-nowrap flex-shrink-0'>
-							<span className='text-base text-pry'>
+						<p className='flex items-center gap-1 text-[11px] md:text-xs whitespace-nowrap flex-shrink-0 font-saira'>
+							<span className='text-xs text-pry'>
 								&bull;
 							</span>
-							<span className='text-xs md:text-sm'>
+							<span>
 								{formatDate(
 									new Date(
 										job.publishedAt,
@@ -53,7 +53,7 @@ const JobCardCategories = ({ job }: JobCardProps) => {
 					</div>
 
 					{/* Summary */}
-					<div className='text-[12px] md:text-sm font-saira line-clamp-2 mb-1'>
+					<div className='text-[11px] md:text-[13px] font-saira line-clamp-2 mb-1 job-summary'>
 						<PortableText
 							value={job.summary}
 							components={
@@ -61,30 +61,28 @@ const JobCardCategories = ({ job }: JobCardProps) => {
 							}
 						/>
 					</div>
-					<div className='text-[12px] md:text-sm text-black'>
-						<div className='flex gap-3'>
-							<Link
-								href={`/jobs/by-type/${job.jobType?.slug}`}>
-								<p className='px-2 bg-blue-100 rounded-md text-pry first-letter:uppercase hover:underline'>
-									{
-										job
-											.jobType
-											?.name
-									}
-								</p>
-							</Link>
+					<div className='flex flex-wrap gap-3 my-1 text-[11px] md:text-xs font-medium'>
+						<Link
+							href={`/jobs/by-type/${job.jobType?.slug}`}>
+							<p className='px-2 bg-blue-100 rounded-md text-pry first-letter:uppercase hover:underline'>
+								{
+									job
+										.jobType
+										?.name
+								}
+							</p>
+						</Link>
 
-							<Link
-								href={`/jobs/by-level/${job.level?.slug}`}>
-								<p className='px-2 text-green-800 bg-green-100 rounded-md first-letter:uppercase hover:underline'>
-									{
-										job
-											.level
-											?.name
-									}
-								</p>
-							</Link>
-						</div>
+						<Link
+							href={`/jobs/by-level/${job.level?.slug}`}>
+							<p className='px-2 text-green-800 bg-green-100 rounded-md first-letter:uppercase hover:underline'>
+								{
+									job
+										.level
+										?.name
+								}
+							</p>
+						</Link>
 					</div>
 				</div>
 			</div>

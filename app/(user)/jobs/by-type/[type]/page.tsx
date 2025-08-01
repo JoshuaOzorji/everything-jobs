@@ -92,7 +92,7 @@ export default async function JobTypeJobsPage({ params, searchParams }: Props) {
 					{jobTypeData.name} Jobs in Nigeria
 				</h1>
 
-				<div className='page-sub-div'>
+				{/* <div className='page-sub-div'>
 					<p className='page-p'>
 						Browse {totalCount}{" "}
 						{jobTypeData.name.toLowerCase()}{" "}
@@ -100,7 +100,7 @@ export default async function JobTypeJobsPage({ params, searchParams }: Props) {
 						Find your next career
 						opportunity.
 					</p>
-				</div>
+				</div> */}
 
 				{jobs.length > 0 ? (
 					<div className='flex flex-col gap-2'>

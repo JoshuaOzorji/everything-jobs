@@ -70,6 +70,9 @@ async function JobsList({ page = 1 }: JobsListProps) {
 
 	return (
 		<div>
+			<h1 className='py-2 text-base font-medium md:text-lg font-poppins first-letter:uppercase'>
+				Latest Jobs
+			</h1>
 			{jobs.length > 0 ? (
 				<>
 					<div className='flex flex-col gap-2'>

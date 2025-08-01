@@ -49,14 +49,14 @@ export default async function RemoteJobsPage({
 					Remote Jobs in Nigeria
 				</h1>
 
-				<div className='page-sub-div'>
+				{/* <div className='page-sub-div'>
 					<p className='page-p'>
 						Browse {totalCount} remote job
 						opportunities. Work flexibly
 						from anywhere in Nigeria or
 						beyond.
 					</p>
-				</div>
+				</div> */}
 
 				{jobs.length > 0 ? (
 					<div className='flex flex-col gap-2'>

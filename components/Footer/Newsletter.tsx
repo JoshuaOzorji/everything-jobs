@@ -18,10 +18,10 @@ const Newsletter = () => {
 	return (
 		<div>
 			{/* Heading */}
-			<h3 className='footer-h2 text-center md:text-left'>
+			<h3 className='text-center footer-h2 md:text-left'>
 				Stay Updated
 			</h3>
-			<p className='mb-4 text-myBlack text-center md:text-left'>
+			<p className='mb-2 text-center footer-p text-myBlack md:text-left'>
 				Subscribe to our newsletter for the latest job
 				opportunities and career insights.
 			</p>

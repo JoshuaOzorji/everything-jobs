@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { signOut, useSession } from "next-auth/react";
+import { navigationLinks } from "@/lib/data";
 
 const PostJobDropdown = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -102,23 +103,16 @@ const PostJobDropdown = () => {
 						</p>
 					</div>
 
-					<Link href='/dashboard/post-job'>
-						<div className='px-4 py-2 cursor-pointer hover:bg-gray-100'>
-							Post New Job
-						</div>
-					</Link>
-
-					<Link href='/dashboard/company-profile'>
-						<div className='px-4 py-2 cursor-pointer hover:bg-gray-100'>
-							Company Profile
-						</div>
-					</Link>
-
-					<Link href='/dashboard/view-jobs'>
-						<div className='px-4 py-2 cursor-pointer hover:bg-gray-100'>
-							Job Submissions
-						</div>
-					</Link>
+					{navigationLinks.map((link) => (
+						<Link
+							key={link.href}
+							href={link.href}>
+							<div className='px-4 py-2 cursor-pointer hover:bg-gray-100'>
+								{link.label}
+							</div>
+						</Link>
+					))}
+					{/* Logout button */}
 					<button
 						onClick={handleSignOut}
 						className='w-full px-4 py-2 text-left text-red-600 cursor-pointer hover:bg-gray-100'>

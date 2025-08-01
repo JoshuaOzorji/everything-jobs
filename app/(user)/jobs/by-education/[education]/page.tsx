@@ -106,7 +106,7 @@ export default async function EducationJobsPage({
 					Jobs in Nigeria
 				</h1>
 
-				<div className='page-sub-div'>
+				{/* <div className='page-sub-div'>
 					<p className='page-p'>
 						Browse {totalCount} job
 						opportunities for{" "}
@@ -114,7 +114,7 @@ export default async function EducationJobsPage({
 						professionals. Find your next
 						career move.
 					</p>
-				</div>
+				</div> */}
 
 				{jobs.length > 0 ? (
 					<div className='flex flex-col gap-2'>

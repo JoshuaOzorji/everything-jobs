@@ -3,36 +3,15 @@ import Link from "next/link";
 import { useState } from "react";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { signOut, useSession } from "next-auth/react";
+import { navigationLinks } from "@/lib/data";
 
 interface MobilePostJobDropdownProps {
 	onLinkClick: () => void;
 }
 
-interface NavigationLink {
-	href: string;
-	label: string;
-	isExternal?: boolean;
-}
-
 const MobilePostJobDropdown = ({ onLinkClick }: MobilePostJobDropdownProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const { data: session } = useSession();
-
-	// Define your navigation links in an array
-	const navigationLinks: NavigationLink[] = [
-		{
-			href: "/dashboard/post-job",
-			label: "Post Job",
-		},
-		{
-			href: "/dashboard/view-jobs",
-			label: "Job Submissions",
-		},
-		{
-			href: "/dashboard/company-profile",
-			label: "Company Profile",
-		},
-	];
 
 	const handleSignOut = async () => {
 		await signOut({ callbackUrl: "/" });

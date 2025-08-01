@@ -55,11 +55,11 @@ body {
 }
 
 .page-container {
-	@apply my-2;
+	@apply my-4;
 }
 
 .page-h1 {
-	@apply mb-2 text-2xl font-bold md:text-3xl font-poppins first-letter:uppercase;
+	@apply text-xl font-bold md:text-2xl font-poppins first-letter:uppercase pb-2 py-1;
 }
 
 .page-sub-div {
@@ -80,9 +80,12 @@ body {
 }
 
 .footer-h2 {
-	@apply text-base font-semibold mb-2 font-poppins;
+	@apply text-[13px] md:text-sm font-semibold mb-2 font-poppins;
 }
 
+.footer-p {
+	@apply transition text-myBlack hover:text-pry text-[12px] md:text-[13px];
+}
 .form-field-wrapper input,
 .form-field-wrapper select,
 .form-field-wrapper textarea {

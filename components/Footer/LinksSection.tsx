@@ -15,7 +15,7 @@ const LinksSection = ({ title, links, keyPrefix }: LinksSectionProps) => {
 					<li key={`${keyPrefix}-${index}`}>
 						<Link
 							href={link.href}
-							className='transition text-myBlack hover:text-pry'>
+							className='footer-p'>
 							{link.label}
 						</Link>
 					</li>

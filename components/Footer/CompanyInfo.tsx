@@ -18,7 +18,7 @@ const CompanyInfo = () => {
 					priority
 				/>
 			</Link>
-			<p className='mb-4 text-myBlack'>
+			<p className='mb-4 text-myBlack footer-p'>
 				Find your dream job with our comprehensive job
 				search platform. Connect with top employers
 				across industries.
